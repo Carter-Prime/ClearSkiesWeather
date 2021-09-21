@@ -19,7 +19,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val viewModel : HomeViewModel by viewModels()
         homeViewModel = viewModel
 
-        homeViewModel.weatherData.observe(this){
+        homeViewModel.weatherData.observe(viewLifecycleOwner){
             Log.d("dbApp", "Weather Data: $it")
         }
     }
