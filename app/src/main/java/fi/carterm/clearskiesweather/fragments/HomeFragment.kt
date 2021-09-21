@@ -1,4 +1,4 @@
-package fi.carterm.clearskiesweather.ui
+package fi.carterm.clearskiesweather.fragments
 
 import androidx.fragment.app.Fragment
 
