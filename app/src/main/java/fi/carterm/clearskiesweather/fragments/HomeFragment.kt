@@ -49,23 +49,23 @@ class HomeFragment : Fragment(R.layout.fragment_home), SensorEventListener {
         val sensorPressure: TextView = activity!!.findViewById(R.id.tv_sensor_pressure)
         val sensorHumidity: TextView = activity!!.findViewById(R.id.tv_sensor_hum)
 
-        val PM: PackageManager = activity!!.getPackageManager()
-        if (!PM.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
+        val pm: PackageManager = activity!!.packageManager
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
             Log.d("Sensor missing", "GPS")
         }
-        if (!PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_LIGHT)) {
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_LIGHT)) {
             Log.d("Sensor missing", "Light")
             sensorLight.text = "Light sensor not found"
         }
-        if (!PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_AMBIENT_TEMPERATURE)) {
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_AMBIENT_TEMPERATURE)) {
             Log.d("Sensor missing", "Termometer")
             sensorTemperature.text = "Temperature sensor not found"
         }
-        if (!PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_RELATIVE_HUMIDITY)) {
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_RELATIVE_HUMIDITY)) {
             Log.d("Sensor missing", "Humidity")
             sensorHumidity.text = "Relative humidity sensor not found"
         }
-        if (!PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER)) {
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER)) {
             Log.d("Sensor missing", "Barometer")
             sensorPressure.text = "Pressure sensor not found"
         }
