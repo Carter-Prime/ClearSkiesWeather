@@ -44,12 +44,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), SensorEventListener {
     }
 
     private fun checkSensors() {
-        val sensorLight: TextView = activity!!.findViewById(R.id.tv_sensor_light)
-        val sensorTemperature: TextView = activity!!.findViewById(R.id.tv_sensor_temp)
-        val sensorPressure: TextView = activity!!.findViewById(R.id.tv_sensor_pressure)
-        val sensorHumidity: TextView = activity!!.findViewById(R.id.tv_sensor_hum)
+        val sensorLight: TextView = requireActivity().findViewById(R.id.tv_sensor_light)
+        val sensorTemperature: TextView = requireActivity().findViewById(R.id.tv_sensor_temp)
+        val sensorPressure: TextView = requireActivity().findViewById(R.id.tv_sensor_pressure)
+        val sensorHumidity: TextView = requireActivity().findViewById(R.id.tv_sensor_hum)
 
-        val pm: PackageManager = activity!!.packageManager
+        val pm: PackageManager = requireActivity().packageManager
         if (!pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
             Log.d("Sensor missing", "GPS")
         }
@@ -73,7 +73,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), SensorEventListener {
     }
 
     private fun setUpSensor() {
-        sensorManager = activity!!.getSystemService(SENSOR_SERVICE) as SensorManager
+        sensorManager = requireActivity().getSystemService(SENSOR_SERVICE) as SensorManager
         brightness = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         temperature = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
         pressure = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
@@ -81,10 +81,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        val sensorLight: TextView = activity!!.findViewById(R.id.tv_sensor_light)
-        val sensorTemperature: TextView = activity!!.findViewById(R.id.tv_sensor_temp)
-        val sensorPressure: TextView = activity!!.findViewById(R.id.tv_sensor_pressure)
-        val sensorHumidity: TextView = activity!!.findViewById(R.id.tv_sensor_hum)
+        val sensorLight: TextView = requireActivity().findViewById(R.id.tv_sensor_light)
+        val sensorTemperature: TextView = requireActivity().findViewById(R.id.tv_sensor_temp)
+        val sensorPressure: TextView = requireActivity().findViewById(R.id.tv_sensor_pressure)
+        val sensorHumidity: TextView = requireActivity().findViewById(R.id.tv_sensor_hum)
 
         if (event?.sensor?.type == Sensor.TYPE_LIGHT) {
             val light1 = event.values[0]
