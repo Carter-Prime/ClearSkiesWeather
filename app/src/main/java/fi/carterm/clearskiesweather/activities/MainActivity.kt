@@ -2,7 +2,6 @@ package fi.carterm.clearskiesweather.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import fi.carterm.clearskiesweather.R
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun addingNumbers(num1: Int, num2: Int): Int{
+    fun addingNumbers(num1: Int, num2: Int): Int {
         return num1 + num2
     }
 }
