@@ -15,8 +15,10 @@ import androidx.fragment.app.viewModels
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.databinding.FragmentHomeBinding
 import fi.carterm.clearskiesweather.viewmodels.HomeViewModel
+import android.content.pm.PackageManager
 
-class HomeFragment: Fragment(R.layout.fragment_home), SensorEventListener {
+
+class HomeFragment : Fragment(R.layout.fragment_home), SensorEventListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
 
@@ -29,15 +31,47 @@ class HomeFragment: Fragment(R.layout.fragment_home), SensorEventListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
-        val viewModel : HomeViewModel by viewModels()
+        val viewModel: HomeViewModel by viewModels()
         homeViewModel = viewModel
 
-        homeViewModel.weatherData.observe(viewLifecycleOwner){
+        homeViewModel.weatherData.observe(viewLifecycleOwner) {
             Log.d("dbApp", "Weather Data: $it")
         }
 
+        checkSensors()
         setUpSensor()
+
     }
+
+    private fun checkSensors() {
+        val sensorLight: TextView = activity!!.findViewById(R.id.tv_sensor_light)
+        val sensorTemperature: TextView = activity!!.findViewById(R.id.tv_sensor_temp)
+        val sensorPressure: TextView = activity!!.findViewById(R.id.tv_sensor_pressure)
+        val sensorHumidity: TextView = activity!!.findViewById(R.id.tv_sensor_hum)
+
+        val PM: PackageManager = activity!!.getPackageManager()
+        if (!PM.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
+            Log.d("Sensor missing", "GPS")
+        }
+        if (!PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_LIGHT)) {
+            Log.d("Sensor missing", "Light")
+            sensorLight.text = "Light sensor not found"
+        }
+        if (!PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_AMBIENT_TEMPERATURE)) {
+            Log.d("Sensor missing", "Termometer")
+            sensorTemperature.text = "Temperature sensor not found"
+        }
+        if (!PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_RELATIVE_HUMIDITY)) {
+            Log.d("Sensor missing", "Humidity")
+            sensorHumidity.text = "Relative humidity sensor not found"
+        }
+        if (!PM.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER)) {
+            Log.d("Sensor missing", "Barometer")
+            sensorPressure.text = "Pressure sensor not found"
+        }
+
+    }
+
     private fun setUpSensor() {
         sensorManager = activity!!.getSystemService(SENSOR_SERVICE) as SensorManager
         brightness = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
@@ -47,25 +81,30 @@ class HomeFragment: Fragment(R.layout.fragment_home), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
+        val sensorLight: TextView = activity!!.findViewById(R.id.tv_sensor_light)
+        val sensorTemperature: TextView = activity!!.findViewById(R.id.tv_sensor_temp)
+        val sensorPressure: TextView = activity!!.findViewById(R.id.tv_sensor_pressure)
+        val sensorHumidity: TextView = activity!!.findViewById(R.id.tv_sensor_hum)
+
         if (event?.sensor?.type == Sensor.TYPE_LIGHT) {
             val light1 = event.values[0]
-            val sensorLight: TextView = activity!!.findViewById(R.id.tv_sensor_light)
-            sensorLight.text =  "Light sensor: $light1 lx"
+            sensorLight.text = "Light sensor: $light1 lx"
         }
+
         if (event?.sensor?.type == Sensor.TYPE_AMBIENT_TEMPERATURE) {
             val temp1 = event.values[0]
-            val sensorTemperature: TextView = activity!!.findViewById(R.id.tv_sensor_temp)
-            sensorTemperature.text =  "Temperature sensor: $temp1 °C"
+            sensorTemperature.text = "Temperature sensor: $temp1 °C"
         }
+
         if (event?.sensor?.type == Sensor.TYPE_PRESSURE) {
             val press1 = event.values[0]
-            val sensorPressure: TextView = activity!!.findViewById(R.id.tv_sensor_pressure)
-            sensorPressure.text =  "Pressure sensor: $press1 hPa"
+            sensorPressure.text = "Pressure sensor: $press1 hPa"
         }
+
         if (event?.sensor?.type == Sensor.TYPE_RELATIVE_HUMIDITY) {
             val hum1 = event.values[0]
-            val sensorHumidity: TextView = activity!!.findViewById(R.id.tv_sensor_light)
-            sensorHumidity.text =  "Relative humidity sensor: $hum1 %"
+
+            sensorHumidity.text = "Relative humidity sensor: $hum1 %"
         }
     }
 
@@ -75,7 +114,6 @@ class HomeFragment: Fragment(R.layout.fragment_home), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        // Register a listener for the sensor.
         sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_UI)
         sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_UI)
         sensorManager.registerListener(this, pressure, SensorManager.SENSOR_DELAY_UI)
