@@ -22,6 +22,9 @@ class HomeFragment: Fragment(R.layout.fragment_home), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
     private var brightness: Sensor? = null
+    private var pressure: Sensor? = null
+    private var temperature: Sensor? = null
+    private var humidity: Sensor? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,29 +41,34 @@ class HomeFragment: Fragment(R.layout.fragment_home), SensorEventListener {
     private fun setUpSensor() {
         sensorManager = activity!!.getSystemService(SENSOR_SERVICE) as SensorManager
         brightness = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        temperature = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
+        pressure = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
+        humidity = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_LIGHT) {
             val light1 = event.values[0]
-            //val sensorLight = binding.tvSensorLight.text
             val sensorLight: TextView = activity!!.findViewById(R.id.tv_sensor_light)
-            sensorLight.text =  "Sensor: $light1\n${brightness(light1)}"
-            //  pb.setProgressWithAnimation(light1)
+            sensorLight.text =  "Light sensor: $light1 lx"
+        }
+        if (event?.sensor?.type == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+            val temp1 = event.values[0]
+            val sensorTemperature: TextView = activity!!.findViewById(R.id.tv_sensor_temp)
+            sensorTemperature.text =  "Temperature sensor: $temp1 °C"
+        }
+        if (event?.sensor?.type == Sensor.TYPE_PRESSURE) {
+            val press1 = event.values[0]
+            val sensorPressure: TextView = activity!!.findViewById(R.id.tv_sensor_pressure)
+            sensorPressure.text =  "Pressure sensor: $press1 hPa"
+        }
+        if (event?.sensor?.type == Sensor.TYPE_RELATIVE_HUMIDITY) {
+            val hum1 = event.values[0]
+            val sensorHumidity: TextView = activity!!.findViewById(R.id.tv_sensor_light)
+            sensorHumidity.text =  "Relative humidity sensor: $hum1 %"
         }
     }
 
-    private fun brightness(brightness: Float): String {
-
-        return when (brightness.toInt()) {
-            0 -> "Pitch black"
-            in 1..10 -> "Dark"
-            in 11..50 -> "Grey"
-            in 51..5000 -> "Normal"
-            in 5001..25000 -> "Incredibly bright"
-            else -> "This light will blind you"
-        }
-    }
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         return
     }
@@ -68,6 +76,9 @@ class HomeFragment: Fragment(R.layout.fragment_home), SensorEventListener {
     override fun onResume() {
         super.onResume()
         // Register a listener for the sensor.
-        sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, pressure, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, humidity, SensorManager.SENSOR_DELAY_UI)
     }
 }
