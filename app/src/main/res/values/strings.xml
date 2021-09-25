@@ -4,4 +4,8 @@
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+    <string name="home_fragment">HomeFragment</string>
+    <string name="forecast_fragment">ForecastFragment</string>
+    <string name="settings_fragment">SettingsFragment</string>
+    <string name="graph_fragment">GraphFragment</string>
 </resources>

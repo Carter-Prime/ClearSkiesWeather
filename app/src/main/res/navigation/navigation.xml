@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="fi.carterm.clearskiesweather.fragments.HomeFragment"
+        android:label="@string/home_fragment"
+        tools:layout="@layout/fragment_home"
+        />
+    <fragment
+        android:id="@+id/forecastFragment"
+        android:name="fi.carterm.clearskiesweather.fragments.ForecastFragment"
+        android:label="@string/forecast_fragment"
+        tools:layout="@layout/fragment_forcast">
+        <action
+            android:id="@+id/action_forecastFragment_to_sensorFragment"
+            app:destination="@id/graphFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="fi.carterm.clearskiesweather.fragments.SettingsFragment"
+        android:label="@string/settings_fragment"
+        tools:layout="@layout/fragment_settings"/>
+
+    <fragment
+        android:id="@+id/graphFragment"
+        android:name="fi.carterm.clearskiesweather.fragments.GraphFragment"
+        android:label="@string/graph_fragment"
+        tools:layout="@layout/fragment_graph"/>
+
+</navigation>

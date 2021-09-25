@@ -2,22 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="fi.carterm.clearskiesweather">
-
     <!-- Permissions needed for location -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.location.network" />
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
-
-    <!-- Sensors -->
-    <uses-feature android:name="android.hardware.sensor.ambient_temperature" android:required="true" />
-    <uses-feature android:name="android.hardware.sensor.barometer" android:required="true" />
-    <uses-feature android:name="android.hardware.sensor.light" android:required="true" />
-    <uses-feature android:name="android.hardware.sensor.relative_humidity" android:required="true" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- Sensors -->
+    <uses-feature
+        android:name="android.hardware.sensor.ambient_temperature"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.barometer"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.light"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.relative_humidity"
+        android:required="true" />
 
     <application
         android:name=".utilities.WeatherApplication"
@@ -28,16 +34,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ClearSkiesWeather"
         tools:ignore="AllowBackup">
-
         <activity
-            android:name=".activities.MainActivity"
-            android:exported="true">
+            android:name=".activities.OnBoardingActivity"
+            android:exported="true"
+            android:theme="@style/OnboardingTheme"/>
+        <activity
+            android:name=".activities.LaunchActivity"
+            android:exported="true"
+            android:theme="@style/LaunchTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.MainActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>

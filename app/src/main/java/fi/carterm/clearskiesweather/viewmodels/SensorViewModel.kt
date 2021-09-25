@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
 
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
+class SensorViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = getApplication<WeatherApplication>().repository
     val weatherData = repository.allWeather
