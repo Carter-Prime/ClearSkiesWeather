@@ -36,7 +36,7 @@ class SensorViewModel(application: Application) : AndroidViewModel(application) 
         abshumidity: Float,
         dewpoint: Float,
         latitude: Double,
-        longitude: Double
+        longitude: Double,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.addWeatherData(

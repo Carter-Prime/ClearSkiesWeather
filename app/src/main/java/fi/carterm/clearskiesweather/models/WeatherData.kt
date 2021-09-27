@@ -14,6 +14,5 @@ data class WeatherData(
     val abshumidity: Float,
     val dewpoint: Float,
     val latitude: Double,
-    val longitude: Double
-) {
-}
+    val longitude: Double,
+)

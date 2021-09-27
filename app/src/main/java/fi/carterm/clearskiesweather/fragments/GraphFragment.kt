@@ -16,17 +16,12 @@ import androidx.fragment.app.viewModels
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.viewmodels.SensorViewModel
 import android.content.pm.PackageManager
-import android.location.Location
-import android.os.SystemClock
-import android.widget.Button
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.OnCompleteListener
 import fi.carterm.clearskiesweather.databinding.FragmentGraphBinding
-import java.time.LocalDateTime
 import kotlin.math.exp
+import kotlin.math.ln
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
@@ -42,14 +37,14 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     private var temperature: Sensor? = null
     private var humidity: Sensor? = null
 
-    var temp1 = 0.0f
-    var light1 = 0.0f
-    var press1 = 0.0f
-    var hum1 = 0.0f
-    var dewPoint = 0.0f
-    var absHumidity = 0.0f
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
+    private var temp1 = 0.0f
+    private var light1 = 0.0f
+    private var press1 = 0.0f
+    private var hum1 = 0.0f
+    private var dewPoint = 0.0f
+    private var absHumidity = 0.0f
+    private var latitude = 0.0
+    private var longitude = 0.0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,7 +56,6 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
         sensorViewModel.weatherData.observe(viewLifecycleOwner) {
             Log.d("dbApp", "Weather Data: $it")
         }
-
 
         fusedLocationClient =
             LocationServices.getFusedLocationProviderClient(activity?.applicationContext)
@@ -76,11 +70,9 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             } != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
+        )
 
-        checkSensors()
+            checkSensors()
         setUpSensor()
 
     }
@@ -111,7 +103,6 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
             Log.d("Sensor missing", "Barometer")
             sensorPressure.text = "Pressure sensor not found"
         }
-
     }
 
     private fun setUpSensor() {
@@ -123,7 +114,6 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-
 
         val sensorLight: TextView = requireActivity().findViewById(R.id.tv_sensor_light)
         val sensorTemperature: TextView = requireActivity().findViewById(R.id.tv_sensor_temp)
@@ -143,7 +133,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
         if (event?.sensor?.type == Sensor.TYPE_AMBIENT_TEMPERATURE) {
             temp1 = event.values[0]
             dewPoint =
-                (243.12 * (Math.log(hum1 / 100.0) + 17.62 * temp1 / (243.12 + temp1)) / (17.62 - Math.log(
+                (243.12 * (ln(hum1 / 100.0) + 17.62 * temp1 / (243.12 + temp1)) / (17.62 - ln(
                     hum1 / 100.0
                 ) - 17.62 * temp1 / (243.12 + temp1))).toFloat()
             absHumidity =
@@ -156,24 +146,24 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
             press1 = event.values[0]
             dataToRoom(timestamp)
             sensorPressure.text = "Pressure sensor: $press1 hPa"
+            Log.d("Getting location 2", latitude.toString())
         }
 
         if (event?.sensor?.type == Sensor.TYPE_RELATIVE_HUMIDITY) {
             hum1 = event.values[0]
             dewPoint =
-                (243.12 * (Math.log(hum1 / 100.0) + 17.62 * temp1 / (243.12 + temp1)) / (17.62 - Math.log(
+                (243.12 * (ln(hum1 / 100.0) + 17.62 * temp1 / (243.12 + temp1)) / (17.62 - ln(
                     hum1 / 100.0
                 ) - 17.62 * temp1 / (243.12 + temp1))).toFloat()
             absHumidity =
                 (((216.7 * (hum1 / 100) * 6.112 * exp((17.62 * temp1) / (243.12 + temp1))) / (273.15 + temp1)).toFloat())
-
 
             dataToRoom(timestamp)
             sensorHumidity.text = "Relative humidity sensor: $hum1 %"
         }
     }
 
-    fun dataToRoom(timestamp: Long) {
+    private fun dataToRoom(timestamp: Long) {
         sensorViewModel.insertWeather(
             timestamp,
             temp1,
@@ -182,7 +172,8 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
             light1,
             absHumidity,
             dewPoint,
-            latitude, longitude
+            latitude,
+            longitude,
         )
     }
 
@@ -191,7 +182,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
             if (task.isSuccessful && task.result != null) {
                 latitude = task.result!!.latitude
                 longitude = task.result!!.longitude
-                Log.d("Getting location ", latitude.toString() )
+                Log.d("Getting location ", latitude.toString())
             } else {
                 Log.d("Getting location problem", "getLastLocation:exception", task.exception)
             }
@@ -202,12 +193,11 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
         return
     }
 
-   /* override fun onResume() {
+    override fun onResume() {
         super.onResume()
-        sensorManager = requireActivity().getSystemService(SENSOR_SERVICE) as SensorManager
         sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_UI)
         sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_UI)
         sensorManager.registerListener(this, pressure, SensorManager.SENSOR_DELAY_UI)
         sensorManager.registerListener(this, humidity, SensorManager.SENSOR_DELAY_UI)
-    }*/
+    }
 }
