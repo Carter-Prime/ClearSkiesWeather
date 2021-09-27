@@ -15,9 +15,7 @@ import androidx.fragment.app.viewModels
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.viewmodels.SensorViewModel
 import android.content.pm.PackageManager
-import android.os.SystemClock
 import fi.carterm.clearskiesweather.databinding.FragmentGraphBinding
-import java.time.LocalDateTime
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
@@ -25,15 +23,20 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
    private lateinit var sensorViewModel: SensorViewModel
 
     private lateinit var sensorManager: SensorManager
+    private lateinit var sensorLight: TextView
+    private lateinit var sensorTemperature: TextView
+    private lateinit var sensorPressure: TextView
+    private lateinit var sensorHumidity: TextView
     private var brightness: Sensor? = null
     private var pressure: Sensor? = null
     private var temperature: Sensor? = null
     private var humidity: Sensor? = null
 
-    var temp1 = 0.0f
-    var light1 = 0.0f
-    var press1 = 0.0f
-    var hum1 = 0.0f
+
+    private var temp1 = 0.0f
+    private var light1 = 0.0f
+    private var press1 = 0.0f
+    private var hum1 = 0.0f
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,17 +48,17 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
         sensorViewModel.weatherData.observe(viewLifecycleOwner) {
             Log.d("dbApp", "Weather Data: $it")
         }
+        sensorLight = binding.tvSensorLight
+        sensorTemperature = binding.tvSensorTemp
+        sensorPressure = binding.tvSensorPressure
+        sensorHumidity = binding.tvSensorHum
 
-        checkSensors()
-       setUpSensor()
+        sensorPermissionCheck()
+        setUpSensor()
 
     }
 
-    private fun checkSensors() {
-        val sensorLight: TextView = requireActivity().findViewById(R.id.tv_sensor_light)
-        val sensorTemperature: TextView = requireActivity().findViewById(R.id.tv_sensor_temp)
-        val sensorPressure: TextView = requireActivity().findViewById(R.id.tv_sensor_pressure)
-        val sensorHumidity: TextView = requireActivity().findViewById(R.id.tv_sensor_hum)
+    private fun sensorPermissionCheck() {
 
         val pm: PackageManager = requireActivity().packageManager
         if (!pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
@@ -89,12 +92,6 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-
-
-        val sensorLight: TextView = requireActivity().findViewById(R.id.tv_sensor_light)
-        val sensorTemperature: TextView = requireActivity().findViewById(R.id.tv_sensor_temp)
-        val sensorPressure: TextView = requireActivity().findViewById(R.id.tv_sensor_pressure)
-        val sensorHumidity: TextView = requireActivity().findViewById(R.id.tv_sensor_hum)
         val timestamp = System.currentTimeMillis()
 
         if (event?.sensor?.type == Sensor.TYPE_LIGHT) {
@@ -122,11 +119,9 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
             sensorHumidity.text = "Relative humidity sensor: $hum1 %"
         }
 
-
-
     }
 
-    fun dataToRoom(timestamp : Long){
+    private fun dataToRoom(timestamp : Long){
         sensorViewModel.insertWeather(
             timestamp,
             temp1,

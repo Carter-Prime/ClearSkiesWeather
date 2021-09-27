@@ -9,8 +9,14 @@ import fi.carterm.clearskiesweather.databinding.FragmentSettingsBinding
 class SettingsFragment: Fragment(R.layout.fragment_settings) {
     lateinit var binding: FragmentSettingsBinding
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSettingsBinding.bind(view)
+
     }
+
 }
+
+
+
