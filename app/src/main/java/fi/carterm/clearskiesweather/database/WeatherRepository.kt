@@ -7,7 +7,9 @@ class WeatherRepository(private val weatherDataDAO: WeatherDataDAO) {
 
     val allWeather: LiveData<List<WeatherData>> = weatherDataDAO.getWeatherData()
 
-    suspend fun addWeather(data: WeatherData): Long {
+    suspend fun addWeatherData(data: WeatherData): Long {
         return weatherDataDAO.insert(data)
     }
+
+
 }
