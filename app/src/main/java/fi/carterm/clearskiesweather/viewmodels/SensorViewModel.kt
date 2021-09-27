@@ -26,9 +26,9 @@ class SensorViewModel(application: Application) : AndroidViewModel(application) 
         repository = WeatherRepository(weatherDataDao)
         weatherData = repository.allWeather
     }
-    fun insertWeather(temp: Float, humidity: Float, pressure: Double, wind: Double){
+    fun insertWeather(timestamp: Long, temp: Float, humidity: Float, pressure: Float, wind: Float){
         viewModelScope.launch(Dispatchers.IO){
-            val response = repository.addWeatherData(WeatherData(0, temp,
+            val response = repository.addWeatherData(WeatherData(timestamp, temp,
                  humidity, pressure, wind))
             Log.d("SensorViewModsel", "Weather added: $response")
         }
