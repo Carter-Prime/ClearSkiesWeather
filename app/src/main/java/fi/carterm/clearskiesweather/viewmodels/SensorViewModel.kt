@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 class SensorViewModel(application: Application) : AndroidViewModel(application) {
 
     //private val repository = getApplication<WeatherApplication>().repository
-    private val repository :WeatherRepository
-   val weatherData : LiveData<List<WeatherData>>
+    private val repository: WeatherRepository
+    val weatherData: LiveData<List<WeatherData>>
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -26,10 +26,32 @@ class SensorViewModel(application: Application) : AndroidViewModel(application) 
         repository = WeatherRepository(weatherDataDao)
         weatherData = repository.allWeather
     }
-    fun insertWeather(timestamp: Long, temp: Float, humidity: Float, pressure: Float, wind: Float){
-        viewModelScope.launch(Dispatchers.IO){
-            val response = repository.addWeatherData(WeatherData(timestamp, temp,
-                 humidity, pressure, wind))
+
+    fun insertWeather(
+        timestamp: Long,
+        temp: Float,
+        humidity: Float,
+        pressure: Float,
+        light: Float,
+        abshumidity: Float,
+        dewpoint: Float,
+        latitude: Double,
+        longitude: Double
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.addWeatherData(
+                WeatherData(
+                    timestamp,
+                    temp,
+                    humidity,
+                    pressure,
+                    light,
+                    abshumidity,
+                    dewpoint,
+                    latitude,
+                    longitude
+                )
+            )
             Log.d("SensorViewModsel", "Weather added: $response")
         }
     }

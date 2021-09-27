@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7183d1c3544274e7c75cfd37b4505151",
+    "identityHash": "634331d3a32e51c909e012782af2de94",
     "entities": [
       {
         "tableName": "WeatherData",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timestamp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `temp` REAL NOT NULL, `humidity` REAL NOT NULL, `pressure` REAL NOT NULL, `wind` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timestamp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `temp` REAL NOT NULL, `humidity` REAL NOT NULL, `pressure` REAL NOT NULL, `light` REAL NOT NULL, `abshumidity` REAL NOT NULL, `dewpoint` REAL NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "timestamp",
@@ -33,8 +33,32 @@
             "notNull": true
           },
           {
-            "fieldPath": "wind",
-            "columnName": "wind",
+            "fieldPath": "light",
+            "columnName": "light",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "abshumidity",
+            "columnName": "abshumidity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dewpoint",
+            "columnName": "dewpoint",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
             "affinity": "REAL",
             "notNull": true
           }
@@ -52,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7183d1c3544274e7c75cfd37b4505151')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '634331d3a32e51c909e012782af2de94')"
     ]
   }
 }

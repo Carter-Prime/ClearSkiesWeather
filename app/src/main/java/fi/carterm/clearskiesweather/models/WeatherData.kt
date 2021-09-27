@@ -6,9 +6,14 @@ import androidx.room.PrimaryKey
 @Entity
 data class WeatherData(
     @PrimaryKey(autoGenerate = true)
-    val timestamp: Long,  //timestamp
+    val timestamp: Long,
     val temp: Float,
     val humidity: Float,
     val pressure: Float,
-    val wind: Float) { //light
+    val light: Float,
+    val abshumidity: Float,
+    val dewpoint: Float,
+    val latitude: Double,
+    val longitude: Double
+) {
 }
