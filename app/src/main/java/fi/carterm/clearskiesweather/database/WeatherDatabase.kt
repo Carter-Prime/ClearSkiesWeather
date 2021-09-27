@@ -27,7 +27,7 @@ abstract class WeatherDatabase: RoomDatabase() {
                 scope.launch {
                     val weatherDataDao = database.WeatherDataDAO()
 
-                    val weatherOne = WeatherData(0, 13.2, 45.2, 75.0, 1.0)
+                   /* val weatherOne = WeatherData(0, 13.2, 45.2, 75.0, 1.0)
                     var id = weatherDataDao.insert(weatherOne)
                     Log.d("dbApp", "database init weather one $id")
                     val weatherTwo = WeatherData(0, 15.2, 23.2, 78.0, 4.0)
@@ -36,7 +36,7 @@ abstract class WeatherDatabase: RoomDatabase() {
                     val weatherThree = WeatherData(0, 3.2, 65.2, 79.0, 14.0)
                     id = weatherDataDao.insert(weatherThree)
                     Log.d("dbApp", "database init weather three $id")
-                    Log.d("dbApp", "database init over")
+                    Log.d("dbApp", "database init over")*/
 
                 }
             }

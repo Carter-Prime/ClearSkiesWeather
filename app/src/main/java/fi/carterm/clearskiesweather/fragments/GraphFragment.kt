@@ -15,12 +15,14 @@ import androidx.fragment.app.viewModels
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.viewmodels.SensorViewModel
 import android.content.pm.PackageManager
+import android.os.SystemClock
 import fi.carterm.clearskiesweather.databinding.FragmentGraphBinding
+import java.time.LocalDateTime
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     private lateinit var binding: FragmentGraphBinding
-    //private lateinit var sensorViewModel: SensorViewModel
+   private lateinit var sensorViewModel: SensorViewModel
 
     private lateinit var sensorManager: SensorManager
     private var brightness: Sensor? = null
@@ -28,19 +30,24 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     private var temperature: Sensor? = null
     private var humidity: Sensor? = null
 
+    var temp1 = 0.0f
+    var light1 = 0.0f
+    var press1 = 0.0f
+    var hum1 = 0.0f
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("WeatherTest", "Fragment")
         binding = FragmentGraphBinding.bind(view)
-//        val viewModel: SensorViewModel by viewModels()
-//        sensorViewModel = viewModel
-//
-//        sensorViewModel.weatherData.observe(viewLifecycleOwner) {
-//            Log.d("dbApp", "Weather Data: $it")
-//        }
-//
-//        checkSensors()
-//        setUpSensor()
+        val viewModel: SensorViewModel by viewModels()
+        sensorViewModel = viewModel
+
+        sensorViewModel.weatherData.observe(viewLifecycleOwner) {
+            Log.d("dbApp", "Weather Data: $it")
+        }
+
+        checkSensors()
+       setUpSensor()
 
     }
 
@@ -82,42 +89,61 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
+
+
         val sensorLight: TextView = requireActivity().findViewById(R.id.tv_sensor_light)
         val sensorTemperature: TextView = requireActivity().findViewById(R.id.tv_sensor_temp)
         val sensorPressure: TextView = requireActivity().findViewById(R.id.tv_sensor_pressure)
         val sensorHumidity: TextView = requireActivity().findViewById(R.id.tv_sensor_hum)
+        val timestamp = System.currentTimeMillis()
 
         if (event?.sensor?.type == Sensor.TYPE_LIGHT) {
-            val light1 = event.values[0]
+            light1 = event.values[0]
+
+            dataToRoom(timestamp)
             sensorLight.text = "Light sensor: $light1 lx"
         }
 
         if (event?.sensor?.type == Sensor.TYPE_AMBIENT_TEMPERATURE) {
-            val temp1 = event.values[0]
+             temp1 = event.values[0]
+            dataToRoom(timestamp)
             sensorTemperature.text = "Temperature sensor: $temp1 °C"
         }
 
         if (event?.sensor?.type == Sensor.TYPE_PRESSURE) {
-            val press1 = event.values[0]
+             press1 = event.values[0]
+            dataToRoom(timestamp)
             sensorPressure.text = "Pressure sensor: $press1 hPa"
         }
 
         if (event?.sensor?.type == Sensor.TYPE_RELATIVE_HUMIDITY) {
-            val hum1 = event.values[0]
-
+            hum1 = event.values[0]
+            dataToRoom(timestamp)
             sensorHumidity.text = "Relative humidity sensor: $hum1 %"
         }
+
+
+
     }
 
+    fun dataToRoom(timestamp : Long){
+        sensorViewModel.insertWeather(
+            timestamp,
+            temp1,
+            hum1,
+            press1,
+            light1,
+        )
+    }
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         return
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_UI)
-//        sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_UI)
-//        sensorManager.registerListener(this, pressure, SensorManager.SENSOR_DELAY_UI)
-//        sensorManager.registerListener(this, humidity, SensorManager.SENSOR_DELAY_UI)
-//    }
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, pressure, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, humidity, SensorManager.SENSOR_DELAY_UI)
+    }
 }
