@@ -10,5 +10,4 @@ data class WeatherData(
     val temp: Float,
     val humidity: Float,
     val pressure: Float,
-    val wind: Float) { //light
-}
+    val light: Float)
