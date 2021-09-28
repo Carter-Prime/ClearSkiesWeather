@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class SensorViewModel(application: Application) : AndroidViewModel(application) {
+class SensorViewModel(application: WeatherApplication) : AndroidViewModel(application) {
     private val repository = getApplication<WeatherApplication>().repository
     val weatherData : LiveData<List<WeatherData>> = repository.allWeather
 
