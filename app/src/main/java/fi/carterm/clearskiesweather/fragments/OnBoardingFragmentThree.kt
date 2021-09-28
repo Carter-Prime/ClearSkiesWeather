@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.activities.MainActivity
 import fi.carterm.clearskiesweather.databinding.FragmentOnboardingThreeBinding
-import fi.carterm.clearskiesweather.databinding.FragmentOnboardingTwoBinding
 
 class OnBoardingFragmentThree : Fragment(R.layout.fragment_onboarding_three) {
     lateinit var binding: FragmentOnboardingThreeBinding

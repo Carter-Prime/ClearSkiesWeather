@@ -32,6 +32,10 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     private lateinit var sensorViewModel: SensorViewModel
 
     private lateinit var sensorManager: SensorManager
+    private lateinit var sensorLight: TextView
+    private lateinit var sensorTemperature: TextView
+    private lateinit var sensorPressure: TextView
+    private lateinit var sensorHumidity: TextView
     private var brightness: Sensor? = null
     private var pressure: Sensor? = null
     private var temperature: Sensor? = null
@@ -56,6 +60,11 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
         sensorViewModel.weatherData.observe(viewLifecycleOwner) {
             Log.d("dbApp", "Weather Data: $it")
         }
+        sensorLight = binding.tvSensorLight
+        sensorTemperature = binding.tvSensorTemp
+        sensorPressure = binding.tvSensorPressure
+        sensorHumidity = binding.tvSensorHum
+
 
         fusedLocationClient =
             LocationServices.getFusedLocationProviderClient(activity?.applicationContext)
@@ -72,16 +81,14 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
             } != PackageManager.PERMISSION_GRANTED
         )
 
-            checkSensors()
+
+        sensorPermissionCheck()
+
         setUpSensor()
 
     }
 
-    private fun checkSensors() {
-        val sensorLight: TextView = requireActivity().findViewById(R.id.tv_sensor_light)
-        val sensorTemperature: TextView = requireActivity().findViewById(R.id.tv_sensor_temp)
-        val sensorPressure: TextView = requireActivity().findViewById(R.id.tv_sensor_pressure)
-        val sensorHumidity: TextView = requireActivity().findViewById(R.id.tv_sensor_hum)
+    private fun sensorPermissionCheck() {
 
         val pm: PackageManager = requireActivity().packageManager
         if (!pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
@@ -162,7 +169,8 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
         }
     }
 
-    private fun dataToRoom(timestamp: Long) {
+
+    private fun dataToRoom(timestamp : Long){
 
         sensorViewModel.insertWeather(
             timestamp,

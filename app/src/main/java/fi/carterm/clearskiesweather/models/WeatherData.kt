@@ -16,3 +16,4 @@ data class WeatherData(
     val latitude: Double,
    val longitude: Double,
 )
+

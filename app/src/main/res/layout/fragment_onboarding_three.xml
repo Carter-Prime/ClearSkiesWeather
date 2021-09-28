@@ -13,11 +13,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:contentDescription="@string/clear_skies_title_descriptor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/app_title"
-        android:contentDescription="Clear Skies Title" />
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/textView"
@@ -26,7 +27,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="16dp"
-        android:text="Welcome to Clear Skies... before you begin  we would like to give you a quick introduction on how to use our app..."
+        android:text="@string/onboarding_text_intro"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +42,7 @@
         android:layout_marginTop="32dp"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:text="Finally..."
+        android:text="@string/finally_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -53,7 +54,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:srcCompat="@drawable/img_1" />
+        app:srcCompat="@drawable/img_1"
+        android:contentDescription="@string/screenshot_of_home_screen" />
 
     <TextView
         android:id="@+id/textView3"
@@ -62,7 +64,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:text="The forecast will show the weather up to 30 days in advance."
+        android:text="@string/the_forecast_will_show_the_weather_up_to_30_days_in_advance"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/btn_continue"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +80,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Get Started"
+        android:text="@string/get_started"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

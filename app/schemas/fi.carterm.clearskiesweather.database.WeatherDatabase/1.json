@@ -2,11 +2,19 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
+<<<<<<< HEAD
     "identityHash": "634331d3a32e51c909e012782af2de94",
     "entities": [
       {
         "tableName": "WeatherData",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timestamp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `temp` REAL NOT NULL, `humidity` REAL NOT NULL, `pressure` REAL NOT NULL, `light` REAL NOT NULL, `abshumidity` REAL NOT NULL, `dewpoint` REAL NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL)",
+=======
+    "identityHash": "0f527b1fbab9a71ef201f8a70fabbf22",
+    "entities": [
+      {
+        "tableName": "WeatherData",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timestamp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `temp` REAL NOT NULL, `humidity` REAL NOT NULL, `pressure` REAL NOT NULL, `light` REAL NOT NULL)",
+>>>>>>> master
         "fields": [
           {
             "fieldPath": "timestamp",
@@ -35,6 +43,7 @@
           {
             "fieldPath": "light",
             "columnName": "light",
+<<<<<<< HEAD
             "affinity": "REAL",
             "notNull": true
           },
@@ -59,6 +68,8 @@
           {
             "fieldPath": "longitude",
             "columnName": "longitude",
+=======
+>>>>>>> master
             "affinity": "REAL",
             "notNull": true
           }
@@ -76,7 +87,11 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+<<<<<<< HEAD
       "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '634331d3a32e51c909e012782af2de94')"
+=======
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0f527b1fbab9a71ef201f8a70fabbf22')"
+>>>>>>> master
     ]
   }
 }
