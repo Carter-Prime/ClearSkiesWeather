@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/weather_description_image"
             android:scaleType="centerCrop"
-            android:src="@drawable/sunny_clear_sky"
+            android:src="@drawable/weather_sunny_clear_sky"
             android:elevation="20dp"/>
 
         <LinearLayout
@@ -100,7 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="340dp"
         android:layout_marginStart="1dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -16,14 +16,14 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
     lateinit var binding: FragmentHomeBinding
     private lateinit var sensorAdapter: SensorAdapter
     private var sensorArray = listOf(
-        SensorData("Temperature", 23.5f, R.drawable.slightly_cloudy),
-        SensorData("Humidity", 50.5f, R.drawable.cloudy),
-        SensorData("Light", 230f, R.drawable.heavy_rain),
-        SensorData("Pressure", 30f, R.drawable.light_rain),
-        SensorData("Wind", 5.5f, R.drawable.windy),
-        SensorData("UV Rating", 10f, R.drawable.snow),
-        SensorData("Sunrise", 0630f, R.drawable.thunderstorm),
-        SensorData("Sunset", 1830f, R.drawable.sunny_clear_sky)
+        SensorData("Temperature", 23.5f, R.drawable.clipart_temperature),
+        SensorData("Humidity", 50.5f, R.drawable.clipart_humidity),
+        SensorData("Light", 230f, R.drawable.clipart_light),
+        SensorData("Pressure", 30f, R.drawable.clipart_barometer),
+        SensorData("Wind", 5.5f, R.drawable.clipart_windy),
+        SensorData("UV Rating", 10f, R.drawable.clipart_uv_rating),
+        SensorData("Sunrise", 0630f, R.drawable.clipart_sunrise),
+        SensorData("Sunset", 1830f, R.drawable.clipart_sunset)
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
