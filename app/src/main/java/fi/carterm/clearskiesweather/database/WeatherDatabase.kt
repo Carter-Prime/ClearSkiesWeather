@@ -17,41 +17,14 @@ abstract class WeatherDatabase: RoomDatabase() {
 
     abstract fun WeatherDataDAO():WeatherDataDAO
 
-    private class WeatherDatabaseCallback(
-        private val scope: CoroutineScope
-    ) : RoomDatabase.Callback() {
-
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            instance?.let { database ->
-                scope.launch {
-                    val weatherDataDao = database.WeatherDataDAO()
-
-                   /* val weatherOne = WeatherData(0, 13.2, 45.2, 75.0, 1.0)
-                    var id = weatherDataDao.insert(weatherOne)
-                    Log.d("dbApp", "database init weather one $id")
-                    val weatherTwo = WeatherData(0, 15.2, 23.2, 78.0, 4.0)
-                    id = weatherDataDao.insert(weatherTwo)
-                    Log.d("dbApp", "database init weather two $id")
-                    val weatherThree = WeatherData(0, 3.2, 65.2, 79.0, 14.0)
-                    id = weatherDataDao.insert(weatherThree)
-                    Log.d("dbApp", "database init weather three $id")
-                    Log.d("dbApp", "database init over")*/
-
-                }
-            }
-        }
-    }
-
     companion object{
         private var instance: WeatherDatabase? = null
 
         @Synchronized
-        fun get(context: Context, scope: CoroutineScope): WeatherDatabase {
+        fun get(context: Context): WeatherDatabase {
             if (instance == null) {
                 instance = Room.databaseBuilder(context.applicationContext,
                     WeatherDatabase::class.java, "weatherData.db")
-                    .addCallback(WeatherDatabaseCallback(scope))
                     .build()
             }
             return instance!!

@@ -13,6 +13,8 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0"
+        renderscriptTargetApi 24
+        renderscriptSupportModeEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -21,6 +23,8 @@ android {
                 arg("room.schemaLocation", "$projectDir/schemas")
             }
         }
+
+
     }
     buildFeatures{
         viewBinding true
@@ -108,6 +112,14 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+
+    // BlurViews
+    implementation 'com.github.furkankaplan:fk-blur-view-android:1.0.1'
+
+    // RecyclerView
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+
 
 
 
