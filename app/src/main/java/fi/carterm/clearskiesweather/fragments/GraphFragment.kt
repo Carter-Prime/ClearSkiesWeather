@@ -41,8 +41,8 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     private var light1 = 0.0f
     private var press1 = 0.0f
     private var hum1 = 0.0f
-    private var dewPoint = 0.0f
-    private var absHumidity = 0.0f
+    private var dewPoint = 0.0
+    private var absHumidity = 0.0
     private var latitude = 0.0
     private var longitude = 0.0
 
@@ -132,12 +132,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
 
         if (event?.sensor?.type == Sensor.TYPE_AMBIENT_TEMPERATURE) {
             temp1 = event.values[0]
-            dewPoint =
-                (243.12 * (ln(hum1 / 100.0) + 17.62 * temp1 / (243.12 + temp1)) / (17.62 - ln(
-                    hum1 / 100.0
-                ) - 17.62 * temp1 / (243.12 + temp1))).toFloat()
-            absHumidity =
-                (((216.7 * (hum1 / 100) * 6.112 * exp((17.62 * temp1) / (243.12 + temp1))) / (273.15 + temp1)).toFloat())
+            calculateValues()
             dataToRoom(timestamp)
             sensorTemperature.text = "Temperature sensor: $temp1 °C"
         }
@@ -150,20 +145,25 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
 
         if (event?.sensor?.type == Sensor.TYPE_RELATIVE_HUMIDITY) {
             hum1 = event.values[0]
-            dewPoint =
-                (243.12 * (ln(hum1 / 100.0) + 17.62 * temp1 / (243.12 + temp1)) / (17.62 - ln(
-                    hum1 / 100.0
-                ) - 17.62 * temp1 / (243.12 + temp1))).toFloat()
-            absHumidity =
-                (((216.7 * (hum1 / 100) * 6.112 * exp((17.62 * temp1) / (243.12 + temp1))) / (273.15 + temp1)).toFloat())
-
+            calculateValues()
             dataToRoom(timestamp)
             sensorHumidity.text = "Relative humidity sensor: $hum1 %"
         }
     }
 
+    private fun calculateValues() {
+        if(temp1 != 0.0f && hum1 != 0.0f ){
+        dewPoint = (243.12 * (ln(hum1 / 100.0) + (17.62 * temp1 / (243.12 + temp1))) / (17.62 -( ln(hum1 / 100.0 ) + (17.62 * temp1) / (243.12 + temp1))))
+        Log.d("DEWABS-DEW", dewPoint.toString())
+          absHumidity = ((216.7 * (hum1 / 100) * 6.112 * exp((17.62 * temp1) / (243.12 + temp1))) / (273.15 + temp1))
+        Log.d("DEWABS-ABS", absHumidity.toString())}
+        else{
+            Log.d("DEWABS-none", absHumidity.toString())
+        }
+    }
+
     private fun dataToRoom(timestamp: Long) {
-        Log.d("Getting location 4", latitude.toString())
+
         sensorViewModel.insertWeather(
             timestamp,
             temp1,
@@ -182,8 +182,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
             if (task.isSuccessful && task.result != null) {
                 latitude = task.result!!.latitude
                 longitude = task.result!!.longitude
-                Log.d("Getting location ", latitude.toString())
-            } else {
+                   } else {
                 Log.d("Getting location problem", "getLastLocation:exception", task.exception)
             }
         }

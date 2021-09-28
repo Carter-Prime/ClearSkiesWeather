@@ -33,8 +33,8 @@ class SensorViewModel(application: Application) : AndroidViewModel(application) 
         humidity: Float,
         pressure: Float,
         light: Float,
-        abshumidity: Float,
-        dewpoint: Float,
+        abshumidity: Double,
+        dewpoint: Double,
         latitude: Double,
         longitude: Double,
     ) {
