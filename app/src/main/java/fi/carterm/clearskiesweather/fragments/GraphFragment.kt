@@ -146,7 +146,6 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
             press1 = event.values[0]
             dataToRoom(timestamp)
             sensorPressure.text = "Pressure sensor: $press1 hPa"
-            Log.d("Getting location 2", latitude.toString())
         }
 
         if (event?.sensor?.type == Sensor.TYPE_RELATIVE_HUMIDITY) {
@@ -164,6 +163,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph), SensorEventListener {
     }
 
     private fun dataToRoom(timestamp: Long) {
+        Log.d("Getting location 4", latitude.toString())
         sensorViewModel.insertWeather(
             timestamp,
             temp1,
