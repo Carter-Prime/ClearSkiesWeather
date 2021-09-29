@@ -11,8 +11,8 @@ data class WeatherData(
     val humidity: Float,
     val pressure: Float,
     val light: Float,
-    val abshumidity: Double,
-    val dewpoint: Double,
-    val latitude: Double,
-   val longitude: Double,
+    val absHumidity: Double,
+    val dewPoint: Double,
+    val latitude: String,
+   val longitude: String,
 )
