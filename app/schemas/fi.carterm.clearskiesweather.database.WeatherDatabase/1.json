@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0f527b1fbab9a71ef201f8a70fabbf22",
+    "identityHash": "25e98c41a62f7ddde6c3c486c2bd5d0a",
     "entities": [
       {
         "tableName": "WeatherData",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timestamp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `temp` REAL NOT NULL, `humidity` REAL NOT NULL, `pressure` REAL NOT NULL, `light` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timestamp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `temp` REAL NOT NULL, `humidity` REAL NOT NULL, `pressure` REAL NOT NULL, `light` REAL NOT NULL, `absHumidity` REAL NOT NULL, `dewPoint` REAL NOT NULL, `latitude` TEXT NOT NULL, `longitude` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "timestamp",
@@ -37,6 +37,30 @@
             "columnName": "light",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "absHumidity",
+            "columnName": "absHumidity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dewPoint",
+            "columnName": "dewPoint",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -52,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0f527b1fbab9a71ef201f8a70fabbf22')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '25e98c41a62f7ddde6c3c486c2bd5d0a')"
     ]
   }
 }

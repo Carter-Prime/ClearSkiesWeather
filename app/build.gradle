@@ -119,6 +119,11 @@ dependencies {
     // RecyclerView
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
+    //Location
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+    //Shared Preferences
+    implementation 'androidx.preference:preference-ktx:1.1.1'
 
 
 

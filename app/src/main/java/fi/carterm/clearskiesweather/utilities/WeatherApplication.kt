@@ -5,6 +5,6 @@ import fi.carterm.clearskiesweather.database.WeatherDatabase
 import fi.carterm.clearskiesweather.database.WeatherRepository
 
 class WeatherApplication : Application() {
-    val database by lazy { WeatherDatabase.get(this) }
+    private val database by lazy { WeatherDatabase.get(this) }
     val repository by lazy { WeatherRepository(database.WeatherDataDAO()) }
 }
