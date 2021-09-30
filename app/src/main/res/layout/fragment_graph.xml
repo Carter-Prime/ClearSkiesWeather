@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:theme="@style/Theme.ClearSkiesWeather"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.ClearSkiesWeather">
 
 
     <com.jjoe64.graphview.GraphView
@@ -17,19 +16,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <!--Base CardView-->
+    <!--Base CardView 2-->
     <androidx.cardview.widget.CardView
         android:id="@+id/base_cardview"
         style="@style/Base.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintVertical_bias="0.021">
+        app:layout_constraintTop_toBottomOf="@+id/graph">
 
         <!--This is a ConstraintLayout for the entire CardView
                    including the expandable portion-->
@@ -48,7 +43,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/fixed_layout"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -60,30 +55,21 @@
                     android:id="@+id/list_of_subjects"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="58dp"
-                    android:text="List of subjects"
+                    android:text="Select your data to display"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/fixed_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.878"
-                    app:layout_constraintStart_toStartOf="parent"
 
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <!--This is ImageButton for the expansion icon.-->
                 <ImageButton
                     android:id="@+id/arrow_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="expand selection of sensors"
                     android:src="@drawable/ic_baseline_expand_more_24"
-                    app:layout_constraintBottom_toBottomOf="@id/fixed_layout"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.802"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/list_of_subjects"
-                    app:layout_constraintVertical_bias="0.0"
-                    android:contentDescription="expand selection of sensors" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -109,15 +95,12 @@
                     android:orientation="horizontal">
 
 
-
-                    <TextView
+                    <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
-                        android:text="Database Management"
-                        android:textColor="#000000"
-                        android:textSize="20dp" />
+                        android:text="Pressure" />
                 </LinearLayout>
 
                 <!--Child LinearLayout 2-->
@@ -127,15 +110,12 @@
                     android:orientation="horizontal">
 
 
-
-                    <TextView
+                    <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
-                        android:text="Data Structures"
-                        android:textColor="#000000"
-                        android:textSize="20dp" />
+                        android:text="Humidity" />
                 </LinearLayout>
 
                 <!--Child LinearLayout 3-->
@@ -145,20 +125,51 @@
                     android:orientation="horizontal">
 
 
-
-                    <TextView
+                    <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
-                        android:text="Operating Systems"
-                        android:textColor="#000000"
-                        android:textSize="20dp" />
+                        android:text="Temperature" />
+                </LinearLayout>
+                <!--Child LinearLayout 4-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Light" />
                 </LinearLayout>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
+    <Button
+        android:id="@+id/openAlertDialogButton"
+        android:layout_width="256dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Select time interval"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/base_cardview" />
+
+    <TextView
+        android:id="@+id/selectedItemPreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/openAlertDialogButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

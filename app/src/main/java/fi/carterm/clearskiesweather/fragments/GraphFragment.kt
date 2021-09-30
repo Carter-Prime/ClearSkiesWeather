@@ -1,6 +1,5 @@
 package fi.carterm.clearskiesweather.fragments
 
-
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -15,12 +14,8 @@ import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.databinding.FragmentGraphBinding
 import fi.carterm.clearskiesweather.viewmodels.GraphViewModel
 import com.jjoe64.graphview.series.LineGraphSeries
-
-
-
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
-
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
 
@@ -38,6 +33,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             Log.d("dbApp", "Weather Data: $it")
         }
 
+        // SELECT SENSOR BUTTONS
         val cardView = view.findViewById<CardView>(R.id.base_cardview)
         val arrow = view.findViewById<ImageButton>(R.id.arrow_button)
         val hiddenView = view.findViewById<LinearLayout>(R.id.hidden_view)
@@ -78,9 +74,12 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             )
         )
         graph.addSeries(series)
-    }
 
+
+
+    }
 }
+
 
 
 
