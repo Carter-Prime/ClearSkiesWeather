@@ -26,8 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/graph">
 
-        <!--This is a ConstraintLayout for the entire CardView
-                   including the expandable portion-->
+        <!--Tentire CardView including the expandable portion-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,10 +35,7 @@
             app:layout_constraintVertical_bias="0.511"
             tools:layout_editor_absoluteX="-55dp">
 
-            <!--This is a ConstraintLayout for the fixed portion
-                of the CardView. The elements
-                that lie within the fixed portion of the CardView
-                can be constrained to this layout.-->
+            <!--fixed portion-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/fixed_layout"
                 android:layout_width="match_parent"
@@ -73,10 +69,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!--The following is the expandable portion whose
-                visibility is initially set to 'gone'.
-                The parent LinearLayout contains 3 child LinearLayouts
-                that hold a subject name and an icon each.-->
+            <!--expandable portion -->
             <LinearLayout
                 android:id="@+id/hidden_view"
                 android:layout_width="match_parent"
@@ -88,64 +81,45 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fixed_layout">
 
-                <!--Child LinearLayout 1-->
-                <LinearLayout
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/flexboxLayout4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
 
+                    app:flexDirection="row"
+                    app:flexWrap="wrap"
+                    app:justifyContent="flex_start"
+                    app:alignItems="flex_start"
+                    app:alignContent="flex_start">
 
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Pressure" />
-                </LinearLayout>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Pressure" />
 
-                <!--Child LinearLayout 2-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Humidity" />
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Temperature" />
 
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Humidity" />
-                </LinearLayout>
-
-                <!--Child LinearLayout 3-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Temperature" />
-                </LinearLayout>
-                <!--Child LinearLayout 4-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Light" />
-                </LinearLayout>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Light" />
+                </com.google.android.flexbox.FlexboxLayout>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

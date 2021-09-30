@@ -125,6 +125,9 @@ dependencies {
     //Shared Preferences
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
+    //Flexbox
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
 
 
 
