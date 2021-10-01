@@ -5,10 +5,12 @@ import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.databinding.FragmentGraphBinding
@@ -75,8 +77,20 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         )
         graph.addSeries(series)
 
+        //PICK DATE BUTTONS
+        val startDateButton = view.findViewById<Button>(R.id.btn_starDate)
+        val endDateButton = view.findViewById<Button>(R.id.btn_endDate)
 
 
+        startDateButton.setOnClickListener {
+            showDatePickerDialog(it)
+        }
+
+    }
+    fun showDatePickerDialog(v: View) {
+        val newFragment = DatePickerFragment()
+        val supportFragmentManager:FragmentManager
+        newFragment.show(supportFragmentManager, "datePicker")
     }
 }
 

@@ -125,6 +125,31 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexboxLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:alignItems="flex_start"
+        app:alignContent="flex_start">
+
+    <Button
+        android:id="@+id/btn_starDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start date"
+         />
+    <Button
+        android:id="@+id/btn_endDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End date"
+         />
+    </com.google.android.flexbox.FlexboxLayout>
+
     <Button
         android:id="@+id/openAlertDialogButton"
         android:layout_width="256dp"
