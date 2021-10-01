@@ -7,9 +7,12 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.lifecycle.LiveData
-import fi.carterm.clearskiesweather.models.SensorReading
+import fi.carterm.clearskiesweather.models.sensors.HumiditySensorReading
+import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
+import fi.carterm.clearskiesweather.models.sensors.PressureSensorReading
+import fi.carterm.clearskiesweather.models.sensors.TemperatureSensorReading
 
-class SensorLiveData( var application: Application): LiveData<SensorReading>(), SensorEventListener {
+class SensorLiveData( var application: Application): LiveData<Any>(), SensorEventListener {
 
     private val sensorManager
         get() = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -19,18 +22,14 @@ class SensorLiveData( var application: Application): LiveData<SensorReading>(), 
     private var pressure = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
     private var humidity = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
 
-    private var temperatureReading: Float = 0.0f
-    private var pressureReading: Float = 0.0f
-    private var lightReading: Float = 0.0f
-    private var relativeHumidityReading: Float = 0.0f
 
 
     override fun onActive() {
         super.onActive()
-        sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_UI)
-        sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_UI)
-        sensorManager.registerListener(this, pressure, SensorManager.SENSOR_DELAY_UI)
-        sensorManager.registerListener(this, humidity, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, pressure, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, humidity, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onInactive() {
@@ -42,23 +41,22 @@ class SensorLiveData( var application: Application): LiveData<SensorReading>(), 
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        when(event?.sensor?.type){
+        value = when(event?.sensor?.type){
             Sensor.TYPE_LIGHT -> {
-                lightReading = event.values[0]
-
+                LightSensorReading(0, System.currentTimeMillis(), event.values[0])
             }
             Sensor.TYPE_AMBIENT_TEMPERATURE ->{
-                temperatureReading = event.values[0]
+                TemperatureSensorReading(0, System.currentTimeMillis(), event.values[0])
             }
             Sensor.TYPE_PRESSURE ->{
-                pressureReading = event.values[0]
+                PressureSensorReading(0, System.currentTimeMillis(), event.values[0])
             }
             Sensor.TYPE_RELATIVE_HUMIDITY ->{
-                relativeHumidityReading = event.values[0]
+                HumiditySensorReading(0, System.currentTimeMillis(), event.values[0])
             }
+            else -> null
         }
-        value = SensorReading(temperatureReading, pressureReading, lightReading, relativeHumidityReading)
-        value!!.calculateValues()
+
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
