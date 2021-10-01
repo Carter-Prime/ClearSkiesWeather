@@ -29,15 +29,13 @@ data class DewPointAndAbsHumidityReading(
        absHumidityReading = calculateAbsHumidity(temperature, relativeHumidity)
     }
 
-    private fun calculateDewPoint(temperature: Float, relativeHumidity:Float): Double {
+    private fun calculateDewPoint(temperature: Float, relativeHumidity: Float): Double {
         return (243.12 * (ln(relativeHumidity / 100.0) + (17.62 * temperature / (243.12 + temperature))) / (17.62 - (ln(
             relativeHumidity / 100.0
         ) + (17.62 * temperature) / (243.12 + temperature))))
-
     }
 
-    private fun calculateAbsHumidity(temperature: Float, relativeHumidity:Float): Double {
+    private fun calculateAbsHumidity(temperature: Float, relativeHumidity: Float): Double {
         return ((216.7 * (relativeHumidity / 100) * 6.112 * exp((17.62 * temperature) / (243.12 + temperature))) / (273.15 + temperature))
-
     }
 }
