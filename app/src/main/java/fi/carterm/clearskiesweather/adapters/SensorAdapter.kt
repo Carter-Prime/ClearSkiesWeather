@@ -1,5 +1,6 @@
 package fi.carterm.clearskiesweather.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +15,25 @@ import fi.carterm.clearskiesweather.models.SensorData
 
 class SensorAdapter( private val onClick: ((position: Int) -> Unit)? = null) : RecyclerView.Adapter<SensorAdapter.SensorHolder>() {
 
+    companion object{
+        var tempImage = R.drawable.clipart_temperature
+        var humidityImage = R.drawable.clipart_humidity
+        var lightImage = R.drawable.clipart_light
+        var pressureImage = R.drawable.clipart_barometer
+        var uvImage = R.drawable.clipart_uv_rating
+        var sunriseImage = R.drawable.clipart_sunrise
+        var sunsetImage = R.drawable.clipart_sunset
+    }
+
     private val diffCallback = object : DiffUtil.ItemCallback<SensorData>() {
 
         override fun areItemsTheSame(oldItem: SensorData, newItem: SensorData): Boolean {
-            return oldItem.sensorType == newItem.sensorType
+            Log.d("differCall", "Are Items the same: ${oldItem.sensorReading} ${newItem.sensorReading}")
+            return oldItem.sensorReading == newItem.sensorReading
         }
 
         override fun areContentsTheSame(oldItem: SensorData, newItem: SensorData): Boolean {
+            Log.d("differCall", "Are contents the same: ${oldItem == newItem}")
             return oldItem == newItem
         }
 

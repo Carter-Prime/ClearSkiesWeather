@@ -1,27 +1,42 @@
 package fi.carterm.clearskiesweather.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import fi.carterm.clearskiesweather.R
+import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
 import fi.carterm.clearskiesweather.models.SensorData
-import fi.carterm.clearskiesweather.models.WeatherData
+import fi.carterm.clearskiesweather.models.sensors.TemperatureSensorReading
 import fi.carterm.clearskiesweather.utilities.LocationLiveData
 import fi.carterm.clearskiesweather.utilities.SensorLiveData
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 class HomeViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository = getApplication<WeatherApplication>().repository
-    val weatherData: LiveData<List<WeatherData>> = repository.allWeather
+    val sensorLightReadings = repository.allLightReadings
 
-    private val locationLiveData = LocationLiveData(application.applicationContext)
+    private val locationLiveData = LocationLiveData(application)
     fun getLocationLiveData() = locationLiveData
+
+//    private val allReadings = repository.latestSensorReadings
+//    fun getAllReadings() = allReadings
 
     private val sensorLiveData = SensorLiveData(application)
     fun getSensorLiveData() = sensorLiveData
 
-    var sensorArray = listOf(
+    private var lastLight = repository.latestLightReading
+    fun getLastLight() = lastLight
+
+    private var lastTemp = repository.latestTempReading
+    fun getLastTemp() = lastTemp
+
+    var data = listOf(
         SensorData("Temperature", 23.5f, R.drawable.clipart_temperature),
         SensorData("Humidity", 50.5f, R.drawable.clipart_humidity),
         SensorData("Light", 230f, R.drawable.clipart_light),
@@ -31,28 +46,43 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         SensorData("Sunrise", 0630f, R.drawable.clipart_sunrise),
         SensorData("Sunset", 1830f, R.drawable.clipart_sunset)
     )
+
+
     
-//    fun saveToDatabase(){
-//        val timestamp = System.currentTimeMillis()
-//        val long = locationLiveData.value?.longitude ?: "null"
-//        val lat = locationLiveData.value?.latitude ?: "null"
-//
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val response = repository.addWeatherData(
-//                WeatherData(
-//                    timestamp,
-//                    temperature,
-//                    relativeHumidity,
-//                    pressure,
-//                    light,
-//                    absHumidity,
-//                    dewPoint,
-//                    lat,
-//                    long
-//                )
-//            )
-//            Log.d("HomeViewModel", "Weather added: $response")
-//        }
-//    }
+
+
+    fun lightOnChangeSaveToDatabase(current: LightSensorReading){
+        val minRange = lastLight.value?.sensorReading!! - 5
+        val maxRange = lastLight.value?.sensorReading!! + 5
+        if(current.sensorReading!! in minRange..maxRange){
+            return
+        }else{
+            viewModelScope.launch(Dispatchers.IO) {
+                val currentTime = System.currentTimeMillis()
+                val newReading = LightSensorReading(0,currentTime, current.sensorReading, getLocationLiveData().value)
+                val response =  repository.addLightReading(newReading)
+                Log.d("lightChange", "Light was changed: $response")
+            }
+
+        }
+
+    }
+
+    fun temperatureOnChangeSaveToDatabase(current: TemperatureSensorReading){
+        val minRange = lastTemp.value?.sensorReading!! - 2
+        val maxRange = lastTemp.value?.sensorReading!! + 2
+        if(current.sensorReading!! in minRange..maxRange){
+            return
+        }else{
+            viewModelScope.launch(Dispatchers.IO) {
+                val currentTime = System.currentTimeMillis()
+                val newReading = TemperatureSensorReading(0,currentTime, current.sensorReading, getLocationLiveData().value)
+                val response =  repository.addTempReading(newReading)
+                Log.d("TempChange", "Temperature was changed: $response")
+            }
+
+        }
+
+    }
 
 }

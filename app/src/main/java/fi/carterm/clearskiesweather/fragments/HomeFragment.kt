@@ -1,6 +1,5 @@
 package fi.carterm.clearskiesweather.fragments
 
-
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -11,11 +10,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.adapters.SensorAdapter
 import fi.carterm.clearskiesweather.databinding.FragmentHomeBinding
+import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
+import fi.carterm.clearskiesweather.models.sensors.TemperatureSensorReading
 import fi.carterm.clearskiesweather.utilities.PermissionsManager
 import fi.carterm.clearskiesweather.viewmodels.HomeViewModel
 
 
-class HomeFragment: Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var sensorAdapter: SensorAdapter
     private lateinit var homeViewModel: HomeViewModel
@@ -30,20 +31,54 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         checkSensors()
 
         binding.rvSensorDataCards.layoutManager = GridLayoutManager(context, 2)
-        sensorAdapter = SensorAdapter{
+        sensorAdapter = SensorAdapter {
             onClick(it)
         }
         binding.rvSensorDataCards.adapter = sensorAdapter
-        sensorAdapter.submitList(homeViewModel.sensorArray)
+        sensorAdapter.submitList(homeViewModel.data)
 
-        homeViewModel.getLocationLiveData().observe(viewLifecycleOwner){
-            Log.d("weatherTest", "Location Data $it")
+        homeViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
         }
 
-        homeViewModel.getSensorLiveData().observe(viewLifecycleOwner){
-            Log.d("weatherTest", "Sensor Data $it")
+        homeViewModel.getLastLight().observe(viewLifecycleOwner){
+            homeViewModel.data[2].sensorReading = it.sensorReading!!
+            sensorAdapter.submitList(homeViewModel.data)
+            sensorAdapter.notifyDataSetChanged()
         }
 
+        homeViewModel.getLastTemp().observe(viewLifecycleOwner){
+            homeViewModel.data[0].sensorReading = it.sensorReading!!
+            sensorAdapter.submitList(homeViewModel.data)
+            sensorAdapter.notifyDataSetChanged()
+        }
+
+        homeViewModel.getSensorLiveData().observe(viewLifecycleOwner) {
+            if (homeViewModel.getLocationLiveData().value != null) {
+                when (it) {
+                    is LightSensorReading -> {
+                        homeViewModel.lightOnChangeSaveToDatabase(it)
+                        homeViewModel.data[2].sensorReading = it.sensorReading!!
+                        sensorAdapter.submitList(homeViewModel.data)
+                        sensorAdapter.notifyDataSetChanged()
+                    }
+                    is TemperatureSensorReading -> {
+                        homeViewModel.temperatureOnChangeSaveToDatabase(it)
+                        homeViewModel.data[0].sensorReading = it.sensorReading!!
+                        sensorAdapter.submitList(homeViewModel.data)
+                        sensorAdapter.notifyDataSetChanged()
+                    }
+                    else -> Log.d("something", "else")
+//                    is HumiditySensorReading -> TODO()
+//                    is PressureSensorReading -> TODO()
+//                    is SensorReading -> TODO()
+                }
+            }
+
+        }
+
+        homeViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
+                Log.d("testingRoom", "Sensor Data from Room: $it")
+        }
     }
 
     private fun onClick(position: Int) {

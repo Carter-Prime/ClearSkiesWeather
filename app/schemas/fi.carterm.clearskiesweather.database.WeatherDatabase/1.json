@@ -2,70 +2,240 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "25e98c41a62f7ddde6c3c486c2bd5d0a",
+    "identityHash": "696b25aa2399edbc5ef619ec5bff0824",
     "entities": [
       {
-        "tableName": "WeatherData",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timestamp` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `temp` REAL NOT NULL, `humidity` REAL NOT NULL, `pressure` REAL NOT NULL, `light` REAL NOT NULL, `absHumidity` REAL NOT NULL, `dewPoint` REAL NOT NULL, `latitude` TEXT NOT NULL, `longitude` TEXT NOT NULL)",
+        "tableName": "LightSensorReading",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid_light` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp_light` INTEGER NOT NULL, `reading_light` REAL, `longitude` TEXT, `latitude` TEXT)",
         "fields": [
           {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
+            "fieldPath": "uuid",
+            "columnName": "uuid_light",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "temp",
-            "columnName": "temp",
-            "affinity": "REAL",
+            "fieldPath": "timestamp",
+            "columnName": "timestamp_light",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "humidity",
-            "columnName": "humidity",
+            "fieldPath": "sensorReading",
+            "columnName": "reading_light",
             "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.longitude",
+            "columnName": "longitude",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.latitude",
+            "columnName": "latitude",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uuid_light"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "TemperatureSensorReading",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid_temperature` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp_temperature` INTEGER NOT NULL, `reading_temperature` REAL, `longitude` TEXT, `latitude` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid_temperature",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "pressure",
-            "columnName": "pressure",
-            "affinity": "REAL",
+            "fieldPath": "timestamp",
+            "columnName": "timestamp_temperature",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "light",
-            "columnName": "light",
+            "fieldPath": "sensorReading",
+            "columnName": "reading_temperature",
             "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.longitude",
+            "columnName": "longitude",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.latitude",
+            "columnName": "latitude",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uuid_temperature"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "DewPointAndAbsHumidityReading",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid_DewPointAbsHumidity` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp_DewPointAbsHumidity` INTEGER NOT NULL, `temperature` REAL, `relativeHumidity` REAL, `dewPoint` REAL, `absHumidityReading` REAL, `longitude` TEXT, `latitude` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid_DewPointAbsHumidity",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "absHumidity",
-            "columnName": "absHumidity",
-            "affinity": "REAL",
+            "fieldPath": "timestamp",
+            "columnName": "timestamp_DewPointAbsHumidity",
+            "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "temperature",
+            "columnName": "temperature",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "relativeHumidity",
+            "columnName": "relativeHumidity",
+            "affinity": "REAL",
+            "notNull": false
           },
           {
             "fieldPath": "dewPoint",
             "columnName": "dewPoint",
             "affinity": "REAL",
-            "notNull": true
+            "notNull": false
           },
           {
-            "fieldPath": "latitude",
-            "columnName": "latitude",
-            "affinity": "TEXT",
-            "notNull": true
+            "fieldPath": "absHumidityReading",
+            "columnName": "absHumidityReading",
+            "affinity": "REAL",
+            "notNull": false
           },
           {
-            "fieldPath": "longitude",
+            "fieldPath": "location.longitude",
             "columnName": "longitude",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.latitude",
+            "columnName": "latitude",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "timestamp"
+            "uuid_DewPointAbsHumidity"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "HumiditySensorReading",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid_humidity` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp_humidity` INTEGER NOT NULL, `reading_humidity` REAL, `longitude` TEXT, `latitude` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid_humidity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp_humidity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sensorReading",
+            "columnName": "reading_humidity",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.longitude",
+            "columnName": "longitude",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.latitude",
+            "columnName": "latitude",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uuid_humidity"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PressureSensorReading",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid_pressure` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp_pressure` INTEGER NOT NULL, `reading_pressure` REAL, `longitude` TEXT, `latitude` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid_pressure",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp_pressure",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sensorReading",
+            "columnName": "reading_pressure",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.longitude",
+            "columnName": "longitude",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location.latitude",
+            "columnName": "latitude",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uuid_pressure"
           ],
           "autoGenerate": true
         },
@@ -76,7 +246,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '25e98c41a62f7ddde6c3c486c2bd5d0a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '696b25aa2399edbc5ef619ec5bff0824')"
     ]
   }
 }

@@ -23,13 +23,5 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         val viewModel: GraphViewModel by viewModels()
         graphViewModel = viewModel
 
-        graphViewModel.weatherData.observe(viewLifecycleOwner) {
-            Log.d("dbApp", "Weather Data: $it")
-        }
-
-
-
     }
-
-
 }
