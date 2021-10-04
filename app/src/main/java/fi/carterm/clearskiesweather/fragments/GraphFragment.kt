@@ -1,14 +1,11 @@
 package fi.carterm.clearskiesweather.fragments
 
-import android.graphics.Color.DKGRAY
+import android.graphics.Color
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import fi.carterm.clearskiesweather.R
@@ -23,7 +20,6 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import java.time.LocalDateTime
-import java.util.*
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -32,21 +28,21 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private lateinit var graphViewModel: GraphViewModel
 
     //graph query variables
-    val defaultStartDate = LocalDateTime.now().minusDays(31).toString()
-    val defaultEndDate = LocalDateTime.now().toString()
-    val defaultInterval = 4
-    val intervalMap = mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
+    private val defaultStartDate = LocalDateTime.now().minusDays(31).toString()
+    private val defaultEndDate = LocalDateTime.now().toString()
+    private val defaultInterval = 4
+    private val intervalMap = mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
 
-    var selectedTemperature = false
-    var selectedPressure = false
-    var selectedLight = false
-    var selectedHumidity = false
-    var selectedAbsHumidity = false
-    var selectedDewPoint = false
+    private var selectedTemperature = false
+    private var selectedPressure = false
+    private var selectedLight = false
+    private var selectedHumidity = false
+    private var selectedAbsHumidity = false
+    private var selectedDewPoint = false
 
-    var selectedInterval = defaultInterval
-    var selectedStartDate = defaultStartDate
-    var selectedEndDate = defaultEndDate
+    private var selectedInterval = defaultInterval
+    private var selectedStartDate = defaultStartDate
+    private var selectedEndDate = defaultEndDate
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -101,9 +97,9 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         }
 */
         // SELECT SENSOR BUTTONS
-        binding.arrowButton.setOnClickListener(View.OnClickListener {
+        binding.arrowButton.setOnClickListener {
             // If the CardView is already expanded, set its visibility to gone and change the expand less icon to expand more.
-            if (binding.hiddenView.getVisibility() == View.VISIBLE) {
+            if (binding.hiddenView.visibility == View.VISIBLE) {
 
                 // The transition of the hiddenView is carried out by the TransitionManager class.
                 // Here we use an object of the AutoTransition Class to create a default transition.
@@ -111,80 +107,79 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                     binding.cvCardView,
                     AutoTransition()
                 )
-                binding.hiddenView.setVisibility(View.GONE)
+                binding.hiddenView.visibility = View.GONE
                 binding.arrowButton.setImageResource(R.drawable.ic_baseline_expand_more_24)
             } else {
                 TransitionManager.beginDelayedTransition(
                     binding.cvCardView,
                     AutoTransition()
                 )
-                binding.hiddenView.setVisibility(View.VISIBLE)
+                binding.hiddenView.visibility = View.VISIBLE
                 binding.arrowButton.setImageResource(R.drawable.ic_baseline_expand_less_24)
+
                 // read light button value
                 binding.lightBtn.setOnClickListener {
-                    if (selectedLight == false) {
+                    if (!selectedLight) {
                         selectedLight = true
-                        binding.lightBtn.setBackgroundColor(R.color.purple_200)
+                        binding.lightBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedLight = false
-                        binding.lightBtn.setBackgroundColor(R.color.black_transparent)
+                        binding.lightBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
 
                 }
                 // read temp button value
                 binding.temperatureBtn.setOnClickListener {
-                    if (selectedLight == false) {
-                        selectedLight = true
-                        binding.temperatureBtn.setBackgroundColor(R.color.purple_200)
+                    if (!selectedTemperature) {
+                        selectedTemperature = true
+                        binding.temperatureBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedTemperature = false
-                        binding.temperatureBtn.setBackgroundColor(R.color.black_transparent)
+                        binding.temperatureBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
                 // read humidity button value
                 binding.humidityBtn.setOnClickListener {
-                    if (selectedHumidity == false) {
+                    if (!selectedHumidity) {
                         selectedHumidity = true
-                        binding.humidityBtn.setBackgroundColor(R.color.purple_200)
+                        binding.humidityBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedHumidity = false
-                        binding.humidityBtn.setBackgroundColor(R.color.black_transparent)
+                        binding.humidityBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
 // read absolute humidity button value
                 binding.absHumidityBtn.setOnClickListener {
-                    if (selectedAbsHumidity == false) {
+                    if (!selectedAbsHumidity) {
                         selectedAbsHumidity = true
-                        binding.absHumidityBtn.setBackgroundColor(R.color.purple_200)
+                        binding.absHumidityBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedAbsHumidity = false
-                        binding.absHumidityBtn.setBackgroundColor(R.color.black_transparent)
+                        binding.absHumidityBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
 // read pressure button value
                 binding.pressureBtn.setOnClickListener {
-                    if (selectedPressure == false) {
+                    if (!selectedPressure) {
                         selectedPressure = true
-                        binding.pressureBtn.setBackgroundColor(R.color.purple_200)
+                        binding.pressureBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedPressure = false
-                        binding.pressureBtn.setBackgroundColor(R.color.black_transparent)
+                        binding.pressureBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
                 // read dew point button value
                 binding.dewPointBtn.setOnClickListener {
-                    if (selectedDewPoint == false) {
+                    if (!selectedDewPoint) {
                         selectedDewPoint = true
-                        binding.dewPointBtn.setBackgroundColor(R.color.purple_200)
+                        binding.dewPointBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedDewPoint = false
-                        binding.dewPointBtn.setBackgroundColor(R.color.black_transparent)
+                        binding.dewPointBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
-
-
-            }
-        })
+             }
+        }
 
         val graph = view.findViewById(R.id.graph) as GraphView
         val series: LineGraphSeries<DataPoint> = LineGraphSeries(
