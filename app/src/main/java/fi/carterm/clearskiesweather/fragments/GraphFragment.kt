@@ -73,32 +73,28 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         }
 
         // SELECT SENSOR BUTTONS
-        val cardView = view.findViewById<CardView>(R.id.base_cardview)
-        val arrow = view.findViewById<ImageButton>(R.id.arrow_button)
-        val hiddenView = view.findViewById<LinearLayout>(R.id.hidden_view)
-
-        arrow.setOnClickListener(View.OnClickListener {
+        binding.arrowButton.setOnClickListener(View.OnClickListener {
             // If the CardView is already expanded, set its visibility
             //  to gone and change the expand less icon to expand more.
-            if (hiddenView.getVisibility() == View.VISIBLE) {
+            if (binding.hiddenView.getVisibility() == View.VISIBLE) {
 
                 // The transition of the hiddenView is carried out
                 //  by the TransitionManager class.
                 // Here we use an object of the AutoTransition
                 // Class to create a default transition.
                 TransitionManager.beginDelayedTransition(
-                    cardView,
+                    binding.cvCardView,
                     AutoTransition()
                 )
-                hiddenView.setVisibility(View.GONE)
-                arrow.setImageResource(R.drawable.ic_baseline_expand_more_24)
+                binding.hiddenView.setVisibility(View.GONE)
+                binding.arrowButton.setImageResource(R.drawable.ic_baseline_expand_more_24)
             } else {
                 TransitionManager.beginDelayedTransition(
-                    cardView,
+                    binding.cvCardView,
                     AutoTransition()
                 )
-                hiddenView.setVisibility(View.VISIBLE)
-                arrow.setImageResource(R.drawable.ic_baseline_expand_less_24)
+                binding.hiddenView.setVisibility(View.VISIBLE)
+                binding.arrowButton.setImageResource(R.drawable.ic_baseline_expand_less_24)
             }
         })
 
