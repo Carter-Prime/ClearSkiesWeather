@@ -21,6 +21,8 @@ import android.text.Editable
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
+import java.time.LocalDateTime
+import java.util.*
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -36,10 +38,26 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         graphViewModel = viewModel
          val fragmentManager = (activity as FragmentActivity).supportFragmentManager
 
+        //graph query variables
+        val defaultStartDate = LocalDateTime.now().minusDays(31).toString()
+        val defaultEndDate = LocalDateTime.now().toString()
+        val defaultInterval = 4
+        val intervalMap = mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
+
+        var selectedTemperature = false
+        var selectedPressure = false
+        var selectedLight = false
+        var selectedHumidity = false
+        var selectedAbsHumidity = false
+
+        var selectedInterval = defaultInterval
+        var selectedStartDate = defaultStartDate
+        var selectedEndDate = defaultEndDate
+
         //startDatePicker
         val startDatePicker =
             MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select Event Start Date")
+                .setTitleText("Select Start Date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .setCalendarConstraints(CalendarConstraints.Builder()
                     .setValidator(DateValidatorPointForward.now()).build())
@@ -49,13 +67,14 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         }
         startDatePicker.addOnPositiveButtonClickListener {
             val date = startDatePicker.headerText
+            selectedStartDate = date
             binding.etEventStartDate.text = Editable.Factory.getInstance().newEditable(date)
         }
 
         //endDatePicker
         val endDatePicker =
             MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select Event End Date")
+                .setTitleText("Select End Date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .setCalendarConstraints(CalendarConstraints.Builder()
                     .setValidator(DateValidatorPointForward.now()).build())
@@ -65,6 +84,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         }
         endDatePicker.addOnPositiveButtonClickListener {
             val date = endDatePicker.headerText
+            selectedEndDate = date
             binding.etEventEndDate.text = Editable.Factory.getInstance().newEditable(date)
         }
 
