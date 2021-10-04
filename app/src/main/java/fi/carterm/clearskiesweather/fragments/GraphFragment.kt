@@ -95,11 +95,11 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             selectedEndDate = date
             binding.etEventEndDate.text = Editable.Factory.getInstance().newEditable(date)
         }
-
+/*
         graphViewModel.weatherData.observe(viewLifecycleOwner) {
             Log.d("dbApp", "Weather Data: $it")
         }
-
+*/
         // SELECT SENSOR BUTTONS
         binding.arrowButton.setOnClickListener(View.OnClickListener {
             // If the CardView is already expanded, set its visibility to gone and change the expand less icon to expand more.
@@ -218,7 +218,3 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         //default should never happen
     }
 }
-
-
-
-
