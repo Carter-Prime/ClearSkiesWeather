@@ -14,7 +14,7 @@ import fi.carterm.clearskiesweather.models.sensors.HumiditySensorReading
 import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
 import fi.carterm.clearskiesweather.models.sensors.PressureSensorReading
 import fi.carterm.clearskiesweather.models.sensors.TemperatureSensorReading
-import fi.carterm.clearskiesweather.utilities.PermissionsManager
+import fi.carterm.clearskiesweather.utilities.managers.PermissionsManager
 import fi.carterm.clearskiesweather.viewmodels.HomeViewModel
 
 
@@ -39,11 +39,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.rvSensorDataCards.adapter = sensorAdapter
 
         homeViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
+            binding.tvCurrentLocation.text = it.address
         }
 
-        homeViewModel.getLatestHomeScreenData().observe(viewLifecycleOwner){
-            sensorAdapter.submitList(homeViewModel.createList(it))
+        homeViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner){
+            if (it != null){
+                sensorAdapter.submitList(homeViewModel.createListOfPhoneSensorData(it))
+            }
         }
+
+        homeViewModel.openWeatherCall.observe(viewLifecycleOwner){
+            Log.d("OneCallWeather", "$it")
+            homeViewModel.insertWeather(it)
+        }
+
+        homeViewModel.getAllWeatherModel().observe(viewLifecycleOwner){
+            Log.d("WeatherModel", "$it")
+        }
+
 
 
         homeViewModel.getSensorLiveData().observe(viewLifecycleOwner) {
@@ -58,9 +71,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        homeViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
-                Log.d("testingRoom", "Sensor Data from Room: $it")
-        }
+
     }
 
     private fun onClick(sensorType: String) {

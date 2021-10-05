@@ -1,4 +1,4 @@
-package fi.carterm.clearskiesweather.models
+package fi.carterm.clearskiesweather.models.sensors
 
 
 data class SensorData(

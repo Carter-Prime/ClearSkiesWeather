@@ -1,4 +1,4 @@
-package fi.carterm.clearskiesweather.utilities
+package fi.carterm.clearskiesweather.utilities.livedata
 
 import android.app.Application
 import android.content.Context

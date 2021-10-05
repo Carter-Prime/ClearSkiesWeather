@@ -1,6 +1,6 @@
 package fi.carterm.clearskiesweather.adapters
 
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import fi.carterm.clearskiesweather.R
-import fi.carterm.clearskiesweather.models.SensorData
+import fi.carterm.clearskiesweather.models.sensors.SensorData
 
 
 class SensorAdapter(private val onClick: ((position: String) -> Unit)? = null) :
