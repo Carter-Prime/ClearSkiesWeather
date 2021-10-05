@@ -9,11 +9,11 @@ android {
 
     defaultConfig {
         applicationId "fi.carterm.clearskiesweather"
-        minSdk 24
+        minSdk 26
         targetSdk 30
         versionCode 1
         versionName "1.0"
-        renderscriptTargetApi 24
+        renderscriptTargetApi 26
         renderscriptSupportModeEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -124,6 +124,9 @@ dependencies {
 
     //Shared Preferences
     implementation 'androidx.preference:preference-ktx:1.1.1'
+
+    //Flexbox
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
 
 
