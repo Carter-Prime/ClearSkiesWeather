@@ -19,7 +19,6 @@ import android.text.Editable
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
-import java.time.Duration
 import java.time.LocalDateTime
 
 
@@ -29,7 +28,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private lateinit var graphViewModel: GraphViewModel
 
     //graph query variables
-    private val defaultStartDate = LocalDateTime.now().minus(Duration.ofDays(31L)).toString()
+    private val defaultStartDate = LocalDateTime.now().minusDays(31).toString()
     private val defaultEndDate = LocalDateTime.now().toString()
     private val defaultInterval = 4
     private val intervalMap = mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
