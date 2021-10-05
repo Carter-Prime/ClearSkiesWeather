@@ -153,7 +153,7 @@
 
 
     <Button
-        android:id="@+id/openAlertDialogButton"
+        android:id="@+id/intervalButton"
         android:layout_width="256dp"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
@@ -170,7 +170,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/openAlertDialogButton">
+        app:layout_constraintTop_toBottomOf="@+id/intervalButton">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEventStartDate"
