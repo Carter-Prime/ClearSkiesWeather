@@ -31,4 +31,6 @@
     <string name="the_forecast_will_show_the_weather_up_to_30_days_in_advance">The forecast will show the weather up to 30 days in advance.</string>
     <string name="get_started">Get Started</string>
     <string name="temperature">Temperature</string>
+    <string name="select_start_date">select start date</string>
+    <string name="select_end_date">select end date</string>
 </resources>
