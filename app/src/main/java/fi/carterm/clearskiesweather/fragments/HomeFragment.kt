@@ -53,7 +53,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         homeViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner){
-            if (it != null){
+            if (it != null && sensorToggleOn){
                 sensorAdapter.submitList(homeViewModel.createListOfPhoneSensorData(it))
             }
         }
@@ -61,6 +61,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homeViewModel.openWeatherCall.observe(viewLifecycleOwner){
             Log.d("OneCallWeather", "$it")
             homeViewModel.insertWeather(it)
+            if(it != null && !sensorToggleOn){
+                sensorAdapter.submitList(homeViewModel.createListOfCurrentWeatherData(it))
+            }
         }
 
         homeViewModel.getAllWeatherModel().observe(viewLifecycleOwner){

@@ -11,6 +11,9 @@ import fi.carterm.clearskiesweather.utilities.livedata.LocationLiveData
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
+import java.util.*
 
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
@@ -142,6 +145,30 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 R.drawable.clipart_windy
             ),
             SensorData("Dew Point", data.dewPoint.toFloat(), R.drawable.clipart_uv_rating),
+        )
+    }
+
+    fun createListOfCurrentWeatherData(data: OneCallWeather): List<SensorData> {
+        val sunrise = Instant.ofEpochSecond(data.current.sunrise.toLong())
+            .atZone(ZoneId.systemDefault())
+            .toLocalTime()
+        val sunset = Instant.ofEpochSecond(data.current.sunset.toLong())
+            .atZone(ZoneId.systemDefault())
+            .toLocalTime()
+
+        return listOf(
+            SensorData("Temperature", data.current.temp.toFloat(), R.drawable.clipart_temperature),
+            SensorData("Humidity", data.current.humidity.toFloat(), R.drawable.clipart_humidity),
+            SensorData("Light", data.current.visibility.toFloat(), R.drawable.clipart_light),
+            SensorData("Pressure", data.current.pressure.toFloat(), R.drawable.clipart_barometer),
+            SensorData(
+                "Wind",
+                data.current.wind_speed.toFloat(),
+                R.drawable.clipart_windy
+            ),
+            SensorData("UV Rating", data.current.uvi.toFloat(), R.drawable.clipart_uv_rating),
+            SensorData("Sunrise",sunrise , R.drawable.clipart_sunrise),
+            SensorData("Sunset", sunset, R.drawable.clipart_sunset),
         )
     }
 
