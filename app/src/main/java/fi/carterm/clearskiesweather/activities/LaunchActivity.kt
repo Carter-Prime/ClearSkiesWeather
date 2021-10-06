@@ -3,6 +3,8 @@ package fi.carterm.clearskiesweather.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.core.view.WindowCompat
@@ -23,14 +25,13 @@ class LaunchActivity : AppCompatActivity() {
             controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
 
-        val intent = Intent (this, OnBoardingActivity::class.java)
-        CoroutineScope(Dispatchers.Main).launch {
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            val intent = Intent (this, OnBoardingActivity::class.java)
             Log.d("WeatherTest", "Launch activity two")
-            delay(2000)
+
             startActivity(intent)
             finish()
-        }
-
+             },5000)
 
     }
 

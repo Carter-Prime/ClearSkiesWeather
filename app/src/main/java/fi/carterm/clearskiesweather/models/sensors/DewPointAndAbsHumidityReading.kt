@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import fi.carterm.clearskiesweather.models.LocationDetails
+import fi.carterm.clearskiesweather.models.misc.LocationDetails
 import kotlin.math.exp
 import kotlin.math.ln
 

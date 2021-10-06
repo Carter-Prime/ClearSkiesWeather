@@ -2,14 +2,12 @@ package fi.carterm.clearskiesweather.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import fi.carterm.clearskiesweather.R
-import fi.carterm.clearskiesweather.models.SensorData
+import fi.carterm.clearskiesweather.models.api.OneCallWeather
+import fi.carterm.clearskiesweather.models.sensors.SensorData
 import fi.carterm.clearskiesweather.models.sensors.*
-import fi.carterm.clearskiesweather.utilities.LocationLiveData
-import fi.carterm.clearskiesweather.utilities.SensorLiveData
+import fi.carterm.clearskiesweather.utilities.livedata.LocationLiveData
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,129 +16,121 @@ import kotlinx.coroutines.launch
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = getApplication<WeatherApplication>().repository
-    val sensorLightReadings = repository.allLightReadings
+
 
     private val locationLiveData = LocationLiveData(application)
     fun getLocationLiveData() = locationLiveData
 
-    private val latestHomeScreenData = repository.latestHomeScreenData
-    fun getLatestHomeScreenData() = latestHomeScreenData
-
-    private val sensorLiveData = SensorLiveData(application)
-    fun getSensorLiveData() = sensorLiveData
+    private val latestPhoneSensorData = repository.latestPhoneSensorData
+    fun getLatestPhoneSensorData() = latestPhoneSensorData
 
 
-    fun lightOnChangeSaveToDatabase(current: LightSensorReading) {
-        if (getLatestHomeScreenData().value != null) {
-            val minRange = getLatestHomeScreenData().value!!.reading_light - 1
-            val maxRange = getLatestHomeScreenData().value!!.reading_light + 1
-            if (current.sensorReading!! in minRange..maxRange) {
-                return
-            } else {
+
+    private val getWeatherModel = repository.getWeatherModel
+    fun getAllWeatherModel() = getWeatherModel
+
+    var openWeatherCall = locationLiveData.switchMap {
+        liveData(Dispatchers.IO){
+            emit(repository.getWeather(it.latitude, it.longitude))
+    }
+    }
+
+    fun insertWeather(data: OneCallWeather){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.insertWeatherToDatabase(data)
+        }
+    }
+
+
+    fun lightOnChangeSaveToDatabase(current: Float) {
+        if (current != -1000f) {
                 viewModelScope.launch(Dispatchers.IO) {
                     val currentTime = System.currentTimeMillis()
                     val newReading = LightSensorReading(
                         0,
                         currentTime,
-                        current.sensorReading,
+                        current,
                         getLocationLiveData().value
                     )
-                    repository.addLightReading(newReading)
+                    val response = repository.addLightReading(newReading)
+                    Log.d("weatherTest", "light inserted $response")
                 }
 
             }
         }
-    }
 
-    fun temperatureOnChangeSaveToDatabase(current: TemperatureSensorReading) {
-        if (getLatestHomeScreenData().value != null) {
-            val minRange = getLatestHomeScreenData().value!!.reading_temperature - 1
-            val maxRange = getLatestHomeScreenData().value!!.reading_temperature + 1
-            if (current.sensorReading!! in minRange..maxRange) {
-                return
-            } else {
+    fun temperatureOnChangeSaveToDatabase(current: Float) {
+        if (current != -1000f) {
                 viewModelScope.launch(Dispatchers.IO) {
                     val currentTime = System.currentTimeMillis()
                     val newReading = TemperatureSensorReading(
                         0,
                         currentTime,
-                        current.sensorReading,
+                        current,
                         getLocationLiveData().value
                     )
-                    repository.addTempReading(newReading)
+                    val responseOne = repository.addTempReading(newReading)
 
                     val newReadingTwo = DewPointAndAbsHumidityReading(
                         0,
                         currentTime,
-                        getLatestHomeScreenData().value!!.reading_temperature,
-                        getLatestHomeScreenData().value!!.reading_humidity,
+                        getLatestPhoneSensorData().value!!.reading_temperature,
+                        getLatestPhoneSensorData().value!!.reading_humidity,
                         getLocationLiveData().value
                     )
 
-                    repository.addDewAndAbsReading(newReadingTwo)
+                   val responseTwo = repository.addDewAndAbsReading(newReadingTwo)
+                    Log.d("weatherTest", "temp inserted $responseOne and dewPoint inserted $responseTwo")
                 }
 
             }
         }
 
-    }
+    fun humidityOnChangeSaveToDatabase(current: Float) {
+        if (current != -1000f) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val currentTime = System.currentTimeMillis()
+                val newReading = HumiditySensorReading(
+                    0,
+                    currentTime,
+                    current,
+                    getLocationLiveData().value
+                )
+                val responseOne = repository.addHumidityReading(newReading)
 
-    fun humidityOnChangeSaveToDatabase(current: HumiditySensorReading) {
-        if (getLatestHomeScreenData().value != null) {
-            val minRange = getLatestHomeScreenData().value!!.reading_humidity - 1
-            val maxRange = getLatestHomeScreenData().value!!.reading_humidity + 1
-            if (current.sensorReading!! in minRange..maxRange) {
-                return
-            } else {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val currentTime = System.currentTimeMillis()
-                    val newReading = HumiditySensorReading(
-                        0,
-                        currentTime,
-                        current.sensorReading,
-                        getLocationLiveData().value
-                    )
-                    repository.addHumidityReading(newReading)
+                val newReadingTwo = DewPointAndAbsHumidityReading(
+                    0,
+                    currentTime,
+                    getLatestPhoneSensorData().value!!.reading_temperature,
+                    getLatestPhoneSensorData().value!!.reading_humidity,
+                    getLocationLiveData().value
+                )
 
-                    val newReadingTwo = DewPointAndAbsHumidityReading(
-                        0,
-                        currentTime,
-                        getLatestHomeScreenData().value!!.reading_temperature,
-                        getLatestHomeScreenData().value!!.reading_humidity,
-                        getLocationLiveData().value
-                    )
-
-                    repository.addDewAndAbsReading(newReadingTwo)
-                }
-
+                val responseTwo = repository.addDewAndAbsReading(newReadingTwo)
+                Log.d("weatherTest", "humidity inserted $responseOne and dewPoint inserted $responseTwo")
             }
-        }
 
-    }
-
-    fun pressureOnChangeSaveToDatabase(current: PressureSensorReading) {
-        if (getLatestHomeScreenData().value != null) {
-            val minRange = getLatestHomeScreenData().value!!.reading_pressure - 1
-            val maxRange = getLatestHomeScreenData().value!!.reading_pressure + 1
-            if (current.sensorReading!! in minRange..maxRange) {
-                return
-            } else {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val currentTime = System.currentTimeMillis()
-                    val newReading = PressureSensorReading(
-                        0,
-                        currentTime,
-                        current.sensorReading,
-                        getLocationLiveData().value
-                    )
-                    repository.addPressureReading(newReading)
-                }
-
-            }
         }
     }
 
-    fun createList(data: HomeSensorData): List<SensorData> {
+    fun pressureOnChangeSaveToDatabase(current: Float) {
+        if (current != -1000f) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val currentTime = System.currentTimeMillis()
+                val newReading = PressureSensorReading(
+                    0,
+                    currentTime,
+                    current,
+                    getLocationLiveData().value
+                )
+                val response = repository.addPressureReading(newReading)
+                Log.d("weatherTest", "pressure inserted $response")
+            }
+
+        }
+    }
+
+    fun createListOfPhoneSensorData(data: PhoneSensorData): List<SensorData> {
         return listOf(
             SensorData("Temperature", data.reading_temperature, R.drawable.clipart_temperature),
             SensorData("Humidity", data.reading_humidity, R.drawable.clipart_humidity),
@@ -154,5 +144,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             SensorData("Dew Point", data.dewPoint.toFloat(), R.drawable.clipart_uv_rating),
         )
     }
+
 
 }

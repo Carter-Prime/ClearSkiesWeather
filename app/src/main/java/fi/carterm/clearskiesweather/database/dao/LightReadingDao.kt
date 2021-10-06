@@ -2,7 +2,7 @@ package fi.carterm.clearskiesweather.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import fi.carterm.clearskiesweather.models.sensors.HomeSensorData
+import fi.carterm.clearskiesweather.models.sensors.PhoneSensorData
 import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
 
 
@@ -19,7 +19,7 @@ interface LightReadingDao {
     @Query("""SELECT reading_light, reading_temperature, reading_humidity, reading_pressure, absHumidityReading, dewPoint
             FROM TemperatureSensorReading, LightSensorReading, HumiditySensorReading, PressureSensorReading, DewPointAndAbsHumidityReading
             ORDER BY uuid_light DESC, uuid_temperature DESC, uuid_humidity DESC, uuid_pressure DESC, uuid_DewPointAbsHumidity DESC LIMIT 1""")
-    fun getLatestReadings(): LiveData<HomeSensorData>
+    fun getLatestReadings(): LiveData<PhoneSensorData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(lightSensorData: LightSensorReading): Long
