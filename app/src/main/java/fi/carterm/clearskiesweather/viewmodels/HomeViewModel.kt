@@ -2,18 +2,19 @@ package fi.carterm.clearskiesweather.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.models.api.OneCallWeather
-import fi.carterm.clearskiesweather.models.sensors.SensorData
 import fi.carterm.clearskiesweather.models.sensors.*
-import fi.carterm.clearskiesweather.utilities.livedata.LocationLiveData
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
+import fi.carterm.clearskiesweather.utilities.livedata.LocationLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
-import java.util.*
 
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
@@ -149,12 +150,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun createListOfCurrentWeatherData(data: OneCallWeather): List<SensorData> {
-        val sunrise = Instant.ofEpochSecond(data.current.sunrise.toLong())
-            .atZone(ZoneId.systemDefault())
-            .toLocalTime()
-        val sunset = Instant.ofEpochSecond(data.current.sunset.toLong())
-            .atZone(ZoneId.systemDefault())
-            .toLocalTime()
+//        val sunrise = Instant.ofEpochSecond(data.current.sunrise.toLong())
+//            .atZone(ZoneId.systemDefault())
+//            .toLocalTime()
+//        val sunset = Instant.ofEpochSecond(data.current.sunset.toLong())
+//            .atZone(ZoneId.systemDefault())
+//            .toLocalTime()
 
         return listOf(
             SensorData("Temperature", data.current.temp.toFloat(), R.drawable.clipart_temperature),
@@ -167,8 +168,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 R.drawable.clipart_windy
             ),
             SensorData("UV Rating", data.current.uvi.toFloat(), R.drawable.clipart_uv_rating),
-            SensorData("Sunrise",sunrise , R.drawable.clipart_sunrise),
-            SensorData("Sunset", sunset, R.drawable.clipart_sunset),
+            SensorData("Sunrise",data.current.sunrise , R.drawable.clipart_sunrise),
+            SensorData("Sunset", data.current.sunset, R.drawable.clipart_sunset),
         )
     }
 

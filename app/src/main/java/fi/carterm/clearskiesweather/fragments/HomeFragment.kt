@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.adapters.SensorAdapter
 import fi.carterm.clearskiesweather.databinding.FragmentHomeBinding
@@ -42,7 +43,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 SensorService.KEY_ON_SENSOR_CHANGED_ACTION))
         }
 
-        binding.rvSensorDataCards.layoutManager = GridLayoutManager(context, 2)
+       val mLayoutManager = GridLayoutManager(context, 2)
+        mLayoutManager.spanSizeLookup = object : SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (sensorAdapter.getItemViewType(position)) {
+                    0 -> 2
+                    1 -> 1
+                    else -> 1
+                }
+            }
+        }
+
+        binding.rvSensorDataCards.layoutManager = mLayoutManager
         sensorAdapter = SensorAdapter {
             onClick(it)
         }
@@ -54,7 +66,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         homeViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner){
             if (it != null && sensorToggleOn){
-                sensorAdapter.submitList(homeViewModel.createListOfPhoneSensorData(it))
+                sensorAdapter.addHeaderAndSubmitList(homeViewModel.createListOfPhoneSensorData(it))
             }
         }
 
@@ -62,7 +74,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Log.d("OneCallWeather", "$it")
             homeViewModel.insertWeather(it)
             if(it != null && !sensorToggleOn){
-                sensorAdapter.submitList(homeViewModel.createListOfCurrentWeatherData(it))
+                sensorAdapter.addHeaderAndSubmitList(homeViewModel.createListOfCurrentWeatherData(it))
             }
         }
 
