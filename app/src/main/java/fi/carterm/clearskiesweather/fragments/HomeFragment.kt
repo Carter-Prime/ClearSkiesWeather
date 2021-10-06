@@ -1,19 +1,21 @@
 package fi.carterm.clearskiesweather.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.adapters.SensorAdapter
 import fi.carterm.clearskiesweather.databinding.FragmentHomeBinding
-import fi.carterm.clearskiesweather.models.sensors.HumiditySensorReading
-import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
-import fi.carterm.clearskiesweather.models.sensors.PressureSensorReading
-import fi.carterm.clearskiesweather.models.sensors.TemperatureSensorReading
+import fi.carterm.clearskiesweather.services.background.SensorService
 import fi.carterm.clearskiesweather.utilities.managers.PermissionsManager
 import fi.carterm.clearskiesweather.viewmodels.HomeViewModel
 
@@ -31,6 +33,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         PermissionsManager.hasLocationPermissions(requireContext(), requireActivity())
         checkSensors()
+
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadcastReceiver,  IntentFilter(
+            SensorService.KEY_ON_SENSOR_CHANGED_ACTION))
 
         binding.rvSensorDataCards.layoutManager = GridLayoutManager(context, 2)
         sensorAdapter = SensorAdapter {
@@ -57,21 +62,37 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Log.d("WeatherModel", "$it")
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startForegroundServiceForSensors(false)
+    }
+
+    private fun startForegroundServiceForSensors(background: Boolean) {
+        val sensorServiceIntent = Intent(activity, SensorService::class.java)
+        sensorServiceIntent.putExtra(SensorService.KEY_BACKGROUND, background)
+        requireActivity().startForegroundService(sensorServiceIntent)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        startForegroundServiceForSensors(true)
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver)
+        super.onDestroy()
+    }
 
 
-        homeViewModel.getSensorLiveData().observe(viewLifecycleOwner) {
-            if (homeViewModel.getLocationLiveData().value != null) {
-                when (it) {
-                    is LightSensorReading -> homeViewModel.lightOnChangeSaveToDatabase(it)
-                    is TemperatureSensorReading -> homeViewModel.temperatureOnChangeSaveToDatabase(it)
-                    is HumiditySensorReading -> homeViewModel.humidityOnChangeSaveToDatabase(it)
-                    is PressureSensorReading -> homeViewModel.pressureOnChangeSaveToDatabase(it)
-                    else -> Log.d("something", "else")
-                }
-            }
+    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+             homeViewModel.lightOnChangeSaveToDatabase(intent.getFloatExtra(SensorService.KEY_LIGHT, -1000f))
+             homeViewModel.temperatureOnChangeSaveToDatabase(intent.getFloatExtra(SensorService.KEY_TEMP, -1000f))
+             homeViewModel.pressureOnChangeSaveToDatabase(intent.getFloatExtra(SensorService.KEY_PRESSURE, -1000f))
+             homeViewModel.humidityOnChangeSaveToDatabase(intent.getFloatExtra(SensorService.KEY_HUMIDITY, -1000f))
         }
-
-
     }
 
     private fun onClick(sensorType: String) {
@@ -89,7 +110,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_AMBIENT_TEMPERATURE)) {
-            Log.d("Sensor missing", "Termometer")
+            Log.d("Sensor missing", "Thermometer")
 
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_RELATIVE_HUMIDITY)) {
