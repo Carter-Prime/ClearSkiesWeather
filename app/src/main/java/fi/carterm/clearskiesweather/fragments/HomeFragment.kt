@@ -1,12 +1,12 @@
 package fi.carterm.clearskiesweather.fragments
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,18 +24,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var sensorAdapter: SensorAdapter
     private lateinit var homeViewModel: HomeViewModel
+    private var sensorToggleOn = true
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         binding = FragmentHomeBinding.bind(view)
         val viewModel: HomeViewModel by viewModels()
         homeViewModel = viewModel
+        sensorToggleOn = getState()
 
         PermissionsManager.hasLocationPermissions(requireContext(), requireActivity())
         checkSensors()
-
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadcastReceiver,  IntentFilter(
-            SensorService.KEY_ON_SENSOR_CHANGED_ACTION))
+        if (sensorToggleOn){
+            LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadcastReceiver,  IntentFilter(
+                SensorService.KEY_ON_SENSOR_CHANGED_ACTION))
+        }
 
         binding.rvSensorDataCards.layoutManager = GridLayoutManager(context, 2)
         sensorAdapter = SensorAdapter {
@@ -64,9 +69,56 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_right_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.btn_toggle_sensors -> {
+                Log.d("weatherTest", "Toggle button pressed")
+                if(sensorToggleOn){
+                        stopService()
+                }else{
+                    startService()
+                }
+                saveState()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun stopService(){
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver)
+        requireContext().stopService(Intent(activity, SensorService::class.java))
+    }
+
+    private fun startService(){
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadcastReceiver,  IntentFilter(
+            SensorService.KEY_ON_SENSOR_CHANGED_ACTION))
+        startForegroundServiceForSensors(false)
+    }
+
+    private fun saveState(){
+        sensorToggleOn = !sensorToggleOn
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putBoolean("toggleSensorOn", sensorToggleOn)
+            apply()
+        }
+    }
+
+    private fun getState(): Boolean{
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        return sharedPref!!.getBoolean("toggleSensorOn", true)
+    }
+
     override fun onResume() {
         super.onResume()
-        startForegroundServiceForSensors(false)
+        if(sensorToggleOn) {
+            startForegroundServiceForSensors(false)
+        }
     }
 
     private fun startForegroundServiceForSensors(background: Boolean) {
@@ -77,11 +129,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onPause() {
         super.onPause()
-        startForegroundServiceForSensors(true)
+        if(sensorToggleOn) {
+            startForegroundServiceForSensors(true)
+        }
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver)
+        if(sensorToggleOn) {
+            LocalBroadcastManager.getInstance(requireContext())
+                .unregisterReceiver(broadcastReceiver)
+        }
         super.onDestroy()
     }
 
