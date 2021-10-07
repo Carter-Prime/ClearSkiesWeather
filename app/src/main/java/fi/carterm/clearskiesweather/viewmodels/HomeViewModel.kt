@@ -1,11 +1,11 @@
 package fi.carterm.clearskiesweather.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.models.api.OneCallWeather
 import fi.carterm.clearskiesweather.models.apiRoomCache.WeatherModel
 import fi.carterm.clearskiesweather.models.sensors.*
@@ -17,9 +17,13 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
+    var tempSensor = true
+    var lightSensor = true
+    var gpsSensor = true
+    var humiditySensor = true
+    var pressureSensor = true
+
     private val repository = getApplication<WeatherApplication>().repository
-
-
     private val locationLiveData = LocationLiveData(application)
     fun getLocationLiveData() = locationLiveData
 
@@ -30,61 +34,60 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getLatestWeather() = latestWeatherData
 
     var openWeatherCall = locationLiveData.switchMap {
-        liveData(Dispatchers.IO){
+        liveData(Dispatchers.IO) {
             emit(repository.getWeather(it.latitude, it.longitude))
-    }
+        }
     }
 
-    fun insertWeather(data: OneCallWeather){
-        viewModelScope.launch(Dispatchers.IO){
+    fun insertWeather(data: OneCallWeather) {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.insertWeatherToDatabase(data)
         }
     }
 
-
     fun lightOnChangeSaveToDatabase(current: Float) {
         if (current != -1000f) {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val currentTime = System.currentTimeMillis()
-                    val newReading = LightSensorReading(
-                        0,
-                        currentTime,
-                        current,
-                        getLocationLiveData().value
-                    )
-                    val response = repository.addLightReading(newReading)
-                    Log.d("weatherTest", "light inserted $response")
-                }
+            viewModelScope.launch(Dispatchers.IO) {
+                val currentTime = System.currentTimeMillis()
+                val newReading = LightSensorReading(
+                    0,
+                    currentTime,
+                    current,
+                    getLocationLiveData().value
+                )
+                repository.addLightReading(newReading)
 
             }
+
         }
+    }
 
     fun temperatureOnChangeSaveToDatabase(current: Float) {
         if (current != -1000f) {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val currentTime = System.currentTimeMillis()
-                    val newReading = TemperatureSensorReading(
-                        0,
-                        currentTime,
-                        current,
-                        getLocationLiveData().value
-                    )
-                    val responseOne = repository.addTempReading(newReading)
+            viewModelScope.launch(Dispatchers.IO) {
+                val currentTime = System.currentTimeMillis()
+                val newReading = TemperatureSensorReading(
+                    0,
+                    currentTime,
+                    current,
+                    getLocationLiveData().value
+                )
+                repository.addTempReading(newReading)
 
-                    val newReadingTwo = DewPointAndAbsHumidityReading(
-                        0,
-                        currentTime,
-                        getLatestPhoneSensorData().value!!.reading_temperature,
-                        getLatestPhoneSensorData().value!!.reading_humidity,
-                        getLocationLiveData().value
-                    )
+                val newReadingTwo = DewPointAndAbsHumidityReading(
+                    0,
+                    currentTime,
+                    getLatestPhoneSensorData().value!!.reading_temperature,
+                    getLatestPhoneSensorData().value!!.reading_humidity,
+                    getLocationLiveData().value
+                )
 
-                   val responseTwo = repository.addDewAndAbsReading(newReadingTwo)
-                    Log.d("weatherTest", "temp inserted $responseOne and dewPoint inserted $responseTwo")
-                }
+                repository.addDewAndAbsReading(newReadingTwo)
 
             }
+
         }
+    }
 
     fun humidityOnChangeSaveToDatabase(current: Float) {
         if (current != -1000f) {
@@ -96,7 +99,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     current,
                     getLocationLiveData().value
                 )
-                val responseOne = repository.addHumidityReading(newReading)
+                repository.addHumidityReading(newReading)
 
                 val newReadingTwo = DewPointAndAbsHumidityReading(
                     0,
@@ -106,8 +109,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     getLocationLiveData().value
                 )
 
-                val responseTwo = repository.addDewAndAbsReading(newReadingTwo)
-                Log.d("weatherTest", "humidity inserted $responseOne and dewPoint inserted $responseTwo")
+                repository.addDewAndAbsReading(newReadingTwo)
+
             }
 
         }
@@ -123,47 +126,80 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     current,
                     getLocationLiveData().value
                 )
-                val response = repository.addPressureReading(newReading)
-                Log.d("weatherTest", "pressure inserted $response")
+                repository.addPressureReading(newReading)
             }
 
         }
     }
 
     fun createListOfPhoneSensorData(data: PhoneSensorData): List<SensorData> {
+
         return listOf(
-            SensorData("Temperature", data.reading_temperature),
-            SensorData("Humidity", data.reading_humidity),
-            SensorData("Light", data.reading_light),
-            SensorData("Pressure", data.reading_pressure),
             SensorData(
-                "Absolute Humidity",
-                data.absHumidityReading.toFloat(),
-                ),
-            SensorData("Dew Point", data.dewPoint.toFloat()),
+                getApplication<Application>().getString(R.string.sensor_temperature),
+                if (tempSensor) data.reading_temperature else -1000f
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_humidity),
+                if (humiditySensor) data.reading_humidity else -1000f
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_light),
+                if (lightSensor) data.reading_light else -1000f
+
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_pressure),
+                if (pressureSensor) data.reading_pressure else -1000f
+
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_absolute_humidity),
+                if (tempSensor && humiditySensor) data.absHumidityReading.toFloat() else -1000f
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_dew_point),
+                if (tempSensor && humiditySensor) data.dewPoint.toFloat() else -1000f
+            ),
         )
     }
 
     fun createListOfCurrentWeatherData(data: WeatherModel): List<SensorData> {
-//        val sunrise = Instant.ofEpochSecond(data.current.sunrise.toLong())
-//            .atZone(ZoneId.systemDefault())
-//            .toLocalTime()
-//        val sunset = Instant.ofEpochSecond(data.current.sunset.toLong())
-//            .atZone(ZoneId.systemDefault())
-//            .toLocalTime()
 
         return listOf(
-            SensorData("Temperature", data.current.temp.toFloat(), data.current.weather),
-            SensorData("Humidity", data.current.humidity.toFloat()),
-            SensorData("Light", data.current.visibility.toFloat()),
-            SensorData("Pressure", data.current.pressure.toFloat()),
             SensorData(
-                "Wind",
+                getApplication<Application>().getString(R.string.sensor_temperature),
+                data.current.temp.toFloat(),
+                data.current.weather
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_humidity),
+                data.current.humidity.toFloat()
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_visibility),
+                data.current.visibility.toFloat()
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_pressure),
+                data.current.pressure.toFloat()
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_wind),
                 data.current.wind_speed.toFloat()
             ),
-            SensorData("UV Rating", data.current.uvi.toFloat()),
-            SensorData("Sunrise",data.current.sunrise.toFloat()),
-            SensorData("Sunset", data.current.sunset.toFloat()),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_uv_rating),
+                data.current.uvi.toFloat()
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_sunrise),
+                data.current.sunrise.toFloat()
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_sunset),
+                data.current.sunset.toFloat()
+            ),
         )
     }
 

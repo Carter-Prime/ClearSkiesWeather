@@ -6,7 +6,7 @@
         android:id="@+id/btn_toggle_sensors"
         android:orderInCategory="100"
         android:icon="@drawable/ic_phone"
-        android:title="@string/toggle_phone_sensors"
+        android:title="@string/placeholder_text_toggle_phone_sensors"
         app:showAsAction="always" />
 
 </menu>

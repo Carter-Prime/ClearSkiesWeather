@@ -11,6 +11,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import fi.carterm.clearskiesweather.R
@@ -58,10 +59,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.rvSensorDataCards.layoutManager = mLayoutManager
-        sensorAdapter = SensorAdapter {
+        sensorAdapter = SensorAdapter(requireActivity().application){
             onClick(it)
         }
         binding.rvSensorDataCards.adapter = sensorAdapter
+        binding.rvSensorDataCards.itemAnimator = null
 
         homeViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
             binding.tvCurrentLocation.text = it.address
@@ -74,7 +76,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         homeViewModel.openWeatherCall.observe(viewLifecycleOwner) {
-            Log.d("OneCallWeather", "$it")
             homeViewModel.insertWeather(it)
         }
 
@@ -83,7 +84,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 sensorAdapter.addHeaderAndSubmitList(homeViewModel.createListOfCurrentWeatherData(it))
             }
         }
-
 
     }
 
@@ -146,6 +146,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         if (sensorToggleOn) {
             startForegroundServiceForSensors(false)
         }
+        checkSensors()
     }
 
     private fun startForegroundServiceForSensors(background: Boolean) {
@@ -159,6 +160,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         if (sensorToggleOn) {
             startForegroundServiceForSensors(true)
         }
+        checkSensors()
     }
 
     override fun onDestroy() {
@@ -166,6 +168,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             LocalBroadcastManager.getInstance(requireContext())
                 .unregisterReceiver(broadcastReceiver)
         }
+        checkSensors()
         super.onDestroy()
     }
 
@@ -201,27 +204,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun onClick(sensorType: String) {
         Log.d("weatherTest", "Data Type $sensorType")
+        val bundle = Bundle()
+        bundle.putString("sensorType", sensorType)
+        findNavController().navigate(R.id.action_homeFragment_to_graphFragment, bundle)
     }
 
     private fun checkSensors() {
 
         val pm: PackageManager = requireActivity().packageManager
         if (!pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
-            Log.d("Sensor missing", "GPS")
+            homeViewModel.gpsSensor = false
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_LIGHT)) {
-            Log.d("Sensor missing", "Light")
-
+            homeViewModel.lightSensor = false
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_AMBIENT_TEMPERATURE)) {
-            Log.d("Sensor missing", "Thermometer")
-
+            homeViewModel.tempSensor = false
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_RELATIVE_HUMIDITY)) {
-            Log.d("Sensor missing", "Humidity")
+            homeViewModel.humiditySensor = false
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER)) {
-            Log.d("Sensor missing", "Barometer")
+            homeViewModel.pressureSensor = false
         }
     }
 
