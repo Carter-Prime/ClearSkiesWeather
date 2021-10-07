@@ -71,6 +71,14 @@ class SensorService: Service(), SensorEventListener {
         return null
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
+    override fun onDestroy() {
+        super.onDestroy()
+        val notificationManager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(notificationId)
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             Log.d("sensor", "Start command")
@@ -181,6 +189,7 @@ class SensorService: Service(), SensorEventListener {
         val contentIntent = PendingIntent.getActivity(
             this, notificationActivityRequestCode,
             Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+
         // Stop notification intent
         val stopNotificationIntent = Intent(this, ActionListener::class.java)
         stopNotificationIntent.action = KEY_NOTIFICATION_STOP_ACTION
@@ -198,7 +207,7 @@ class SensorService: Service(), SensorEventListener {
             .setSound(null)
             .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentIntent(contentIntent)
-            .addAction(R.mipmap.ic_launcher_round, "Stop Notifications", pendingStopNotificationIntent)
+            .addAction(R.mipmap.ic_launcher_round, "Stop Sensors", pendingStopNotificationIntent)
 
 
         return notificationBuilder.build()
@@ -211,9 +220,10 @@ class SensorService: Service(), SensorEventListener {
                 if (intent.action.equals(KEY_NOTIFICATION_STOP_ACTION)) {
                     context?.let {
                         val notificationManager =
-                            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                        val sensorIntent = Intent(context, SensorService::class.java)
-                        context.stopService(sensorIntent)
+                            it.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        val sensorIntent = Intent(it, SensorService::class.java)
+                        Log.d("stopService", "service stopped")
+                        it.stopService(sensorIntent)
                         val notificationId = intent.getIntExtra(KEY_NOTIFICATION_ID, -1)
                         if (notificationId != -1) {
                             notificationManager.cancel(notificationId)

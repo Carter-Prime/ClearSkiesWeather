@@ -1,36 +1,75 @@
 <resources>
+
+    <!--ApplicationDescriptions-->
     <string name="app_name">Clear Skies Weather</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
     <string name="home_fragment">HomeFragment</string>
     <string name="forecast_fragment">ForecastFragment</string>
     <string name="settings_fragment">SettingsFragment</string>
     <string name="graph_fragment">GraphFragment</string>
-    <string name="home">Home</string>
-    <string name="forecast">Forecast</string>
-    <string name="settings">Settings</string>
-    <string name="current_location">Current Location: Helsinki</string>
-    <string name="weather_description_image">Weather description Image</string>
-    <string name="day_title">Today</string>
-    <string name="temperature_reading">20°C</string>
-    <string name="sunny_weather_description">Sunny with Clear Skies</string>
-    <string name="clear_skies_title_descriptor">Clear Skies Title</string>
-    <string name="firstly">Firstly…</string>
-    <string name="onboarding_text_1">This icon will toggle on/off your phones internal sensors to show some weather data.</string>
-    <string name="onboarding_text_2">Other information shown will be downloaded from a regularly up dated database.</string>
-    <string name="onboarding_text_3">Click on a card in the list to display a graph of the data.</string>
-    <string name="skip">Skip</string>
-    <string name="continue_btn">Continue…</string>
-    <string name="onboarding_text_intro">Welcome to Clear Skies… before you begin we would like to give you a quick introduction on how to use our app…</string>
-    <string name="screenshot_of_home_screen">Screenshot of Home Screen</string>
-    <string name="finally_text">Finally…</string>
-    <string name="next">Next…</string>
-    <string name="you_can_easily_change_the_data_shown_by_using_the_option_at_the_bottom_of_the_screen">You can easily change the data shown by using the option at the bottom of the screen</string>
-    <string name="the_forecast_will_show_the_weather_up_to_30_days_in_advance">The forecast will show the weather up to 30 days in advance.</string>
-    <string name="get_started">Get Started</string>
-    <string name="temperature">Temperature</string>
-    <string name="select_start_date">select start date</string>
-    <string name="select_end_date">select end date</string>
+
+    <!--OnBoarding-->
+    <string name="on_boarding_text_intro">Welcome to Clear Skies… before you begin we would
+        like to give you a quick introduction on how to use our app…</string>
+    <string name="on_boarding_text_1">This icon will toggle on/off your phones internal sensors to show some weather data.</string>
+    <string name="on_boarding_text_2">Other information shown will be downloaded from a regularly up dated database.</string>
+    <string name="on_boarding_text_3">Click on a card in the list to display a graph of the data.</string>
+    <string name="on_boarding_text_4">You can easily change the data shown by using the option at the bottom of the screen</string>
+    <string name="on_boarding_text_5">The forecast will show the weather up to 30 days in advance.</string>
+
+    <string name="on_boarding_firstly">Firstly…</string>
+    <string name="on_boarding_next">Next…</string>
+    <string name="on_boarding_finally">Finally…</string>
+
+
+    <!--Buttons-->
+    <string name="btn_text_home">Home</string>
+    <string name="btn_text_forecast">Forecast</string>
+    <string name="btn_text_settings">Settings</string>
+    <string name="btn_text_skip">Skip</string>
+    <string name="btn_text_continue">Continue…</string>
+    <string name="btn_text_get_started">Get Started</string>
+
+    <!--PlaceholderText-->
+
+    <string name="placeholder_text_current_location">Current Location: Helsinki</string>
+    <string name="placeholder_text_day_title">Today</string>
+    <string name="placeholder_text_sensor_reading">20°C</string>
+    <string name="placeholder_text_weather_condition">Sunny with Clear Skies</string>
+    <string name="placeholder_text_select_start_date">select start date</string>
+    <string name="placeholder_select_end_date">select end date</string>
+    <string name="placeholder_text_toggle_phone_sensors">Toggle Phone Sensors</string>
+
+
+    <!--ContentDescriptions-->
+    <string name="content_description_weather_image">Weather description Image</string>
+    <string name="content_description_app_title">Clear Skies Title</string>
+    <string name="content_description_home_screenshot">Screenshot of Home Screen</string>
+
+    <!--SensorTypes-->
+    <string name="sensor_temperature">Temperature</string>
+    <string name="sensor_humidity">Humidity</string>
+    <string name="sensor_light">Light</string>
+    <string name="sensor_pressure">Pressure</string>
+    <string name="sensor_absolute_humidity">Absolute Humidity</string>
+    <string name="sensor_dew_point">Dew Point</string>
+    <string name="sensor_uv_rating">UV Rating</string>
+    <string name="sensor_wind">Wind</string>
+    <string name="sensor_visibility">Visibility</string>
+    <string name="sensor_sunrise">Sunrise</string>
+    <string name="sensor_sunset">Sunset</string>
+
+<!--    WeatherConditions-->
+    <string name="weather_condition_thunderstorm">Thunderstorm</string>
+    <string name="weather_condition_drizzle">Drizzle</string>
+    <string name="weather_condition_rain">Rain</string>
+    <string name="weather_condition_snow">Snow</string>
+    <string name="weather_condition_mist">Mist</string>
+    <string name="weather_condition_clear">Clear</string>
+    <string name="weather_condition_clouds">Clouds</string>
+    <string name="weather_condition_default">Default</string>
+
+<!--    Error Messages-->
+    <string name="error_no_weather_condition">No Weather Found</string>
+    <string name="error_no_weather_reading">No Sensor Reading</string>
+
 </resources>
