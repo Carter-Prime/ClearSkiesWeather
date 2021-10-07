@@ -24,6 +24,8 @@ class WeatherRepository(private val lightReadingDao: LightReadingDao,
     val latestPhoneSensorData: LiveData<PhoneSensorData> = lightReadingDao.getLatestReadings()
     val getWeatherModel: LiveData<List<WeatherModel>> = weatherModelDao.getAllWeather()
 
+    val getCurrentWeather: LiveData<WeatherModel> = weatherModelDao.getLatestWeather()
+
     suspend fun addLightReading(sensorReading: LightSensorReading): Long{
         return lightReadingDao.insert(sensorReading)
     }

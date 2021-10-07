@@ -3,6 +3,7 @@ package fi.carterm.clearskiesweather.database.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import fi.carterm.clearskiesweather.models.apiRoomCache.WeatherModel
+import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
 
 
 @Dao
@@ -19,4 +20,7 @@ interface WeatherModelDao {
 
     @Query("SELECT * FROM one_call_weather")
     fun getAllWeather(): LiveData<List<WeatherModel>>
+
+    @Query("SELECT * FROM one_call_weather ORDER BY id DESC LIMIT 1")
+    fun getLatestWeather(): LiveData<WeatherModel>
 }

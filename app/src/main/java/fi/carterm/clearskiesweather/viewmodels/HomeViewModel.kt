@@ -6,15 +6,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.models.api.OneCallWeather
+import fi.carterm.clearskiesweather.models.apiRoomCache.WeatherModel
 import fi.carterm.clearskiesweather.models.sensors.*
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
 import fi.carterm.clearskiesweather.utilities.livedata.LocationLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.ZoneId
 
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
@@ -28,10 +26,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val latestPhoneSensorData = repository.latestPhoneSensorData
     fun getLatestPhoneSensorData() = latestPhoneSensorData
 
-
-
-    private val getWeatherModel = repository.getWeatherModel
-    fun getAllWeatherModel() = getWeatherModel
+    private val latestWeatherData = repository.getCurrentWeather
+    fun getLatestWeather() = latestWeatherData
 
     var openWeatherCall = locationLiveData.switchMap {
         liveData(Dispatchers.IO){
@@ -136,20 +132,19 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun createListOfPhoneSensorData(data: PhoneSensorData): List<SensorData> {
         return listOf(
-            SensorData("Temperature", data.reading_temperature, R.drawable.clipart_temperature),
-            SensorData("Humidity", data.reading_humidity, R.drawable.clipart_humidity),
-            SensorData("Light", data.reading_light, R.drawable.clipart_light),
-            SensorData("Pressure", data.reading_pressure, R.drawable.clipart_barometer),
+            SensorData("Temperature", data.reading_temperature),
+            SensorData("Humidity", data.reading_humidity),
+            SensorData("Light", data.reading_light),
+            SensorData("Pressure", data.reading_pressure),
             SensorData(
                 "Absolute Humidity",
                 data.absHumidityReading.toFloat(),
-                R.drawable.clipart_windy
-            ),
-            SensorData("Dew Point", data.dewPoint.toFloat(), R.drawable.clipart_uv_rating),
+                ),
+            SensorData("Dew Point", data.dewPoint.toFloat()),
         )
     }
 
-    fun createListOfCurrentWeatherData(data: OneCallWeather): List<SensorData> {
+    fun createListOfCurrentWeatherData(data: WeatherModel): List<SensorData> {
 //        val sunrise = Instant.ofEpochSecond(data.current.sunrise.toLong())
 //            .atZone(ZoneId.systemDefault())
 //            .toLocalTime()
@@ -158,18 +153,17 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 //            .toLocalTime()
 
         return listOf(
-            SensorData("Temperature", data.current.temp.toFloat(), R.drawable.clipart_temperature),
-            SensorData("Humidity", data.current.humidity.toFloat(), R.drawable.clipart_humidity),
-            SensorData("Light", data.current.visibility.toFloat(), R.drawable.clipart_light),
-            SensorData("Pressure", data.current.pressure.toFloat(), R.drawable.clipart_barometer),
+            SensorData("Temperature", data.current.temp.toFloat(), data.current.weather),
+            SensorData("Humidity", data.current.humidity.toFloat()),
+            SensorData("Light", data.current.visibility.toFloat()),
+            SensorData("Pressure", data.current.pressure.toFloat()),
             SensorData(
                 "Wind",
-                data.current.wind_speed.toFloat(),
-                R.drawable.clipart_windy
+                data.current.wind_speed.toFloat()
             ),
-            SensorData("UV Rating", data.current.uvi.toFloat(), R.drawable.clipart_uv_rating),
-            SensorData("Sunrise",data.current.sunrise , R.drawable.clipart_sunrise),
-            SensorData("Sunset", data.current.sunset, R.drawable.clipart_sunset),
+            SensorData("UV Rating", data.current.uvi.toFloat()),
+            SensorData("Sunrise",data.current.sunrise.toFloat()),
+            SensorData("Sunset", data.current.sunset.toFloat()),
         )
     }
 

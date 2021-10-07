@@ -38,12 +38,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         PermissionsManager.hasLocationPermissions(requireContext(), requireActivity())
         checkSensors()
-        if (sensorToggleOn){
-            LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadcastReceiver,  IntentFilter(
-                SensorService.KEY_ON_SENSOR_CHANGED_ACTION))
+        if (sensorToggleOn) {
+            LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
+                broadcastReceiver, IntentFilter(
+                    SensorService.KEY_ON_SENSOR_CHANGED_ACTION
+                )
+            )
         }
 
-       val mLayoutManager = GridLayoutManager(context, 2)
+        val mLayoutManager = GridLayoutManager(context, 2)
         mLayoutManager.spanSizeLookup = object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when (sensorAdapter.getItemViewType(position)) {
@@ -64,23 +67,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.tvCurrentLocation.text = it.address
         }
 
-        homeViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner){
-            if (it != null && sensorToggleOn){
+        homeViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner) {
+            if (it != null && sensorToggleOn) {
                 sensorAdapter.addHeaderAndSubmitList(homeViewModel.createListOfPhoneSensorData(it))
             }
         }
 
-        homeViewModel.openWeatherCall.observe(viewLifecycleOwner){
+        homeViewModel.openWeatherCall.observe(viewLifecycleOwner) {
             Log.d("OneCallWeather", "$it")
             homeViewModel.insertWeather(it)
-            if(it != null && !sensorToggleOn){
+        }
+
+        homeViewModel.getLatestWeather().observe(viewLifecycleOwner) {
+            if (it != null && !sensorToggleOn) {
                 sensorAdapter.addHeaderAndSubmitList(homeViewModel.createListOfCurrentWeatherData(it))
             }
         }
 
-        homeViewModel.getAllWeatherModel().observe(viewLifecycleOwner){
-            Log.d("WeatherModel", "$it")
-        }
 
     }
 
@@ -91,10 +94,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.btn_toggle_sensors -> {
-                Log.d("weatherTest", "Toggle button pressed")
-                if(sensorToggleOn){
-                        stopService()
-                }else{
+                if (sensorToggleOn) {
+                    stopService()
+                    sensorAdapter.addHeaderAndSubmitList(homeViewModel.getLatestWeather().value?.let {
+                        homeViewModel.createListOfCurrentWeatherData(
+                            it
+                        )
+                    })
+                } else {
                     startService()
                 }
                 saveState()
@@ -104,34 +111,39 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun stopService(){
+    private fun stopService() {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver)
         requireContext().stopService(Intent(activity, SensorService::class.java))
+
+
     }
 
-    private fun startService(){
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(broadcastReceiver,  IntentFilter(
-            SensorService.KEY_ON_SENSOR_CHANGED_ACTION))
+    private fun startService() {
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
+            broadcastReceiver, IntentFilter(
+                SensorService.KEY_ON_SENSOR_CHANGED_ACTION
+            )
+        )
         startForegroundServiceForSensors(false)
     }
 
-    private fun saveState(){
+    private fun saveState() {
         sensorToggleOn = !sensorToggleOn
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
+        with(sharedPref.edit()) {
             putBoolean("toggleSensorOn", sensorToggleOn)
             apply()
         }
     }
 
-    private fun getState(): Boolean{
+    private fun getState(): Boolean {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         return sharedPref!!.getBoolean("toggleSensorOn", true)
     }
 
     override fun onResume() {
         super.onResume()
-        if(sensorToggleOn) {
+        if (sensorToggleOn) {
             startForegroundServiceForSensors(false)
         }
     }
@@ -144,13 +156,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onPause() {
         super.onPause()
-        if(sensorToggleOn) {
+        if (sensorToggleOn) {
             startForegroundServiceForSensors(true)
         }
     }
 
     override fun onDestroy() {
-        if(sensorToggleOn) {
+        if (sensorToggleOn) {
             LocalBroadcastManager.getInstance(requireContext())
                 .unregisterReceiver(broadcastReceiver)
         }
@@ -160,10 +172,30 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-             homeViewModel.lightOnChangeSaveToDatabase(intent.getFloatExtra(SensorService.KEY_LIGHT, -1000f))
-             homeViewModel.temperatureOnChangeSaveToDatabase(intent.getFloatExtra(SensorService.KEY_TEMP, -1000f))
-             homeViewModel.pressureOnChangeSaveToDatabase(intent.getFloatExtra(SensorService.KEY_PRESSURE, -1000f))
-             homeViewModel.humidityOnChangeSaveToDatabase(intent.getFloatExtra(SensorService.KEY_HUMIDITY, -1000f))
+            homeViewModel.lightOnChangeSaveToDatabase(
+                intent.getFloatExtra(
+                    SensorService.KEY_LIGHT,
+                    -1000f
+                )
+            )
+            homeViewModel.temperatureOnChangeSaveToDatabase(
+                intent.getFloatExtra(
+                    SensorService.KEY_TEMP,
+                    -1000f
+                )
+            )
+            homeViewModel.pressureOnChangeSaveToDatabase(
+                intent.getFloatExtra(
+                    SensorService.KEY_PRESSURE,
+                    -1000f
+                )
+            )
+            homeViewModel.humidityOnChangeSaveToDatabase(
+                intent.getFloatExtra(
+                    SensorService.KEY_HUMIDITY,
+                    -1000f
+                )
+            )
         }
     }
 
