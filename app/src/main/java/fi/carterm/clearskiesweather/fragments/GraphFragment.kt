@@ -193,6 +193,12 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
              }
         }
 
+// get data
+        graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
+            val lightDataArray = it
+            Log.d("testingRoom in graph", "Sensor Data from Room: $lightDataArray")
+        }
+
         val graph = view.findViewById(R.id.graph) as GraphView
         val series: LineGraphSeries<DataPoint> = LineGraphSeries(
             arrayOf(
