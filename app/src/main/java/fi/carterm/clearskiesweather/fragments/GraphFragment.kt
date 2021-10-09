@@ -11,27 +11,36 @@ import androidx.fragment.app.viewModels
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.databinding.FragmentGraphBinding
 import fi.carterm.clearskiesweather.viewmodels.GraphViewModel
-import com.jjoe64.graphview.series.LineGraphSeries
-import com.jjoe64.graphview.GraphView
-import com.jjoe64.graphview.series.DataPoint
 import com.google.android.material.datepicker.MaterialDatePicker
 import android.text.Editable
 import androidx.fragment.app.FragmentActivity
+import com.anychart.AnyChartView
+import com.anychart.chart.common.dataentry.DataEntry
+import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import java.time.LocalDateTime
+import com.anychart.AnyChart
+import com.anychart.enums.MarkerType
+import com.anychart.enums.TooltipPositionMode
+import com.anychart.graphics.vector.Stroke
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
 
-    private lateinit var binding: FragmentGraphBinding
+    private lateinit var b: FragmentGraphBinding
     private lateinit var graphViewModel: GraphViewModel
 
     //graph query variables
-    private val defaultStartDate = LocalDateTime.now().minusDays(31).toString()
+    private val defaultStartDate = LocalDateTime.now().minusMonths(1).toString()
     private val defaultEndDate = LocalDateTime.now().toString()
     private val defaultInterval = 4
-    private val intervalMap = mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
+    private val intervalMap =
+        mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
+    private val intervalMapRev =
+        mapOf(0 to "minute", 1 to "hour", 2 to "day", 3 to "month", 4 to "year")
 
     private var selectedTemperature = false
     private var selectedPressure = false
@@ -48,11 +57,16 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("WeatherTest", "Fragment")
-        binding = FragmentGraphBinding.bind(view)
+        b = FragmentGraphBinding.bind(view)
         val viewModel: GraphViewModel by viewModels()
         graphViewModel = viewModel
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
 
+        /*
+        graphViewModel.weatherData.observe(viewLifecycleOwner) {
+            Log.d("dbApp", "Weather Data: $it")
+        }
+*/
 
         //startDatePicker
         val startDatePicker =
@@ -64,13 +78,13 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                         .setValidator(DateValidatorPointForward.now()).build()
                 )
                 .build()
-        binding.etEventStartDate.setOnClickListener {
+        b.etEventStartDate.setOnClickListener {
             startDatePicker.show(fragmentManager, "tag")
         }
         startDatePicker.addOnPositiveButtonClickListener {
             val date = startDatePicker.headerText
             selectedStartDate = date
-            binding.etEventStartDate.text = Editable.Factory.getInstance().newEditable(date)
+            b.etEventStartDate.text = Editable.Factory.getInstance().newEditable(date)
         }
 
         //endDatePicker
@@ -83,133 +97,153 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                         .setValidator(DateValidatorPointForward.now()).build()
                 )
                 .build()
-        binding.etEventEndDate.setOnClickListener {
+        b.etEventEndDate.setOnClickListener {
             endDatePicker.show(fragmentManager, "tag")
         }
         endDatePicker.addOnPositiveButtonClickListener {
             val date = endDatePicker.headerText
             selectedEndDate = date
-            binding.etEventEndDate.text = Editable.Factory.getInstance().newEditable(date)
+            b.etEventEndDate.text = Editable.Factory.getInstance().newEditable(date)
         }
-/*
-        graphViewModel.weatherData.observe(viewLifecycleOwner) {
-            Log.d("dbApp", "Weather Data: $it")
+
+        // read time interval button value
+        b.intervalButton.setOnClickListener {
+            if (selectedInterval < 4) {
+                selectedInterval += 1
+                b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
+            } else {
+                selectedInterval = 0
+                b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
+            }
         }
-*/
         // SELECT SENSOR BUTTONS
-        binding.arrowButton.setOnClickListener {
+        b.arrowButton.setOnClickListener {
             // If the CardView is already expanded, set its visibility to gone and change the expand less icon to expand more.
-            if (binding.hiddenView.visibility == View.VISIBLE) {
+            if (b.hiddenView.visibility == View.VISIBLE) {
 
                 // The transition of the hiddenView is carried out by the TransitionManager class.
                 // Here we use an object of the AutoTransition Class to create a default transition.
                 TransitionManager.beginDelayedTransition(
-                    binding.cvCardView,
+                    b.cvCardView,
                     AutoTransition()
                 )
-                binding.hiddenView.visibility = View.GONE
-                binding.arrowButton.setImageResource(R.drawable.ic_baseline_expand_more_24)
+                b.hiddenView.visibility = View.GONE
+                b.arrowButton.setImageResource(R.drawable.ic_baseline_expand_more_24)
             } else {
                 TransitionManager.beginDelayedTransition(
-                    binding.cvCardView,
+                    b.cvCardView,
                     AutoTransition()
                 )
-                binding.hiddenView.visibility = View.VISIBLE
-                binding.arrowButton.setImageResource(R.drawable.ic_baseline_expand_less_24)
+                b.hiddenView.visibility = View.VISIBLE
+                b.arrowButton.setImageResource(R.drawable.ic_baseline_expand_less_24)
 
                 // read light button value
-                binding.lightBtn.setOnClickListener {
+                b.lightBtn.setOnClickListener {
                     if (!selectedLight) {
                         selectedLight = true
-                        binding.lightBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
+                        b.lightBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedLight = false
-                        binding.lightBtn.setBackgroundColor(Color.parseColor("#34000000"))
+                        b.lightBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
 
                 }
                 // read temp button value
-                binding.temperatureBtn.setOnClickListener {
+                b.temperatureBtn.setOnClickListener {
                     if (!selectedTemperature) {
                         selectedTemperature = true
-                        binding.temperatureBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
+                        b.temperatureBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedTemperature = false
-                        binding.temperatureBtn.setBackgroundColor(Color.parseColor("#34000000"))
+                        b.temperatureBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
                 // read humidity button value
-                binding.humidityBtn.setOnClickListener {
+                b.humidityBtn.setOnClickListener {
                     if (!selectedHumidity) {
                         selectedHumidity = true
-                        binding.humidityBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
+                        b.humidityBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedHumidity = false
-                        binding.humidityBtn.setBackgroundColor(Color.parseColor("#34000000"))
+                        b.humidityBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
 // read absolute humidity button value
-                binding.absHumidityBtn.setOnClickListener {
+                b.absHumidityBtn.setOnClickListener {
                     if (!selectedAbsHumidity) {
                         selectedAbsHumidity = true
-                        binding.absHumidityBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
+                        b.absHumidityBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedAbsHumidity = false
-                        binding.absHumidityBtn.setBackgroundColor(Color.parseColor("#34000000"))
+                        b.absHumidityBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
 // read pressure button value
-                binding.pressureBtn.setOnClickListener {
+                b.pressureBtn.setOnClickListener {
                     if (!selectedPressure) {
                         selectedPressure = true
-                        binding.pressureBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
+                        b.pressureBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedPressure = false
-                        binding.pressureBtn.setBackgroundColor(Color.parseColor("#34000000"))
+                        b.pressureBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
                 // read dew point button value
-                binding.dewPointBtn.setOnClickListener {
+                b.dewPointBtn.setOnClickListener {
                     if (!selectedDewPoint) {
                         selectedDewPoint = true
-                        binding.dewPointBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
+                        b.dewPointBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
                     } else {
                         selectedDewPoint = false
-                        binding.dewPointBtn.setBackgroundColor(Color.parseColor("#34000000"))
+                        b.dewPointBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
-             }
+            }
         }
 
-        val graph = view.findViewById(R.id.graph) as GraphView
-        val series: LineGraphSeries<DataPoint> = LineGraphSeries(
-            arrayOf(
-                DataPoint(0.0, 1.0),
-                DataPoint(1.0, 5.0),
-                DataPoint(2.0, 3.0),
-                DataPoint(3.0, 2.0),
-                DataPoint(4.0, 6.0)
-            )
-        )
-        graph.addSeries(series)
+        // set up chart
+        val anyChartView = view.findViewById(R.id.graph) as AnyChartView
+        val chart = AnyChart.line()
+        chart.animation(true)
+        chart.padding(10.0, 20.0, 5.0, 20.0)
+        chart.crosshair().enabled(true)
+        chart.crosshair()
+            .yLabel(true)
+            .yStroke(null as Stroke?, null, null, null as String?, null as String?)
+        chart.tooltip().positionMode(TooltipPositionMode.POINT)
+        chart.title("Sensor reading")
+        chart.yAxis(0).title("lumen")
+        chart.xAxis(0).title("time")
+        // chart.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
 
-    }
+
+        //get data and display in chart
+        graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
+            val lightDataArray = it
+            val data: MutableList<DataEntry> = ArrayList()
+
+            for (i in 0..lightDataArray.size - 1) {
+                data.add(
+                    ValueDataEntry(
+                        Date(lightDataArray[i].timestamp).toString(),
+                        lightDataArray[i].sensorReading
+                    )
+                )
+            }
 
 
-    private fun getMonthFormat(month: Int): String {
-        if (month == 1) return "JAN"
-        if (month == 2) return "FEB"
-        if (month == 3) return "MAR"
-        if (month == 4) return "APR"
-        if (month == 5) return "MAY"
-        if (month == 6) return "JUN"
-        if (month == 7) return "JUL"
-        if (month == 8) return "AUG"
-        if (month == 9) return "SEP"
-        if (month == 10) return "OCT"
-        if (month == 11) return "NOV"
-        return if (month == 12) "DEC" else "JAN"
-
-        //default should never happen
+            //chart.data(data)
+            anyChartView.setChart(chart)
+            val line = chart.line(data)
+            line.name("Light")
+            line.hovered().markers().enabled(true)
+            line.hovered().markers()
+                .type(MarkerType.CIRCLE)
+                .size(4.0)
+            line.tooltip()
+                .position("right")
+                .offsetX(5.0)
+                .offsetY(5.0)
+        }
     }
 }
