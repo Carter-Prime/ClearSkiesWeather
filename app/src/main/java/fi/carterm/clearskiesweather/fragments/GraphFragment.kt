@@ -17,9 +17,18 @@ import com.jjoe64.graphview.series.DataPoint
 import com.google.android.material.datepicker.MaterialDatePicker
 import android.text.Editable
 import androidx.fragment.app.FragmentActivity
+import com.anychart.AnyChartView
+import com.anychart.chart.common.dataentry.DataEntry
+import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import java.time.LocalDateTime
+import com.anychart.AnyChart
+
+import com.anychart.charts.Pie
+
+
+
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -31,8 +40,10 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private val defaultStartDate = LocalDateTime.now().minusMonths(1).toString()
     private val defaultEndDate = LocalDateTime.now().toString()
     private val defaultInterval = 4
-    private val intervalMap = mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
-    private val intervalMapRev = mapOf(0 to "minute", 1 to "hour",2 to "day",3 to "month",4 to "year")
+    private val intervalMap =
+        mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
+    private val intervalMapRev =
+        mapOf(0 to "minute", 1 to "hour", 2 to "day", 3 to "month", 4 to "year")
 
     private var selectedTemperature = false
     private var selectedPressure = false
@@ -100,7 +111,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
 
         // read time interval button value
         b.intervalButton.setOnClickListener {
-            if (selectedInterval<4) {
+            if (selectedInterval < 4) {
                 selectedInterval += 1
                 b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
             } else {
@@ -190,44 +201,35 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                         b.dewPointBtn.setBackgroundColor(Color.parseColor("#34000000"))
                     }
                 }
-             }
+            }
         }
 
-// get data
+        // get data
+        val anyChartView = view.findViewById(R.id.graph) as AnyChartView
+        val chart = AnyChart.line()
+
         graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
             val lightDataArray = it
-            Log.d("testingRoom in graph", "Sensor Data from Room: $lightDataArray")
+            val data: MutableList<DataEntry> = ArrayList()
+
+            for (s in lightDataArray) {
+                data.add(
+                    ValueDataEntry(
+                        lightDataArray[0].timestamp,
+                        lightDataArray[0].sensorReading
+                    )
+                )
+
+            }
+            Log.d("testingRoom in graph", "Sensor Data transformed: $data")
+            chart.data(data)
+            anyChartView.setChart(chart)
         }
 
-        val graph = view.findViewById(R.id.graph) as GraphView
-        val series: LineGraphSeries<DataPoint> = LineGraphSeries(
-            arrayOf(
-                DataPoint(0.0, 1.0),
-                DataPoint(1.0, 5.0),
-                DataPoint(2.0, 3.0),
-                DataPoint(3.0, 2.0),
-                DataPoint(4.0, 6.0)
-            )
-        )
-        graph.addSeries(series)
 
-    }
+        // display in graph
 
 
-    private fun getMonthFormat(month: Int): String {
-        if (month == 1) return "JAN"
-        if (month == 2) return "FEB"
-        if (month == 3) return "MAR"
-        if (month == 4) return "APR"
-        if (month == 5) return "MAY"
-        if (month == 6) return "JUN"
-        if (month == 7) return "JUL"
-        if (month == 8) return "AUG"
-        if (month == 9) return "SEP"
-        if (month == 10) return "OCT"
-        if (month == 11) return "NOV"
-        return if (month == 12) "DEC" else "JAN"
 
-        //default should never happen
     }
 }
