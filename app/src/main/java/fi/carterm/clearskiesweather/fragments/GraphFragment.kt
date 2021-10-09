@@ -28,8 +28,10 @@ import com.anychart.AnyChart
 import com.anychart.charts.Pie
 import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
 import com.anychart.AnyChart.cartesian
+import com.anychart.enums.MarkerType
 
 import com.anychart.enums.TooltipPositionMode
+import com.anychart.graphics.vector.Anchor
 import com.anychart.graphics.vector.Stroke
 import java.util.*
 import kotlin.collections.ArrayList
@@ -223,6 +225,8 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         chart.xAxis(0).title("time")
        // chart.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
 
+
+
         //get data and display in chart
         graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
             val lightDataArray = it
@@ -243,6 +247,16 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             }
             chart.data(data)
             anyChartView.setChart(chart)
+            val line = chart.line(data)
+            line.name("Light")
+            line.hovered().markers().enabled(true)
+            line.hovered().markers()
+                .type(MarkerType.CIRCLE)
+                .size(4.0)
+            line.tooltip()
+                .position("right")
+                .offsetX(5.0)
+                .offsetY(5.0)
         }
 
 
