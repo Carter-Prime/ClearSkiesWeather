@@ -1,6 +1,6 @@
 package fi.carterm.clearskiesweather.models.sensors
 
-data class HomeSensorData(
+data class PhoneSensorData(
     val reading_light: Float,
     val reading_temperature: Float,
     val reading_humidity: Float,

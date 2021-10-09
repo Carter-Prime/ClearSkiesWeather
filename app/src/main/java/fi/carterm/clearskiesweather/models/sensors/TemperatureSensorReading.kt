@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import fi.carterm.clearskiesweather.models.LocationDetails
+import fi.carterm.clearskiesweather.models.misc.LocationDetails
 
 @Entity
 data class TemperatureSensorReading(

@@ -1,46 +1,55 @@
 package fi.carterm.clearskiesweather.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.databinding.ActivityMainBinding
+import fi.carterm.clearskiesweather.fragments.HomeFragment
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var navController: NavController
+    private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("WeatherTest", "Main activity")
-        val binding =
-            DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
         val navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
 
 
-        bottomNavigationView = findViewById(R.id.bottomNavView)
+        bottomNavigationView = binding.bottomNavView
         bottomNavigationView.setupWithNavController(navController)
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
-                R.id.homeFragment,
-                R.id.forecastFragment,
-                R.id.settingsFragment
+                fi.carterm.clearskiesweather.R.id.homeFragment,
+                fi.carterm.clearskiesweather.R.id.forecastFragment,
+                fi.carterm.clearskiesweather.R.id.settingsFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         setContentView(binding.root)
     }
+
+
+
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()

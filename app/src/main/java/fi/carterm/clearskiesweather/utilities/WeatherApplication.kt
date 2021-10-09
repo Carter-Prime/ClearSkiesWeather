@@ -10,6 +10,17 @@ class WeatherApplication : Application() {
     private val applicationScope by lazy { CoroutineScope(SupervisorJob()) }
     private val database by lazy { WeatherDatabase.get(this, applicationScope) }
 
-    val repository by lazy { WeatherRepository(lightReadingDao = database.lightSensorReadingDao(), temperatureReadingDao = database.temperatureReadingDao(),
-    dewPointAndAbsHumidityReadingDao = database.dewPointAndAbsHumidityDao(), pressureReadingDao = database.pressureReadingDao(), humidityReadingDao = database.humidityReadingDao()) }
+    val repository by lazy {
+        WeatherRepository(
+            lightReadingDao = database.lightSensorReadingDao(),
+            temperatureReadingDao = database.temperatureReadingDao(),
+            dewPointAndAbsHumidityReadingDao = database.dewPointAndAbsHumidityDao(),
+            pressureReadingDao = database.pressureReadingDao(),
+            humidityReadingDao = database.humidityReadingDao(),
+            weatherModelDao = database.weatherModelDao(),
+        )
+    }
+
+
+
 }

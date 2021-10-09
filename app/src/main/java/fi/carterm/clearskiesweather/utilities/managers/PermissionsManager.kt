@@ -1,4 +1,4 @@
-package fi.carterm.clearskiesweather.utilities
+package fi.carterm.clearskiesweather.utilities.managers
 
 import android.Manifest
 import android.app.Activity

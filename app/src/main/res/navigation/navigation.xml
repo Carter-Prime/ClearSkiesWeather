@@ -10,7 +10,11 @@
         android:name="fi.carterm.clearskiesweather.fragments.HomeFragment"
         android:label="@string/home_fragment"
         tools:layout="@layout/fragment_home"
-        />
+        >
+        <action
+            android:id="@+id/action_homeFragment_to_graphFragment"
+            app:destination="@id/graphFragment" />
+    </fragment>
     <fragment
         android:id="@+id/forecastFragment"
         android:name="fi.carterm.clearskiesweather.fragments.ForecastFragment"
