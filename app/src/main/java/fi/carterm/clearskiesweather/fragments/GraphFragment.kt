@@ -26,9 +26,7 @@ import java.time.LocalDateTime
 import com.anychart.AnyChart
 
 import com.anychart.charts.Pie
-
-
-
+import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -212,23 +210,23 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             val lightDataArray = it
             val data: MutableList<DataEntry> = ArrayList()
 
-            for (s in lightDataArray) {
-                data.add(
-                    ValueDataEntry(
-                        lightDataArray[0].timestamp,
-                        lightDataArray[0].sensorReading
+            for (i in 0 until lightDataArray.size) {
+
+                    data.add(
+                        ValueDataEntry(
+                            lightDataArray[i].timestamp,
+                            lightDataArray[i].sensorReading
+                        )
                     )
-                )
 
             }
             Log.d("testingRoom in graph", "Sensor Data transformed: $data")
+            for (s in data) {
+
+            }
             chart.data(data)
             anyChartView.setChart(chart)
         }
-
-
-        // display in graph
-
 
 
     }
