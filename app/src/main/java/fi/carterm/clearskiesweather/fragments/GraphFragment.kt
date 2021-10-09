@@ -27,6 +27,12 @@ import com.anychart.AnyChart
 
 import com.anychart.charts.Pie
 import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
+import com.anychart.AnyChart.cartesian
+
+import com.anychart.enums.TooltipPositionMode
+import com.anychart.graphics.vector.Stroke
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -202,10 +208,22 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             }
         }
 
-        // get data
+        // set up chart
         val anyChartView = view.findViewById(R.id.graph) as AnyChartView
         val chart = AnyChart.line()
+        chart.animation(true)
+        chart.padding(10.0, 20.0, 5.0, 20.0)
+        chart.crosshair().enabled(true)
+        chart.crosshair()
+            .yLabel(true)
+            .yStroke(null as Stroke?, null, null, null as String?, null as String?)
+        chart.tooltip().positionMode(TooltipPositionMode.POINT)
+        chart.title("Sensor reading")
+        chart.yAxis(0).title("lumen")
+        chart.xAxis(0).title("time")
+       // chart.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
 
+        //get data and display in chart
         graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
             val lightDataArray = it
             val data: MutableList<DataEntry> = ArrayList()
@@ -214,11 +232,10 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
 
                     data.add(
                         ValueDataEntry(
-                            lightDataArray[i].timestamp,
+                            Date(lightDataArray[i].timestamp).toString(),
                             lightDataArray[i].sensorReading
                         )
                     )
-
             }
             Log.d("testingRoom in graph", "Sensor Data transformed: $data")
             for (s in data) {
