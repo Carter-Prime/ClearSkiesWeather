@@ -11,9 +11,6 @@ import androidx.fragment.app.viewModels
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.databinding.FragmentGraphBinding
 import fi.carterm.clearskiesweather.viewmodels.GraphViewModel
-import com.jjoe64.graphview.series.LineGraphSeries
-import com.jjoe64.graphview.GraphView
-import com.jjoe64.graphview.series.DataPoint
 import com.google.android.material.datepicker.MaterialDatePicker
 import android.text.Editable
 import androidx.fragment.app.FragmentActivity
@@ -24,14 +21,8 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import java.time.LocalDateTime
 import com.anychart.AnyChart
-
-import com.anychart.charts.Pie
-import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
-import com.anychart.AnyChart.cartesian
 import com.anychart.enums.MarkerType
-
 import com.anychart.enums.TooltipPositionMode
-import com.anychart.graphics.vector.Anchor
 import com.anychart.graphics.vector.Stroke
 import java.util.*
 import kotlin.collections.ArrayList
@@ -223,8 +214,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         chart.title("Sensor reading")
         chart.yAxis(0).title("lumen")
         chart.xAxis(0).title("time")
-       // chart.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
-
+        // chart.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
 
 
         //get data and display in chart
@@ -232,20 +222,17 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             val lightDataArray = it
             val data: MutableList<DataEntry> = ArrayList()
 
-            for (i in 0 until lightDataArray.size) {
-
-                    data.add(
-                        ValueDataEntry(
-                            Date(lightDataArray[i].timestamp).toString(),
-                            lightDataArray[i].sensorReading
-                        )
+            for (i in 0..lightDataArray.size - 1) {
+                data.add(
+                    ValueDataEntry(
+                        Date(lightDataArray[i].timestamp).toString(),
+                        lightDataArray[i].sensorReading
                     )
+                )
             }
-            Log.d("testingRoom in graph", "Sensor Data transformed: $data")
-            for (s in data) {
 
-            }
-            chart.data(data)
+
+            //chart.data(data)
             anyChartView.setChart(chart)
             val line = chart.line(data)
             line.name("Light")
@@ -258,7 +245,5 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                 .offsetX(5.0)
                 .offsetY(5.0)
         }
-
-
     }
 }
