@@ -48,6 +48,11 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private var selectedHumidity = false
     private var selectedAbsHumidity = false
     private var selectedDewPoint = false
+    private var selectedUVRating = false
+    private var selectedWind = false
+    private var selectedVisibility = false
+    private var selectedSunrise = false
+    private var selectedSunset = false
 
     private var selectedInterval = defaultInterval
     private var selectedStartDate = defaultStartDate
@@ -62,11 +67,27 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         graphViewModel = viewModel
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
 
-        /*
-        graphViewModel.weatherData.observe(viewLifecycleOwner) {
-            Log.d("dbApp", "Weather Data: $it")
+        // Receive sensor type from home fragment
+        val sensorType: String = arguments?.getString("sensorType").orEmpty()
+        //Log.d("testing", "sensor type: $sensorType")
+        when (sensorType) {
+            getString(R.string.sensor_temperature) -> selectedTemperature = true
+            getString(R.string.sensor_humidity) -> selectedHumidity = true
+            getString(R.string.sensor_light) -> selectedLight = true
+            getString(R.string.sensor_pressure) -> selectedPressure = true
+            getString(R.string.sensor_absolute_humidity) -> selectedAbsHumidity = true
+            getString(R.string.sensor_dew_point) -> selectedDewPoint = true
+            getString(R.string.sensor_uv_rating) -> selectedUVRating = true
+            getString(R.string.sensor_wind) -> selectedWind = true
+            getString(R.string.sensor_visibility) -> selectedVisibility = true
+            getString(R.string.sensor_sunrise) -> selectedSunrise = true
+            getString(R.string.sensor_sunset) -> selectedSunset = true
+            else -> {
+                //TODO: Toast
+            }
         }
-*/
+
+
 
         //startDatePicker
         val startDatePicker =
