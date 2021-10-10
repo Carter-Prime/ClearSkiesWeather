@@ -14,16 +14,18 @@ import fi.carterm.clearskiesweather.viewmodels.GraphViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import android.text.Editable
 import androidx.fragment.app.FragmentActivity
+import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
-import java.time.LocalDateTime
-import com.anychart.AnyChart
 import com.anychart.enums.MarkerType
 import com.anychart.enums.TooltipPositionMode
 import com.anychart.graphics.vector.Stroke
+
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import java.time.LocalDateTime
+
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -110,10 +112,10 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         b.intervalButton.setOnClickListener {
             if (selectedInterval < 4) {
                 selectedInterval += 1
-                b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
+                b.intervalButton.text = intervalMapRev.getValue(selectedInterval)
             } else {
                 selectedInterval = 0
-                b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
+                b.intervalButton.text = intervalMapRev.getValue(selectedInterval)
             }
         }
         // SELECT SENSOR BUTTONS
@@ -219,10 +221,11 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
 
         //get data and display in chart
         graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
+            Log.d("tag", "All light Readings $it")
             val lightDataArray = it
             val data: MutableList<DataEntry> = ArrayList()
 
-            for (i in 0..lightDataArray.size - 1) {
+            for (i in 0 until lightDataArray.size - 1) {
                 data.add(
                     ValueDataEntry(
                         Date(lightDataArray[i].timestamp).toString(),
