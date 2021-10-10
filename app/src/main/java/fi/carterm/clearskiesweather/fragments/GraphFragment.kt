@@ -233,8 +233,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             .yStroke(null as Stroke?, null, null, null as String?, null as String?)
         chart.tooltip().positionMode(TooltipPositionMode.POINT)
         chart.title("Sensor reading")
-        chart.yAxis(0).title("lumen")
-        chart.xAxis(0).title("time")
+
         // chart.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
 
 
@@ -254,6 +253,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
 
 
             //chart.data(data)
+
             anyChartView.setChart(chart)
             val line = chart.line(data)
             line.name("Light")
@@ -265,6 +265,38 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                 .position("right")
                 .offsetX(5.0)
                 .offsetY(5.0)
+            chart.yAxis(0).title("lumen")
+            chart.xAxis(0).title("time")
+        }
+
+
+        //2
+        graphViewModel.sensorTemperatureReadings.observe(viewLifecycleOwner) {
+            val dataArray = it
+            val data: MutableList<DataEntry> = ArrayList()
+
+            for (i in 0..dataArray.size - 1) {
+                data.add(
+                    ValueDataEntry(
+                        Date(dataArray[i].timestamp).toString(),
+                        dataArray[i].sensorReading
+                    )
+                )
+            }
+                        //chart.data(data)
+            anyChartView.setChart(chart)
+            val line = chart.line(data)
+            line.name("Temperature")
+            line.hovered().markers().enabled(true)
+            line.hovered().markers()
+                .type(MarkerType.CIRCLE)
+                .size(4.0)
+            line.tooltip()
+                .position("right")
+                .offsetX(5.0)
+                .offsetY(5.0)
+            chart.yAxis(0).title("°C")
+            chart.xAxis(0).title("time")
         }
     }
 }

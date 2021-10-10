@@ -20,7 +20,10 @@ class WeatherRepository(private val lightReadingDao: LightReadingDao,
 
     private val call = OpenWeatherRetrofitFactory.SERVICE
     private val responseMapper = NetworkMapper()
+
     val allLightReadings: LiveData<List<LightSensorReading>> = lightReadingDao.getAllLightSensorReadings()
+    val allTemperatureReadings: LiveData<List<TemperatureSensorReading>> = temperatureReadingDao.getAllTemperatureSensorReadings()
+
     val latestPhoneSensorData: LiveData<PhoneSensorData> = lightReadingDao.getLatestReadings()
     val getWeatherModel: LiveData<List<WeatherModel>> = weatherModelDao.getAllWeather()
 
