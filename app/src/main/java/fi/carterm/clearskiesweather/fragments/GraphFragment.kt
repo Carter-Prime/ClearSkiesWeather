@@ -68,9 +68,8 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
 
         // Receive sensor type from home fragment
-        val sensorType: String = arguments?.getString("sensorType").orEmpty()
         //Log.d("testing", "sensor type: $sensorType")
-        when (sensorType) {
+        when (arguments?.getString("sensorType").orEmpty()) {
             getString(R.string.sensor_temperature) -> selectedTemperature = true
             getString(R.string.sensor_humidity) -> selectedHumidity = true
             getString(R.string.sensor_light) -> selectedLight = true
@@ -131,10 +130,10 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         b.intervalButton.setOnClickListener {
             if (selectedInterval < 4) {
                 selectedInterval += 1
-                b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
+                b.intervalButton.text = intervalMapRev.getValue(selectedInterval)
             } else {
                 selectedInterval = 0
-                b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
+                b.intervalButton.text = intervalMapRev.getValue(selectedInterval)
             }
         }
         // SELECT SENSOR BUTTONS
@@ -240,10 +239,13 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
 
         //get data and display in chart
         graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
+            it.forEach { data ->
+                Log.d("tag", data.toString())
+            }
             val lightDataArray = it
             val data: MutableList<DataEntry> = ArrayList()
 
-            for (i in 0..lightDataArray.size - 1) {
+            for (i in 0 until lightDataArray.size - 1) {
                 data.add(
                     ValueDataEntry(
                         Date(lightDataArray[i].timestamp).toString(),
