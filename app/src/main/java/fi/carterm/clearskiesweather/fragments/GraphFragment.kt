@@ -14,6 +14,7 @@ import fi.carterm.clearskiesweather.viewmodels.GraphViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import android.text.Editable
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
@@ -29,6 +30,7 @@ import kotlin.collections.ArrayList
 import com.anychart.AnyChart.cartesian
 import com.anychart.charts.Cartesian
 import com.anychart.core.cartesian.series.Line
+import fi.carterm.clearskiesweather.models.sensors.TemperatureSensorReading
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -241,26 +243,41 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         }
 
 
-
         //get data and display in chart
-        graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
-            val lightDataArray = it
-            for (i in 0 until lightDataArray.size - 1) {
-                data.add(
-                    ValueDataEntry(
-                        Date(lightDataArray[i].timestamp).toString(),
-                        lightDataArray[i].sensorReading
-                    )
+        /*     graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
+                 val lightDataArray = it
+                 for (i in 0 until lightDataArray.size - 1) {
+                     data.add(
+                         ValueDataEntry(
+                             Date(lightDataArray[i].timestamp).toString(),
+                             lightDataArray[i].sensorReading
+                         )
 
-                )
-            }
-            line = chart?.line(data)  // re-creates
-            displayInChart(chart, line, "Light", "lumen", "time")
-        }
+                     )
+                 }
+                 line = chart?.line(data)  // re-creates
+                 displayInChart(chart, line, "Light", "lumen", "time")
+             }*/
 
-//observeSensor(x = graphViewModel.sensorTemperatureReadings,chart, line, "Temperature", "°C", "time")
-/*
-        graphViewModel.sensorTemperatureReadings.observe(viewLifecycleOwner) {
+        observeSensor(
+            x = graphViewModel.sensorTemperatureReadings,
+            chart,
+            line,
+            "Temperature",
+            "°C",
+            "time"
+        )
+    }
+
+    private fun observeSensor(
+        x: LiveData<List<TemperatureSensorReading>>,
+        chart: Cartesian?,
+        line: Line?,
+        s: String,
+        s1: String,
+        s2: String
+    ) {
+        x.observe(viewLifecycleOwner) {
             val dataArray = it
             val data: MutableList<DataEntry> = ArrayList()
 
@@ -272,16 +289,14 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                     )
                 )
             }
-            line = chart?.line(data)  // re-creates
-            displayInChart(chart, line, "Temperature", "°C", "time")
-        }*/
+            this.line = chart?.line(data)  // re-creates
+            this.line?.stroke("blue")
+            displayInChart(chart, line, s, s1, s2)
+        }
     }
 
 
     private fun displayInChart(chart: Cartesian?, line: Line?, s: String, s1: String, s2: String) {
-        if (line != null) {
-            line.stroke("blue")
-        }
         if (chart != null) {
             chart.yAxis(0).title(s1)
             chart.xAxis(0).title(s2)
