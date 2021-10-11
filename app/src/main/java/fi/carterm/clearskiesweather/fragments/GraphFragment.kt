@@ -63,6 +63,8 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private var selectedEndDate = defaultEndDate
 
 
+    var line: Line? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("WeatherTest", "Fragment")
@@ -70,6 +72,20 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         val viewModel: GraphViewModel by viewModels()
         graphViewModel = viewModel
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+
+
+        // set up chart
+        val anyChartView = view.findViewById(R.id.graph) as AnyChartView
+        val chart = AnyChart.line()
+        chart.animation(true)
+        chart.padding(10.0, 20.0, 5.0, 20.0)
+        chart.crosshair().enabled(true)
+        chart.crosshair()
+            .yLabel(true)
+            .yStroke(null as Stroke?, null, null, null as String?, null as String?)
+        chart.tooltip().positionMode(TooltipPositionMode.POINT)
+        chart.title("Sensor reading")
+        anyChartView.setChart(chart)
 
         // Receive sensor type from home fragment
         //Log.d("testing", "sensor type: $sensorType")
@@ -224,19 +240,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             }
         }
 
-        // set up chart
-        val anyChartView = view.findViewById(R.id.graph) as AnyChartView
-        val chart = AnyChart.line()
-        chart.animation(true)
-        chart.padding(10.0, 20.0, 5.0, 20.0)
-        chart.crosshair().enabled(true)
-        chart.crosshair()
-            .yLabel(true)
-            .yStroke(null as Stroke?, null, null, null as String?, null as String?)
-        chart.tooltip().positionMode(TooltipPositionMode.POINT)
-        chart.title("Sensor reading")
-        anyChartView.setChart(chart)
-        var line: Line?
+
 
         //get data and display in chart
         graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
@@ -254,8 +258,8 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             displayInChart(chart, line, "Light", "lumen", "time")
         }
 
-
-
+//observeSensor(x = graphViewModel.sensorTemperatureReadings,chart, line, "Temperature", "°C", "time")
+/*
         graphViewModel.sensorTemperatureReadings.observe(viewLifecycleOwner) {
             val dataArray = it
             val data: MutableList<DataEntry> = ArrayList()
@@ -270,7 +274,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             }
             line = chart?.line(data)  // re-creates
             displayInChart(chart, line, "Temperature", "°C", "time")
-        }
+        }*/
     }
 
 
