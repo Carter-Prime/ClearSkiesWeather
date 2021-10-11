@@ -26,6 +26,9 @@ import com.anychart.enums.TooltipPositionMode
 import com.anychart.graphics.vector.Stroke
 import java.util.*
 import kotlin.collections.ArrayList
+import com.anychart.AnyChart.cartesian
+import com.anychart.charts.Cartesian
+import com.anychart.core.cartesian.series.Line
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -41,6 +44,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
     private val intervalMapRev =
         mapOf(0 to "minute", 1 to "hour", 2 to "day", 3 to "month", 4 to "year")
+    private var data = mutableListOf<DataEntry>()
 
     private var selectedTemperature = false
     private var selectedPressure = false
@@ -85,7 +89,6 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                 //TODO: Toast
             }
         }
-
 
 
         //startDatePicker
@@ -232,47 +235,27 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             .yStroke(null as Stroke?, null, null, null as String?, null as String?)
         chart.tooltip().positionMode(TooltipPositionMode.POINT)
         chart.title("Sensor reading")
-
-        // chart.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
-
+        anyChartView.setChart(chart)
+        var line: Line?
 
         //get data and display in chart
         graphViewModel.sensorLightReadings.observe(viewLifecycleOwner) {
-            it.forEach { data ->
-                Log.d("tag", data.toString())
-            }
             val lightDataArray = it
-            val data: MutableList<DataEntry> = ArrayList()
-
             for (i in 0 until lightDataArray.size - 1) {
                 data.add(
                     ValueDataEntry(
                         Date(lightDataArray[i].timestamp).toString(),
                         lightDataArray[i].sensorReading
                     )
+
                 )
             }
-
-
-            //chart.data(data)
-
-            anyChartView.setChart(chart)
-            val line = chart.line(data)
-            line.name("Light")
-            line.hovered().markers().enabled(true)
-            line.hovered().markers()
-                .type(MarkerType.CIRCLE)
-                .size(4.0)
-            line.tooltip()
-                .position("right")
-                .offsetX(5.0)
-                .offsetY(5.0)
-            chart.yAxis(0).title("lumen")
-            chart.xAxis(0).title("time")
+            line = chart?.line(data)  // re-creates
+            displayInChart(chart, line, "Light", "lumen", "time")
         }
 
 
-        //2
+
         graphViewModel.sensorTemperatureReadings.observe(viewLifecycleOwner) {
             val dataArray = it
             val data: MutableList<DataEntry> = ArrayList()
@@ -285,20 +268,19 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                     )
                 )
             }
-                        //chart.data(data)
-            anyChartView.setChart(chart)
-            val line = chart.line(data)
-            line.name("Temperature")
-            line.hovered().markers().enabled(true)
-            line.hovered().markers()
-                .type(MarkerType.CIRCLE)
-                .size(4.0)
-            line.tooltip()
-                .position("right")
-                .offsetX(5.0)
-                .offsetY(5.0)
-            chart.yAxis(0).title("°C")
-            chart.xAxis(0).title("time")
+            line = chart?.line(data)  // re-creates
+            displayInChart(chart, line, "Temperature", "°C", "time")
+        }
+    }
+
+
+    private fun displayInChart(chart: Cartesian?, line: Line?, s: String, s1: String, s2: String) {
+        if (line != null) {
+            line.stroke("blue")
+        }
+        if (chart != null) {
+            chart.yAxis(0).title(s1)
+            chart.xAxis(0).title(s2)
         }
     }
 }
