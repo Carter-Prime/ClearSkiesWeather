@@ -30,8 +30,7 @@ import kotlin.collections.ArrayList
 import com.anychart.AnyChart.cartesian
 import com.anychart.charts.Cartesian
 import com.anychart.core.cartesian.series.Line
-import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
-import fi.carterm.clearskiesweather.models.sensors.TemperatureSensorReading
+import fi.carterm.clearskiesweather.models.sensors.*
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -101,18 +100,35 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                     "°C",
                     "time"
                 )}
-            getString(R.string.sensor_humidity) -> selectedHumidity = true
+            getString(R.string.sensor_humidity) -> {selectedHumidity = true
+                observeSensorHumidity(
+                    x = graphViewModel.sensorHumidityReadings,
+                    chart,
+                    line,
+                    "Humidity",
+                    "%",
+                    "time"
+                )}
             getString(R.string.sensor_light) -> {selectedLight = true
                 observeSensorLight(
                     x = graphViewModel.sensorLightReadings,
                     chart,
                     line,
-                    "Temperature",
-                    "°C",
+                    "Light",
+                    "lumen",
                     "time"
                 )}
-            getString(R.string.sensor_pressure) -> selectedPressure = true
+            getString(R.string.sensor_pressure) -> {selectedPressure = true
+                observeSensorPressure(
+                    x = graphViewModel.sensorPressureReadings,
+                    chart,
+                    line,
+                    "Pressure",
+                    "Pa",
+                    "time"
+                )}
             getString(R.string.sensor_absolute_humidity) -> selectedAbsHumidity = true
+
             getString(R.string.sensor_dew_point) -> selectedDewPoint = true
             getString(R.string.sensor_uv_rating) -> selectedUVRating = true
             getString(R.string.sensor_wind) -> selectedWind = true
@@ -288,8 +304,81 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     }
 
     private fun observeSensorLight(
-        x: LiveData<List<LightSensorReading>>,
-        chart: Cartesian?,
+        x: LiveData<List<LightSensorReading>>,  chart: Cartesian?,
+        line: Line?,
+        s: String,
+        s1: String,
+        s2: String
+    ) {
+        x.observe(viewLifecycleOwner) {
+            val dataArray = it
+            val data: MutableList<DataEntry> = ArrayList()
+
+            for (i in 0..dataArray.size - 1) {
+                data.add(
+                    ValueDataEntry(
+                        Date(dataArray[i].timestamp).toString(),
+                        dataArray[i].sensorReading
+                    )
+                )
+            }
+            this.line = chart?.line(data)  // re-creates
+            this.line?.stroke("blue")
+            displayInChart(chart, line, s, s1, s2)
+        }
+    }
+
+    private fun observeSensorPressure(
+        x: LiveData<List<PressureSensorReading>>, chart: Cartesian?,
+        line: Line?,
+        s: String,
+        s1: String,
+        s2: String
+    ) {
+        x.observe(viewLifecycleOwner) {
+            val dataArray = it
+            val data: MutableList<DataEntry> = ArrayList()
+
+            for (i in 0..dataArray.size - 1) {
+                data.add(
+                    ValueDataEntry(
+                        Date(dataArray[i].timestamp).toString(),
+                        dataArray[i].sensorReading
+                    )
+                )
+            }
+            this.line = chart?.line(data)  // re-creates
+            this.line?.stroke("blue")
+            displayInChart(chart, line, s, s1, s2)
+        }
+    }
+
+   /* private fun observeSensorDewPoint(
+        x: LiveData<List<DewPointAndAbsHumidityReading>>, chart: Cartesian?,
+        line: Line?,
+        s: String,
+        s1: String,
+        s2: String
+    ) {
+        x.observe(viewLifecycleOwner) {
+            val dataArray = it
+            val data: MutableList<DataEntry> = ArrayList()
+
+            for (i in 0..dataArray.size - 1) {
+                data.add(
+                    ValueDataEntry(
+                        Date(dataArray[i].timestamp).toString(),
+                        dataArray[i].sensorReading
+                    )
+                )
+            }
+            this.line = chart?.line(data)  // re-creates
+            this.line?.stroke("blue")
+            displayInChart(chart, line, s, s1, s2)
+        }
+    }*/
+    private fun observeSensorHumidity(
+        x: LiveData<List<HumiditySensorReading>>, chart: Cartesian?,
         line: Line?,
         s: String,
         s1: String,

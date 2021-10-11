@@ -23,6 +23,9 @@ class WeatherRepository(private val lightReadingDao: LightReadingDao,
 
     val allLightReadings: LiveData<List<LightSensorReading>> = lightReadingDao.getAllLightSensorReadings()
     val allTemperatureReadings: LiveData<List<TemperatureSensorReading>> = temperatureReadingDao.getAllTemperatureSensorReadings()
+    val allPressureReadings: LiveData<List<PressureSensorReading>> = pressureReadingDao.getAllPressureSensorReadings()
+    val allDewPointReadings: LiveData<List<DewPointAndAbsHumidityReading>> = dewPointAndAbsHumidityReadingDao.getAllDewPointAndAbsHumidityReadings()
+    val allHumidityReadings: LiveData<List<HumiditySensorReading>> = humidityReadingDao.getAllHumiditySensorReadings()
 
     val latestPhoneSensorData: LiveData<PhoneSensorData> = lightReadingDao.getLatestReadings()
     val getWeatherModel: LiveData<List<WeatherModel>> = weatherModelDao.getAllWeather()
