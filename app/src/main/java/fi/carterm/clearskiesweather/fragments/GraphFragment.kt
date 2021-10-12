@@ -22,12 +22,10 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import java.time.LocalDateTime
 import com.anychart.AnyChart
-import com.anychart.enums.MarkerType
 import com.anychart.enums.TooltipPositionMode
 import com.anychart.graphics.vector.Stroke
 import java.util.*
 import kotlin.collections.ArrayList
-import com.anychart.AnyChart.cartesian
 import com.anychart.charts.Cartesian
 import com.anychart.core.cartesian.series.Line
 import fi.carterm.clearskiesweather.models.sensors.*
@@ -64,8 +62,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private var selectedStartDate = defaultStartDate
     private var selectedEndDate = defaultEndDate
 
-
-    var line: Line? = null
+    private var line: Line? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
