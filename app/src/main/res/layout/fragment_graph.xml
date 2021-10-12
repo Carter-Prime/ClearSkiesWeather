@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:theme="@style/Theme.ClearSkiesWeather">
 
 
@@ -56,8 +56,8 @@
                     android:id="@+id/list_of_subjects"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select your data to display"
-                    android:textSize="20dp"
+                    android:text="@string/select_your_data_to_display"
+                    android:textSize="20sp"
 
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -67,7 +67,7 @@
                     android:id="@+id/arrowButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="expand selection of sensors"
+                    android:contentDescription="@string/expand_selection_of_sensors"
                     android:src="@drawable/ic_baseline_expand_more_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -104,7 +104,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Pressure" />
+                        android:text="@string/pressure" />
 
                     <Button
                         android:id="@+id/humidityBtn"
@@ -113,7 +113,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Humidity" />
+                        android:text="@string/humidity" />
 
                     <Button
                         android:id="@+id/temperatureBtn"
@@ -122,7 +122,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Temperature" />
+                        android:text="@string/temperature" />
 
                     <Button
                         android:id="@+id/lightBtn"
@@ -131,7 +131,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Light" />
+                        android:text="@string/light" />
 
                     <Button
                         android:id="@+id/absHumidityBtn"
@@ -140,7 +140,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Absolute humidity" />
+                        android:text="@string/absolute_humidity" />
 
                     <Button
                         android:id="@+id/dewPointBtn"
@@ -149,7 +149,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Dew point" />
+                        android:text="@string/dew_point" />
                 </com.google.android.flexbox.FlexboxLayout>
             </LinearLayout>
 
@@ -162,7 +162,7 @@
         android:layout_width="256dp"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
-        android:text="Select time interval"
+        android:text="@string/select_time_interval"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvCardView" />
@@ -173,14 +173,13 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_gravity="center_horizontal"
         app:layout_constraintTop_toBottomOf="@+id/intervalButton">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEventStartDate"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clickable="false"
             android:cursorVisible="false"
             android:focusable="false"
@@ -193,19 +192,19 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_start_date">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_event_end_date"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clickable="false"
             android:cursorVisible="false"
             android:focusable="false"
             android:hint="@string/placeholder_select_end_date"
-            android:inputType="date" />
+            android:inputType="date"
+            android:layout_marginBottom="60dp"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
 
