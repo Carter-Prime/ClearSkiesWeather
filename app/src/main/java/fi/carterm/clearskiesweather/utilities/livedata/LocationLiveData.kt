@@ -6,13 +6,13 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.models.misc.LocationDetails
 import kotlinx.coroutines.*
 
@@ -41,7 +41,6 @@ class LocationLiveData(context: Context) : LiveData<LocationDetails>() {
         ) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location ->
                 location.also {
-                    Log.d("lastLocation", "Location: $it")
                     setLocationData(it.latitude, it.longitude, address)
                 }
             }
@@ -93,11 +92,11 @@ class LocationLiveData(context: Context) : LiveData<LocationDetails>() {
             if(list.isNotEmpty()){
                 list[0].getAddressLine(0)
             }else{
-                "No address found"
+                appContext.getString(R.string.error_no_address_found)
             }
 
         } else {
-            "Geocoder is not available"
+            appContext.getString(R.string.error_geocoder_not_available)
         }
 
     }

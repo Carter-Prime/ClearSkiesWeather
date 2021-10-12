@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:theme="@style/Theme.ClearSkiesWeather">
 
 
@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/graph">
 
-        <!--Tentire CardView including the expandable portion-->
+        <!--Entire CardView including the expandable portion-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,8 +56,8 @@
                     android:id="@+id/list_of_subjects"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select your data to display"
-                    android:textSize="20dp"
+                    android:text="@string/placeholder_text_select_data"
+                    android:textSize="20sp"
 
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -67,7 +67,7 @@
                     android:id="@+id/arrowButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="expand selection of sensors"
+                    android:contentDescription="@string/content_description_arrow_btn"
                     android:src="@drawable/ic_baseline_expand_more_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -104,7 +104,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Pressure" />
+                        android:text="@string/sensor_pressure" />
 
                     <Button
                         android:id="@+id/humidityBtn"
@@ -113,7 +113,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Humidity" />
+                        android:text="@string/sensor_humidity" />
 
                     <Button
                         android:id="@+id/temperatureBtn"
@@ -122,7 +122,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Temperature" />
+                        android:text="@string/sensor_temperature" />
 
                     <Button
                         android:id="@+id/lightBtn"
@@ -131,7 +131,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Light" />
+                        android:text="@string/sensor_light" />
 
                     <Button
                         android:id="@+id/absHumidityBtn"
@@ -140,7 +140,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Absolute humidity" />
+                        android:text="@string/sensor_absolute_humidity" />
 
                     <Button
                         android:id="@+id/dewPointBtn"
@@ -149,7 +149,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:backgroundTint="@color/black_transparent"
-                        android:text="Dew point" />
+                        android:text="@string/sensor_dew_point" />
                 </com.google.android.flexbox.FlexboxLayout>
             </LinearLayout>
 
@@ -162,7 +162,7 @@
         android:layout_width="256dp"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
-        android:text="Select time interval"
+        android:text="@string/btn_text_time_interval"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvCardView" />

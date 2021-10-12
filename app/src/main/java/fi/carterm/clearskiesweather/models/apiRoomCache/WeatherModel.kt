@@ -3,7 +3,6 @@ package fi.carterm.clearskiesweather.models.apiRoomCache
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import fi.carterm.clearskiesweather.models.api.Current
 
 
 @Entity(tableName = "one_call_weather")

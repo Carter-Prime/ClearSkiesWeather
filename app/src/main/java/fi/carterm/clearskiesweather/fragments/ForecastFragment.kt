@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.adapters.ForecastAdapter
 import fi.carterm.clearskiesweather.databinding.FragmentForcastBinding
-import fi.carterm.clearskiesweather.viewmodels.HomeViewModel
+import fi.carterm.clearskiesweather.viewmodels.WeatherViewModel
 
 class ForecastFragment : Fragment(R.layout.fragment_forcast) {
     lateinit var binding: FragmentForcastBinding
-    private lateinit var forecastViewModel: HomeViewModel
+    private lateinit var forecastViewModel: WeatherViewModel
     private lateinit var forecastAdapter: ForecastAdapter
 
 
@@ -25,7 +25,7 @@ class ForecastFragment : Fragment(R.layout.fragment_forcast) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         binding = FragmentForcastBinding.bind(view)
-        val viewModel: HomeViewModel by activityViewModels()
+        val viewModel: WeatherViewModel by activityViewModels()
         forecastViewModel = viewModel
 
         binding.rvForecastList.layoutManager = LinearLayoutManager(context)
@@ -73,5 +73,6 @@ class ForecastFragment : Fragment(R.layout.fragment_forcast) {
 
     private fun onClick(position: Int) {
         Log.d("tag", "data $position")
+        TODO()
     }
 }

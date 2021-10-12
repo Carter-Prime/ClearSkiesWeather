@@ -1,7 +1,6 @@
 package fi.carterm.clearskiesweather.database
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -45,9 +44,7 @@ abstract class WeatherDatabase : RoomDatabase() {
                     val dewPointAbsHumidityDao = database.dewPointAndAbsHumidityDao()
                     val pressureReadingDao = database.pressureReadingDao()
                     val currentTime = System.currentTimeMillis()
-
                     val locations = LocationDetails("12345", "12345", address = "TestCity")
-                    Log.d("weatherTest", "database init")
 
                     val light = listOf(
                         LightSensorReading(0, currentTime, 23.2f, locations),

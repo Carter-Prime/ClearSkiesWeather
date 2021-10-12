@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,8 +36,8 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private val defaultStartDate = LocalDateTime.now().minusMonths(1).toString()
     private val defaultEndDate = LocalDateTime.now().toString()
     private val defaultInterval = 4
-    private val intervalMap =
-        mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
+//    private val intervalMap =
+//        mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
     private val intervalMapRev =
         mapOf(0 to "minute", 1 to "hour", 2 to "day", 3 to "month", 4 to "year")
 
@@ -56,17 +55,10 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("WeatherTest", "Fragment")
         b = FragmentGraphBinding.bind(view)
         val viewModel: GraphViewModel by viewModels()
         graphViewModel = viewModel
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
-
-        /*
-        graphViewModel.weatherData.observe(viewLifecycleOwner) {
-            Log.d("dbApp", "Weather Data: $it")
-        }
-*/
 
         //startDatePicker
         val startDatePicker =
@@ -222,7 +214,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             val lightDataArray = it
             val data: MutableList<DataEntry> = ArrayList()
 
-            for (i in 0..lightDataArray.size - 1) {
+            for (i in lightDataArray.indices) {
                 data.add(
                     ValueDataEntry(
                         Date(lightDataArray[i].timestamp).toString(),

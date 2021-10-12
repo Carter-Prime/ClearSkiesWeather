@@ -153,16 +153,17 @@ class SensorAdapter(
             is HeaderHolder -> {
                 val item = differ.currentList[position] as DataItem.Header
                 holder.backgroundImage.setImageResource(
-                    backgroundImage[5].second)
+                    backgroundImage[5].second
+                )
                 holder.temperatureReading.text =
-                    if (phoneSensorsOn) "empty" else setHeaderReading(item)
+                    if (phoneSensorsOn) "" else setHeaderReading(item)
                 holder.weatherCondition.text = item.weatherCondition?.description ?: ""
                 item.weatherCondition?.let {
                     getWeatherImage(
                         it.main
                     )
                 }?.let {
-                   holder.backgroundImage.setImageResource(it)
+                    holder.backgroundImage.setImageResource(it)
                 }
             }
         }
@@ -343,7 +344,6 @@ class SensorAdapter(
             val reading = sensor.sensorReading
             val sensorType = sensor.sensorType
             val weather = sensor.condition
-
         }
 
         data class Header(val sensor: SensorData) : DataItem() {
@@ -351,11 +351,7 @@ class SensorAdapter(
             val sensorType = sensor.sensorType
             val reading = sensor.sensorReading
             val weatherCondition = sensor.condition
-
         }
-
         abstract val id: Float
     }
-
-
 }

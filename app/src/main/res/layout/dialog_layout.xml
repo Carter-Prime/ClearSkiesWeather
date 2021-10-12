@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,14 +26,14 @@
             android:textSize="20sp"
             android:gravity="center_horizontal"
             android:layout_marginBottom="16dp"
-            android:text="Change Current Location" />
+            android:text="@string/dialog_title" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tf_edit_location"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Enter City Name"
+            android:hint="@string/dialog_input_hint"
             android:textColorHint="@color/white"
             app:boxStrokeColor="@drawable/text_field_state_colours"
             app:hintTextColor="@color/white"
@@ -60,20 +59,19 @@
             android:layout_marginBottom="32dp">
 
             <Button
-                android:id="@+id/btn_reset"
-                style="@style/outlineButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reset" />
-
-            <Button
                 android:id="@+id/btn_cancel"
                 style="@style/outlineButton"
                 android:layout_width="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_height="wrap_content"
+                android:text="@string/btn_text_cancel" />
 
-                android:text="Cancel" />
+            <Button
+                android:id="@+id/btn_reset"
+                style="@style/outlineButton"
+                android:layout_marginStart="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_text_reset" />
 
             <Button
                 android:id="@+id/btn_accept"
@@ -81,8 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-
-                android:text="Accept" />
+                android:text="@string/btn_text_ok" />
 
 
         </LinearLayout>

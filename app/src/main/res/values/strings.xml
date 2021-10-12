@@ -28,6 +28,10 @@
     <string name="btn_text_skip">Skip</string>
     <string name="btn_text_continue">Continue…</string>
     <string name="btn_text_get_started">Get Started</string>
+    <string name="btn_text_reset">Reset</string>
+    <string name="btn_text_cancel">Cancel</string>
+    <string name="btn_text_ok">OK</string>
+    <string name="btn_text_time_interval">Select time interval</string>
 
     <!--PlaceholderText-->
 
@@ -38,6 +42,7 @@
     <string name="placeholder_text_select_start_date">select start date</string>
     <string name="placeholder_select_end_date">select end date</string>
     <string name="placeholder_text_toggle_phone_sensors">Toggle Phone Sensors</string>
+    <string name="placeholder_text_select_data">Select your data to display</string>
 
     <!--TooltipsText-->
     <string name="tooltip_text_toggle_phone_sensors">Toggle Display between phone sensors and weather API</string>
@@ -49,6 +54,7 @@
     <string name="content_description_app_title">Clear Skies Title</string>
     <string name="content_description_home_screenshot">Screenshot of Home Screen</string>
     <string name="content_description_fab_btn">Change your current location</string>
+    <string name="content_description_arrow_btn">Expand selection of sensors</string>
 
     <!--SensorTypes-->
     <string name="sensor_temperature">Temperature</string>
@@ -63,7 +69,7 @@
     <string name="sensor_sunrise">Sunrise</string>
     <string name="sensor_sunset">Sunset</string>
 
-<!--    WeatherConditions-->
+    <!--WeatherConditions-->
     <string name="weather_condition_thunderstorm">Thunderstorm</string>
     <string name="weather_condition_drizzle">Drizzle</string>
     <string name="weather_condition_rain">Rain</string>
@@ -73,9 +79,18 @@
     <string name="weather_condition_clouds">Clouds</string>
     <string name="weather_condition_default">Default</string>
 
-<!--    Error Messages-->
+    <!--Error Messages-->
     <string name="error_no_weather_condition">No Weather Found</string>
     <string name="error_no_weather_reading">No Sensor Reading</string>
-    <string name="btn_text_change_location">Change current location</string>
+<!--    <string name="btn_text_change_location">Change current location</string>-->
+    <string name="error_max_character_reached">You have reached the maximum number of characters</string>
+    <string name="error_location_not_found">Location was not found please try again.</string>
+    <string name="error_no_address_found">No address found</string>
+    <string name="error_geocoder_not_available">Geocoder is not available</string>
 
+    <!--Dialog-->
+    <string name="dialog_title">Change Current Location</string>
+    <string name="dialog_input_hint">Enter city name</string>
+
+    <!--Graphs-->
 </resources>

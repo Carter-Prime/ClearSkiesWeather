@@ -14,18 +14,33 @@ import fi.carterm.clearskiesweather.models.apiRoomCache.DailyModel
 import java.time.Instant
 import java.time.ZoneId
 
-class ForecastAdapter(val application: Application, private val onClick: ((position: Int) -> Unit)? = null):
+class ForecastAdapter(
+    val application: Application,
+    private val onClick: ((position: Int) -> Unit)? = null
+) :
     RecyclerView.Adapter<ForecastAdapter.ForecastHolder>() {
 
     private val backgroundImage = listOf(
-        Pair(application.getString(R.string.weather_condition_thunderstorm), R.drawable.weather_thunderstorm),
-        Pair(application.getString(R.string.weather_condition_drizzle), R.drawable.weather_light_rain),
+        Pair(
+            application.getString(R.string.weather_condition_thunderstorm),
+            R.drawable.weather_thunderstorm
+        ),
+        Pair(
+            application.getString(R.string.weather_condition_drizzle),
+            R.drawable.weather_light_rain
+        ),
         Pair(application.getString(R.string.weather_condition_rain), R.drawable.weather_heavy_rain),
         Pair(application.getString(R.string.weather_condition_snow), R.drawable.weather_snow),
         Pair(application.getString(R.string.weather_condition_mist), R.drawable.weather_misty),
-        Pair(application.getString(R.string.weather_condition_clear), R.drawable.weather_sunny_clear_sky),
+        Pair(
+            application.getString(R.string.weather_condition_clear),
+            R.drawable.weather_sunny_clear_sky
+        ),
         Pair(application.getString(R.string.weather_condition_clouds), R.drawable.weather_cloudy),
-        Pair(application.getString(R.string.weather_condition_default), R.drawable.weather_slightly_cloudy)
+        Pair(
+            application.getString(R.string.weather_condition_default),
+            R.drawable.weather_slightly_cloudy
+        )
 
     )
 
@@ -37,8 +52,6 @@ class ForecastAdapter(val application: Application, private val onClick: ((posit
         override fun areContentsTheSame(oldItem: DailyModel, newItem: DailyModel): Boolean {
             return oldItem == newItem
         }
-
-
     }
 
     private val differ = AsyncListDiffer(this, diffCallback)
@@ -56,13 +69,12 @@ class ForecastAdapter(val application: Application, private val onClick: ((posit
         getWeatherImage(
             item.weather.main
         ).let { holder.backgroundImage.setImageResource(it) }
-        holder.dayName.text = when(position){
+        holder.dayName.text = when (position) {
             0 -> "TODAY"
             1 -> "TOMORROW"
             else -> getDay(item.timestamp)
         }
         holder.weatherCondition.text = item.weather.description
-
         holder.itemView.setOnClickListener {
             onClick?.invoke(position)
         }
@@ -85,11 +97,9 @@ class ForecastAdapter(val application: Application, private val onClick: ((posit
         } else {
             pair[0].second
         }
-
     }
 
-    class ForecastHolder(view: View): RecyclerView.ViewHolder(view){
-
+    class ForecastHolder(view: View) : RecyclerView.ViewHolder(view) {
         val dayName: TextView = view.findViewById(R.id.tv_dayName)
         val weatherCondition: TextView = view.findViewById(R.id.tv_weatherDescription)
         val backgroundImage: ImageView = view.findViewById(R.id.img_background)
