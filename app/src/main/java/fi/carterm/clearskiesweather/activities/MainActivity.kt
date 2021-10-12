@@ -1,9 +1,5 @@
 package fi.carterm.clearskiesweather.activities
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -14,11 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import fi.carterm.clearskiesweather.databinding.ActivityMainBinding
-<<<<<<< HEAD
-=======
 import fi.carterm.clearskiesweather.fragments.InputLocationDialogFragment
->>>>>>> master
-
 
 class MainActivity : AppCompatActivity() {
 
