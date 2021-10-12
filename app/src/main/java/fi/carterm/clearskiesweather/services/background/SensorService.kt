@@ -180,7 +180,7 @@ class SensorService: Service(), SensorEventListener {
         notificationChannel.enableLights(false)
         notificationChannel.setSound(null, null)
         notificationChannel.enableVibration(false)
-        notificationChannel.vibrationPattern = longArrayOf(0L)
+        notificationChannel.vibrationPattern = null
         notificationChannel.setShowBadge(false)
         notificationManager.createNotificationChannel(notificationChannel)
 

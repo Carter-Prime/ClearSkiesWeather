@@ -1,13 +1,12 @@
 package fi.carterm.clearskiesweather.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
+import android.location.Geocoder
+import androidx.lifecycle.*
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.models.api.OneCallWeather
 import fi.carterm.clearskiesweather.models.apiRoomCache.WeatherModel
+import fi.carterm.clearskiesweather.models.misc.LocationDetails
 import fi.carterm.clearskiesweather.models.sensors.*
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
 import fi.carterm.clearskiesweather.utilities.livedata.LocationLiveData
@@ -22,10 +21,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     var gpsSensor = true
     var humiditySensor = true
     var pressureSensor = true
+    var app = getApplication<WeatherApplication>()
+    var useCurrentLocation = true
 
-    private val repository = getApplication<WeatherApplication>().repository
-    private val locationLiveData = LocationLiveData(application)
-    fun getLocationLiveData() = locationLiveData
+    private val repository = app.repository
+
 
     private val latestPhoneSensorData = repository.latestPhoneSensorData
     fun getLatestPhoneSensorData() = latestPhoneSensorData
@@ -33,9 +33,30 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val latestWeatherData = repository.getCurrentWeather
     fun getLatestWeather() = latestWeatherData
 
-    var openWeatherCall = locationLiveData.switchMap {
+    private val locationDetails = LocationLiveData(application.applicationContext)
+    fun getLocationLiveData() = locationDetails
+
+    private val forecastLiveData = repository.getForecast
+    fun getForecast() = forecastLiveData
+
+
+    private val getOtherLocation = MutableLiveData<LocationDetails>()
+    fun getOtherLocation() = getOtherLocation
+
+    val otherLocationWeather = getOtherLocation.switchMap {
         liveData(Dispatchers.IO) {
             emit(repository.getWeather(it.latitude, it.longitude))
+        }
+    }
+
+    private val locationError = MutableLiveData<String>()
+    fun getLocationError() = locationError
+
+    val weather = locationDetails.switchMap {
+        liveData(Dispatchers.IO) {
+            if (useCurrentLocation) {
+                emit(repository.getWeather(it.latitude, it.longitude))
+            }
         }
     }
 
@@ -44,6 +65,35 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             repository.insertWeatherToDatabase(data)
         }
     }
+
+    fun insertForecast(data: OneCallWeather){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertForecasts(data)
+        }
+
+    }
+
+    fun getLocationFromName(name: String) {
+        if (Geocoder.isPresent()) {
+            viewModelScope.launch(Dispatchers.IO) {
+
+                val geocoder = Geocoder(getApplication<WeatherApplication>().applicationContext)
+                val list = geocoder.getFromLocationName(name, 1)
+                if(list.isNotEmpty()){
+                    val long = list[0].longitude
+                    val lat = list[0].latitude
+                    val otherLocation =
+                        LocationDetails(lat.toString(), long.toString(), list[0].getAddressLine(0))
+                    getOtherLocation.postValue(otherLocation)
+                }else{
+                    locationError.postValue("Location was not found please try again.")
+                }
+            }
+
+        }
+
+    }
+
 
     fun lightOnChangeSaveToDatabase(current: Float) {
         if (current != -1000f) {
@@ -56,9 +106,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     getLocationLiveData().value
                 )
                 repository.addLightReading(newReading)
-
             }
-
         }
     }
 
@@ -71,6 +119,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     currentTime,
                     current,
                     getLocationLiveData().value
+
                 )
                 repository.addTempReading(newReading)
 
@@ -80,6 +129,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     getLatestPhoneSensorData().value!!.reading_temperature,
                     getLatestPhoneSensorData().value!!.reading_humidity,
                     getLocationLiveData().value
+
                 )
 
                 repository.addDewAndAbsReading(newReadingTwo)
@@ -98,6 +148,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     currentTime,
                     current,
                     getLocationLiveData().value
+
                 )
                 repository.addHumidityReading(newReading)
 
@@ -107,6 +158,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     getLatestPhoneSensorData().value!!.reading_temperature,
                     getLatestPhoneSensorData().value!!.reading_humidity,
                     getLocationLiveData().value
+
                 )
 
                 repository.addDewAndAbsReading(newReadingTwo)
@@ -125,6 +177,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     currentTime,
                     current,
                     getLocationLiveData().value
+
                 )
                 repository.addPressureReading(newReading)
             }
@@ -134,7 +187,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun createListOfPhoneSensorData(data: PhoneSensorData): List<SensorData> {
 
-        return listOf(
+        val list = listOf(
             SensorData(
                 getApplication<Application>().getString(R.string.sensor_temperature),
                 if (tempSensor) data.reading_temperature else -1000f
@@ -162,6 +215,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 if (tempSensor && humiditySensor) data.dewPoint.toFloat() else -1000f
             ),
         )
+
+        return list.filter { it.sensorReading != -1000f }
+
     }
 
     fun createListOfCurrentWeatherData(data: WeatherModel): List<SensorData> {
@@ -177,8 +233,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 data.current.humidity.toFloat()
             ),
             SensorData(
-                getApplication<Application>().getString(R.string.sensor_visibility),
-                data.current.visibility.toFloat()
+                getApplication<Application>().getString(R.string.sensor_sunrise),
+                data.current.sunrise.toFloat()
+            ),
+            SensorData(
+                getApplication<Application>().getString(R.string.sensor_sunset),
+                data.current.sunset.toFloat()
             ),
             SensorData(
                 getApplication<Application>().getString(R.string.sensor_pressure),
@@ -193,15 +253,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 data.current.uvi.toFloat()
             ),
             SensorData(
-                getApplication<Application>().getString(R.string.sensor_sunrise),
-                data.current.sunrise.toFloat()
+                getApplication<Application>().getString(R.string.sensor_visibility),
+                data.current.visibility.toFloat()
             ),
-            SensorData(
-                getApplication<Application>().getString(R.string.sensor_sunset),
-                data.current.sunset.toFloat()
-            ),
-        )
+
+            )
     }
+
+
 
 
 }

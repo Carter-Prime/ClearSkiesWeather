@@ -7,6 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import fi.carterm.clearskiesweather.database.dao.*
+import fi.carterm.clearskiesweather.models.apiRoomCache.DailyModel
 import fi.carterm.clearskiesweather.models.apiRoomCache.WeatherModel
 import fi.carterm.clearskiesweather.models.misc.LocationDetails
 import fi.carterm.clearskiesweather.models.sensors.*
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 @Database(
     entities = [LightSensorReading::class, TemperatureSensorReading::class,
         DewPointAndAbsHumidityReading::class, HumiditySensorReading::class,
-               PressureSensorReading::class, WeatherModel::class],
+               PressureSensorReading::class, WeatherModel::class, DailyModel::class],
     version = 1
 )
 
@@ -28,6 +29,7 @@ abstract class WeatherDatabase : RoomDatabase() {
     abstract fun dewPointAndAbsHumidityDao(): DewPointAndAbsHumidityReadingDao
     abstract fun pressureReadingDao(): PressureReadingDao
     abstract fun weatherModelDao(): WeatherModelDao
+    abstract fun forecastDao(): ForecastDao
 
     private class WeatherDatabaseCallback(
         private val scope: CoroutineScope

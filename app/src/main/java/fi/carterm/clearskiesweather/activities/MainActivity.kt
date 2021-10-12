@@ -1,5 +1,9 @@
 package fi.carterm.clearskiesweather.activities
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +14,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import fi.carterm.clearskiesweather.databinding.ActivityMainBinding
+<<<<<<< HEAD
+=======
+import fi.carterm.clearskiesweather.fragments.InputLocationDialogFragment
+>>>>>>> master
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,8 +35,8 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
 
+        configureNavigationBar(binding)
 
-        bottomNavigationView = binding.bottomNavView
         bottomNavigationView.setupWithNavController(navController)
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
@@ -37,10 +45,22 @@ class MainActivity : AppCompatActivity() {
                 fi.carterm.clearskiesweather.R.id.settingsFragment
             )
         )
+
+        binding.fab.setOnClickListener {
+            Log.d("tag", "fab pressed")
+            InputLocationDialogFragment().show(supportFragmentManager, "MyCustomerDialog")
+        }
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         setContentView(binding.root)
     }
 
+    private fun configureNavigationBar(binding: ActivityMainBinding){
+        bottomNavigationView = binding.bottomNavView
+        bottomNavigationView.background = null
+        bottomNavigationView.menu.getItem(1).isEnabled = false
+
+    }
 
 
 

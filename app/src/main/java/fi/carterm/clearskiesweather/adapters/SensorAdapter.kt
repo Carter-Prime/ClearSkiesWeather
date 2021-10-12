@@ -21,18 +21,33 @@ import java.time.Instant
 import java.time.ZoneId
 
 
-class SensorAdapter(val application: Application, private val onClick: ((position: String) -> Unit)? = null):
+class SensorAdapter(
+    val application: Application,
+    private val onClick: ((position: String) -> Unit)? = null
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val backgroundImage = listOf(
-        Pair(application.getString(R.string.weather_condition_thunderstorm), R.drawable.weather_thunderstorm),
-        Pair(application.getString(R.string.weather_condition_drizzle), R.drawable.weather_light_rain),
+        Pair(
+            application.getString(R.string.weather_condition_thunderstorm),
+            R.drawable.weather_thunderstorm
+        ),
+        Pair(
+            application.getString(R.string.weather_condition_drizzle),
+            R.drawable.weather_light_rain
+        ),
         Pair(application.getString(R.string.weather_condition_rain), R.drawable.weather_heavy_rain),
         Pair(application.getString(R.string.weather_condition_snow), R.drawable.weather_snow),
         Pair(application.getString(R.string.weather_condition_mist), R.drawable.weather_misty),
-        Pair(application.getString(R.string.weather_condition_clear), R.drawable.weather_sunny_clear_sky),
+        Pair(
+            application.getString(R.string.weather_condition_clear),
+            R.drawable.weather_sunny_clear_sky
+        ),
         Pair(application.getString(R.string.weather_condition_clouds), R.drawable.weather_cloudy),
-        Pair(application.getString(R.string.weather_condition_default), R.drawable.weather_slightly_cloudy)
+        Pair(
+            application.getString(R.string.weather_condition_default),
+            R.drawable.weather_slightly_cloudy
+        )
 
     )
 
@@ -58,6 +73,8 @@ class SensorAdapter(val application: Application, private val onClick: ((positio
 
     }
 
+    private var phoneSensorsOn: Boolean = true
+
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     private val diffCallback = object : DiffUtil.ItemCallback<DataItem>() {
@@ -74,7 +91,8 @@ class SensorAdapter(val application: Application, private val onClick: ((positio
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    fun addHeaderAndSubmitList(list: List<SensorData>?) {
+    fun addHeaderAndSubmitList(list: List<SensorData>?, phoneSensor: Boolean) {
+        phoneSensorsOn = phoneSensor
         adapterScope.launch {
             val items = when (list) {
                 null -> listOf(
@@ -134,34 +152,72 @@ class SensorAdapter(val application: Application, private val onClick: ((positio
             }
             is HeaderHolder -> {
                 val item = differ.currentList[position] as DataItem.Header
-                holder.temperatureReading.text = setHeaderReading(item)
+                holder.backgroundImage.setImageResource(
+                    backgroundImage[5].second)
+                holder.temperatureReading.text =
+                    if (phoneSensorsOn) "empty" else setHeaderReading(item)
                 holder.weatherCondition.text = item.weatherCondition?.description ?: ""
                 item.weatherCondition?.let {
                     getWeatherImage(
                         it.main
                     )
-                }?.let { holder.backgroundImage.setImageResource(it) }
+                }?.let {
+                   holder.backgroundImage.setImageResource(it)
+                }
             }
         }
 
     }
 
     private fun setSensorReading(item: DataItem.SensorItem): String {
-        if(item.reading == -1000f){
+        if (item.reading == -1000f) {
             return "-"
-        }else{
-            return when (item.sensorType){
-                application.getString(R.string.sensor_temperature) -> String.format("%.1f°C", item.reading)
-                application.getString(R.string.sensor_pressure) -> String.format("%s hPa", item.reading.toString())
-                application.getString(R.string.sensor_light) -> String.format("%.1f lux", item.reading)
-                application.getString(R.string.sensor_visibility) -> String.format("%s m", item.reading.toString())
-                application.getString(R.string.sensor_humidity) -> String.format("%s %%", item.reading.toString())
-                application.getString(R.string.sensor_wind) -> String.format("%.1f m/s", item.reading)
-                application.getString(R.string.sensor_absolute_humidity) -> String.format("%.2f %%", item.reading)
-                application.getString(R.string.sensor_dew_point) -> String.format("%.1f°C", item.reading)
-                application.getString(R.string.sensor_sunset) -> String.format("%s", convertToLocalTime(item.reading as Float))
-                application.getString(R.string.sensor_sunrise) -> String.format("%s", convertToLocalTime(item.reading as Float))
-                application.getString(R.string.sensor_uv_rating) -> String.format("%.2f UV Index", item.reading)
+        } else {
+            return when (item.sensorType) {
+                application.getString(R.string.sensor_temperature) -> String.format(
+                    "%.1f°C",
+                    item.reading
+                )
+                application.getString(R.string.sensor_pressure) -> String.format(
+                    "%s hPa",
+                    item.reading.toString()
+                )
+                application.getString(R.string.sensor_light) -> String.format(
+                    "%.1f lux",
+                    item.reading
+                )
+                application.getString(R.string.sensor_visibility) -> String.format(
+                    "%s m",
+                    item.reading.toString()
+                )
+                application.getString(R.string.sensor_humidity) -> String.format(
+                    "%s %%",
+                    item.reading.toString()
+                )
+                application.getString(R.string.sensor_wind) -> String.format(
+                    "%.1f m/s",
+                    item.reading
+                )
+                application.getString(R.string.sensor_absolute_humidity) -> String.format(
+                    "%.2f %%",
+                    item.reading
+                )
+                application.getString(R.string.sensor_dew_point) -> String.format(
+                    "%.1f°C",
+                    item.reading
+                )
+                application.getString(R.string.sensor_sunset) -> String.format(
+                    "%s",
+                    convertToLocalTime(item.reading as Float)
+                )
+                application.getString(R.string.sensor_sunrise) -> String.format(
+                    "%s",
+                    convertToLocalTime(item.reading as Float)
+                )
+                application.getString(R.string.sensor_uv_rating) -> String.format(
+                    "%.2f UV Index",
+                    item.reading
+                )
                 else -> application.getString(R.string.error_no_weather_reading)
             }
         }
@@ -169,21 +225,54 @@ class SensorAdapter(val application: Application, private val onClick: ((positio
     }
 
     private fun setHeaderReading(item: DataItem.Header): String {
-        if(item.reading == -1000f){
+        if (item.reading == -1000f) {
             return "-"
-        }else{
-            return when (item.sensorType){
-                application.getString(R.string.sensor_temperature) -> String.format("%.1f°C", item.reading)
-                application.getString(R.string.sensor_pressure) -> String.format("%s hPa", item.reading.toString())
-                application.getString(R.string.sensor_light) -> String.format("%.1f lux", item.reading)
-                application.getString(R.string.sensor_visibility) -> String.format("%s m", item.reading.toString())
-                application.getString(R.string.sensor_humidity) -> String.format("%s %%", item.reading.toString())
-                application.getString(R.string.sensor_wind) -> String.format("%.1f m/s", item.reading)
-                application.getString(R.string.sensor_absolute_humidity) -> String.format("%.2f %%", item.reading)
-                application.getString(R.string.sensor_dew_point) -> String.format("%.1f°C", item.reading)
-                application.getString(R.string.sensor_sunset) -> String.format("%s", convertToLocalTime(item.reading as Float))
-                application.getString(R.string.sensor_sunrise) -> String.format("%s", convertToLocalTime(item.reading as Float))
-                application.getString(R.string.sensor_uv_rating) -> String.format("%.2f UV Index", item.reading)
+        } else {
+            return when (item.sensorType) {
+                application.getString(R.string.sensor_temperature) -> String.format(
+                    "%.1f°C",
+                    item.reading
+                )
+                application.getString(R.string.sensor_pressure) -> String.format(
+                    "%s hPa",
+                    item.reading.toString()
+                )
+                application.getString(R.string.sensor_light) -> String.format(
+                    "%.1f lux",
+                    item.reading
+                )
+                application.getString(R.string.sensor_visibility) -> String.format(
+                    "%s m",
+                    item.reading.toString()
+                )
+                application.getString(R.string.sensor_humidity) -> String.format(
+                    "%s %%",
+                    item.reading.toString()
+                )
+                application.getString(R.string.sensor_wind) -> String.format(
+                    "%.1f m/s",
+                    item.reading
+                )
+                application.getString(R.string.sensor_absolute_humidity) -> String.format(
+                    "%.2f %%",
+                    item.reading
+                )
+                application.getString(R.string.sensor_dew_point) -> String.format(
+                    "%.1f°C",
+                    item.reading
+                )
+                application.getString(R.string.sensor_sunset) -> String.format(
+                    "%s",
+                    convertToLocalTime(item.reading as Float)
+                )
+                application.getString(R.string.sensor_sunrise) -> String.format(
+                    "%s",
+                    convertToLocalTime(item.reading as Float)
+                )
+                application.getString(R.string.sensor_uv_rating) -> String.format(
+                    "%.2f UV Index",
+                    item.reading
+                )
                 else -> application.getString(R.string.error_no_weather_reading)
             }
         }
@@ -209,8 +298,8 @@ class SensorAdapter(val application: Application, private val onClick: ((positio
         }
     }
 
-    private fun convertToLocalTime(time: Float): String{
-      return Instant.ofEpochSecond(time.toLong())
+    private fun convertToLocalTime(time: Float): String {
+        return Instant.ofEpochSecond(time.toLong())
             .atZone(ZoneId.systemDefault())
             .toLocalTime().toString()
     }
