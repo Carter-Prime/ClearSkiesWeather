@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_homeFragment_to_graphFragment"
             app:destination="@id/graphFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/forecastFragment"
@@ -21,8 +24,8 @@
         android:label="@string/forecast_fragment"
         tools:layout="@layout/fragment_forcast">
         <action
-            android:id="@+id/action_forecastFragment_to_sensorFragment"
-            app:destination="@id/graphFragment" />
+            android:id="@+id/action_forecastFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

@@ -1,14 +1,9 @@
 package fi.carterm.clearskiesweather.activities
 
-import android.content.Intent
+
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,7 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import fi.carterm.clearskiesweather.databinding.ActivityMainBinding
-import fi.carterm.clearskiesweather.fragments.HomeFragment
+import fi.carterm.clearskiesweather.fragments.InputLocationDialogFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,8 +29,8 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
 
+        configureNavigationBar(binding)
 
-        bottomNavigationView = binding.bottomNavView
         bottomNavigationView.setupWithNavController(navController)
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
@@ -44,10 +39,22 @@ class MainActivity : AppCompatActivity() {
                 fi.carterm.clearskiesweather.R.id.settingsFragment
             )
         )
+
+        binding.fab.setOnClickListener {
+            Log.d("tag", "fab pressed")
+            InputLocationDialogFragment().show(supportFragmentManager, "MyCustomerDialog")
+        }
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         setContentView(binding.root)
     }
 
+    private fun configureNavigationBar(binding: ActivityMainBinding){
+        bottomNavigationView = binding.bottomNavView
+        bottomNavigationView.background = null
+        bottomNavigationView.menu.getItem(1).isEnabled = false
+
+    }
 
 
 

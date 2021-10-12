@@ -110,10 +110,10 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         b.intervalButton.setOnClickListener {
             if (selectedInterval < 4) {
                 selectedInterval += 1
-                b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
+                b.intervalButton.text = intervalMapRev.getValue(selectedInterval)
             } else {
                 selectedInterval = 0
-                b.intervalButton.setText(intervalMapRev.getValue(selectedInterval))
+                b.intervalButton.text = intervalMapRev.getValue(selectedInterval)
             }
         }
         // SELECT SENSOR BUTTONS

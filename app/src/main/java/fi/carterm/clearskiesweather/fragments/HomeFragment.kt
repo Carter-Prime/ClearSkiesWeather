@@ -1,6 +1,9 @@
 package fi.carterm.clearskiesweather.fragments
 
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -9,15 +12,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.adapters.SensorAdapter
 import fi.carterm.clearskiesweather.databinding.FragmentHomeBinding
 import fi.carterm.clearskiesweather.services.background.SensorService
+import fi.carterm.clearskiesweather.utilities.WeatherApplication
 import fi.carterm.clearskiesweather.utilities.managers.PermissionsManager
 import fi.carterm.clearskiesweather.viewmodels.HomeViewModel
 
@@ -26,20 +31,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var sensorAdapter: SensorAdapter
     private lateinit var homeViewModel: HomeViewModel
-    private var sensorToggleOn = true
+    private lateinit var app: WeatherApplication
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         binding = FragmentHomeBinding.bind(view)
-        val viewModel: HomeViewModel by viewModels()
+        val viewModel: HomeViewModel by activityViewModels()
         homeViewModel = viewModel
-        sensorToggleOn = getState()
+        app = activity?.application as WeatherApplication
 
         PermissionsManager.hasLocationPermissions(requireContext(), requireActivity())
         checkSensors()
-        if (sensorToggleOn) {
+
+
+        if (app.onPhoneSensors) {
             LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
                 broadcastReceiver, IntentFilter(
                     SensorService.KEY_ON_SENSOR_CHANGED_ACTION
@@ -59,52 +66,77 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.rvSensorDataCards.layoutManager = mLayoutManager
-        sensorAdapter = SensorAdapter(requireActivity().application){
+        sensorAdapter = SensorAdapter(requireActivity().application) {
             onClick(it)
         }
         binding.rvSensorDataCards.adapter = sensorAdapter
         binding.rvSensorDataCards.itemAnimator = null
 
-        homeViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
-            binding.tvCurrentLocation.text = it.address
-        }
-
-        homeViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner) {
-            if (it != null && sensorToggleOn) {
-                sensorAdapter.addHeaderAndSubmitList(homeViewModel.createListOfPhoneSensorData(it))
-            }
-        }
-
-        homeViewModel.openWeatherCall.observe(viewLifecycleOwner) {
+        homeViewModel.otherLocationWeather.observe(viewLifecycleOwner) {
+            Log.d("other", "location weather observer: $it")
             homeViewModel.insertWeather(it)
         }
 
-        homeViewModel.getLatestWeather().observe(viewLifecycleOwner) {
-            if (it != null && !sensorToggleOn) {
-                sensorAdapter.addHeaderAndSubmitList(homeViewModel.createListOfCurrentWeatherData(it))
+        homeViewModel.getLocationError().observe(viewLifecycleOwner) {
+            Log.d("other", "location error observer: $it")
+        }
+
+        homeViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner) {
+            if (it != null && app.onPhoneSensors) {
+                sensorAdapter.addHeaderAndSubmitList(
+                    homeViewModel.createListOfPhoneSensorData(it),
+                    app.onPhoneSensors
+                )
             }
+        }
+
+        homeViewModel.getLatestWeather().observe(viewLifecycleOwner) {
+            if (it != null && !app.onPhoneSensors) {
+                sensorAdapter.addHeaderAndSubmitList(
+                    homeViewModel.createListOfCurrentWeatherData(it),
+                    app.onPhoneSensors
+                )
+            }
+        }
+
+        homeViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
+            binding.tvCurrentLocation.text = if (homeViewModel.useCurrentLocation) {
+                it.address
+            } else {
+                homeViewModel.getOtherLocation().value?.address
+            }
+        }
+
+        homeViewModel.weather.observe(viewLifecycleOwner) {
+            homeViewModel.insertWeather(it)
         }
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_right_menu, menu)
+        menu.findItem(R.id.btn_toggle_sensors).tooltipText =
+            getString(R.string.tooltip_text_toggle_phone_sensors)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.btn_toggle_sensors -> {
-                if (sensorToggleOn) {
+                if (app.onPhoneSensors) {
                     stopService()
                     sensorAdapter.addHeaderAndSubmitList(homeViewModel.getLatestWeather().value?.let {
                         homeViewModel.createListOfCurrentWeatherData(
                             it
                         )
-                    })
+                    }, !app.onPhoneSensors)
                 } else {
                     startService()
                 }
-                saveState()
+                saveOnSensorState()
+                true
+            }
+            R.id.btn_settings_menu -> {
+                findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -127,23 +159,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         startForegroundServiceForSensors(false)
     }
 
-    private fun saveState() {
-        sensorToggleOn = !sensorToggleOn
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+    private fun saveOnSensorState() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         with(sharedPref.edit()) {
-            putBoolean("toggleSensorOn", sensorToggleOn)
+            putBoolean("toggleSensorOn", !app.onPhoneSensors)
             apply()
         }
     }
 
-    private fun getState(): Boolean {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        return sharedPref!!.getBoolean("toggleSensorOn", true)
-    }
-
     override fun onResume() {
         super.onResume()
-        if (sensorToggleOn) {
+        if (app.onPhoneSensors) {
             startForegroundServiceForSensors(false)
         }
         checkSensors()
@@ -157,21 +183,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onPause() {
         super.onPause()
-        if (sensorToggleOn) {
+        if (app.onPhoneSensors) {
             startForegroundServiceForSensors(true)
         }
         checkSensors()
     }
 
     override fun onDestroy() {
-        if (sensorToggleOn) {
+        if (app.onPhoneSensors) {
             LocalBroadcastManager.getInstance(requireContext())
                 .unregisterReceiver(broadcastReceiver)
         }
         checkSensors()
         super.onDestroy()
     }
-
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {

@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="black_transparent">#34000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey">#AFB5DA</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="light_blue_50">#FFE1F5FE</color>
     <color name="light_blue_200">#FF81D4FA</color>
     <color name="light_blue_600">#FF039BE5</color>
@@ -20,5 +22,6 @@
     <color name="blue_900">#0D47A1</color>
     <color name="blue_A100">#82B1FF</color>
     <color name="blue_A400">#2979FF</color>
+    <color name="accent_blue">#00B8D4</color>
 
 </resources>
