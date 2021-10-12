@@ -38,4 +38,6 @@ class NetworkMapper : EntityMapper<OneCallWeather, WeatherModel> {
         )
     }
 
+
+
 }

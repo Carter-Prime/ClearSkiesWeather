@@ -6,14 +6,13 @@
         android:icon="@drawable/ic_home"
         />
 
+    <item android:id="@+id/fab_placeholder"
+        android:title=""
+        />
+
     <item android:id="@+id/forecastFragment"
         android:title="@string/btn_text_forecast"
         android:icon="@drawable/ic_cloud"
-        />
-
-    <item android:id="@+id/settingsFragment"
-        android:title="@string/btn_text_settings"
-        android:icon="@drawable/ic_settings"
         />
 
 </menu>

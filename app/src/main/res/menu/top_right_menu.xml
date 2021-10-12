@@ -7,6 +7,15 @@
         android:orderInCategory="100"
         android:icon="@drawable/ic_phone"
         android:title="@string/placeholder_text_toggle_phone_sensors"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:tooltipText="@string/tooltip_text_toggle_phone_sensors" />
+
+    <item
+        android:id="@+id/btn_settings_menu"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/btn_text_settings"
+        android:tooltipText="@string/tooltip_text_settings_menu"
+        />
 
 </menu>

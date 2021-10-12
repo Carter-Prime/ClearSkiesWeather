@@ -17,21 +17,26 @@ class LaunchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("WeatherTest", "Launch activity one")
-        val view = findViewById<View>(R.id.launch_layout)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, view).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        try{
+
+            Log.d("WeatherTest", "Launch activity one")
+            val view = findViewById<View>(R.id.launch_layout)
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            WindowInsetsControllerCompat(window, view).let { controller ->
+                controller.hide(WindowInsetsCompat.Type.systemBars())
+                controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+
+            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                val intent = Intent (this, OnBoardingActivity::class.java)
+                Log.d("WeatherTest", "Launch activity two")
+
+                startActivity(intent)
+                finish()
+            },2000)
+        }catch (error: Exception){
+            Log.d("Tag", error.toString())
         }
-
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            val intent = Intent (this, OnBoardingActivity::class.java)
-            Log.d("WeatherTest", "Launch activity two")
-
-            startActivity(intent)
-            finish()
-             },5000)
 
     }
 

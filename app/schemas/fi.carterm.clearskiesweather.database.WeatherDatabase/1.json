@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "115436a77fb00fdf10e3abcf83f977c4",
+    "identityHash": "b75df5a5f209be6d05aa1f1c8595c2d8",
     "entities": [
       {
         "tableName": "LightSensorReading",
@@ -417,12 +417,140 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "DailyModel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `timestamp` REAL NOT NULL, `time_offset` INTEGER NOT NULL, `sunrise` REAL NOT NULL, `sunset` REAL NOT NULL, `tempDay` REAL NOT NULL, `tempNight` REAL NOT NULL, `tempMin` REAL NOT NULL, `tempMax` REAL NOT NULL, `pressure` REAL NOT NULL, `humidity` REAL NOT NULL, `dew_point` REAL NOT NULL, `wind_speed` REAL NOT NULL, `clouds` REAL NOT NULL, `pop` REAL NOT NULL, `uvi` REAL NOT NULL, `main` TEXT NOT NULL, `description` TEXT NOT NULL, `icon` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time_offset",
+            "columnName": "time_offset",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sunrise",
+            "columnName": "sunrise",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sunset",
+            "columnName": "sunset",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tempDay",
+            "columnName": "tempDay",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tempNight",
+            "columnName": "tempNight",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tempMin",
+            "columnName": "tempMin",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tempMax",
+            "columnName": "tempMax",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pressure",
+            "columnName": "pressure",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "humidity",
+            "columnName": "humidity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dew_point",
+            "columnName": "dew_point",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wind_speed",
+            "columnName": "wind_speed",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clouds",
+            "columnName": "clouds",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pop",
+            "columnName": "pop",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uvi",
+            "columnName": "uvi",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weather.main",
+            "columnName": "main",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weather.description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weather.icon",
+            "columnName": "icon",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '115436a77fb00fdf10e3abcf83f977c4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b75df5a5f209be6d05aa1f1c8595c2d8')"
     ]
   }
 }

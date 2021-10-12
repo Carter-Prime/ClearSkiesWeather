@@ -2,8 +2,8 @@
 
     <!--ApplicationDescriptions-->
     <string name="app_name">Clear Skies Weather</string>
-    <string name="home_fragment">HomeFragment</string>
-    <string name="forecast_fragment">ForecastFragment</string>
+    <string name="home_fragment">Weather Dashboard</string>
+    <string name="forecast_fragment">8 Day Forecast</string>
     <string name="settings_fragment">SettingsFragment</string>
     <string name="graph_fragment">GraphFragment</string>
 
@@ -39,11 +39,16 @@
     <string name="placeholder_select_end_date">select end date</string>
     <string name="placeholder_text_toggle_phone_sensors">Toggle Phone Sensors</string>
 
+    <!--TooltipsText-->
+    <string name="tooltip_text_toggle_phone_sensors">Toggle Display between phone sensors and weather API</string>
+    <string name="tooltip_text_settings_menu">Change phone settings</string>
+
 
     <!--ContentDescriptions-->
     <string name="content_description_weather_image">Weather description Image</string>
     <string name="content_description_app_title">Clear Skies Title</string>
     <string name="content_description_home_screenshot">Screenshot of Home Screen</string>
+    <string name="content_description_fab_btn">Change your current location</string>
 
     <!--SensorTypes-->
     <string name="sensor_temperature">Temperature</string>
@@ -71,5 +76,6 @@
 <!--    Error Messages-->
     <string name="error_no_weather_condition">No Weather Found</string>
     <string name="error_no_weather_reading">No Sensor Reading</string>
+    <string name="btn_text_change_location">Change current location</string>
 
 </resources>
