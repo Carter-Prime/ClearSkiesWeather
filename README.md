@@ -8,6 +8,7 @@ Android App written in Kotlin with MVVM architeture.
 [![GitHub license](https://img.shields.io/github/license/mjcarterdev/ClearSkiesWeather)](https://github.com/mjcarterdev/ClearSkiesWeather)
 [![GitHub issues](https://img.shields.io/github/issues/mjcarterdev/ClearSkiesWeather?color=green)](https://github.com/mjcarterdev/ClearSkiesWeather)
 [![GitHub closed issues](https://img.shields.io/github/issues-closed/mjcarterdev/ClearSkiesWeather?color=green&label=issues%20closed)](https://github.com//mjcarterdev/ClearSkiesWeather)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mjcarterdev/ClearSkiesWeather)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/mjcarterdev/ClearSkiesWeather?color=green)](https://github.com//mjcarterdev/ClearSkiesWeather)
 [![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/mjcarterdev/ClearSkiesWeather?color=green&label=closed%20pull%20requests)](https://github.com//mjcarterdev/ClearSkiesWeather)
 
@@ -50,6 +51,8 @@ Android App written in Kotlin with MVVM architeture.
 
 1. Clone the repo https://github.com/mjcarterdev/ClearSkiesWeather.git
 2. Create an an account on OpenWeatherMap and generate One Call API key
+3. Open project with Android Studio
+4. Add file ... to folder iii with the following content:
 
 ```
 // setup your own API KEY
@@ -58,13 +61,8 @@ object Constants {
     const val API_KEY = "YOUR API KEY"
 }
 ```
-
-3. Open project with Android Studio
-4. Add file ... to folder iii with the following content:
-
-5. Build project
-6. Run project with Your mobile or Android Emulator SDK 26 or higher
-7. On phone functionality of weather station is limited to the sensor that the phone has.
+5. Run project with Your mobile or Android Emulator SDK 26 or higher
+6. On phone, functionality of weather station is limited to the sensor that the phone has.
    In emulator, sensor activity can be simulated. Graph data will appear after the phone registers a sensor change.
 
 ## Demo video
