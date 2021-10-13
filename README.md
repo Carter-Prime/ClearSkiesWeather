@@ -52,7 +52,7 @@ Android App written in Kotlin with MVVM architeture.
 1. Clone the repo https://github.com/mjcarterdev/ClearSkiesWeather.git
 2. Create an an account on OpenWeatherMap and generate One Call API key
 3. Open project with Android Studio
-4. Add file ... to folder iii with the following content:
+4. Under App, create folder constants and in it an object file called Constants, Add your API key:
 
 ```
 // setup your own API KEY
