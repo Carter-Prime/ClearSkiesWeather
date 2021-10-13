@@ -16,6 +16,14 @@ import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.models.misc.LocationDetails
 import kotlinx.coroutines.*
 
+/**
+ *
+ * Location Class, creates livedata object containing current location coordinates and address.
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 
 class LocationLiveData(context: Context) : LiveData<LocationDetails>() {
 
@@ -79,10 +87,12 @@ class LocationLiveData(context: Context) : LiveData<LocationDetails>() {
         }
     }
 
+    // Sets new location data ready for observation
     private fun setLocationData(lat: Double, long: Double, address: String?) {
         value = LocationDetails(lat.toString(), long.toString(), address)
     }
 
+    // Use geocoder to find address and add to LocationDetail object
     private fun getAddress(lat: Double, lng: Double, context: Context): String {
         return if (Geocoder.isPresent()) {
             val geocoder = Geocoder(context)

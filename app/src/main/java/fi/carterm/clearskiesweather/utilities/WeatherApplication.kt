@@ -9,6 +9,15 @@ import fi.carterm.clearskiesweather.database.WeatherRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
+/**
+ *
+ * Weather Application class that extends the application. Database and repository are accessed from here,
+ * Along with some important toggles from shared preferences. These can all be accessed from application.
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 class WeatherApplication : Application() {
     private val applicationScope by lazy { CoroutineScope(SupervisorJob()) }
     private val database by lazy { WeatherDatabase.get(this, applicationScope) }
