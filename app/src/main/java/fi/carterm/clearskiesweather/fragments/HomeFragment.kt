@@ -77,10 +77,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.rvSensorDataCards.adapter = sensorAdapter
         binding.rvSensorDataCards.itemAnimator = null
 
+        weatherViewModel.isLoading.observe(viewLifecycleOwner){ isLoading ->
+            if(isLoading){
+                binding.tvCurrentLocation.text = getString(R.string.placeholder_is_loading)
+            }
+        }
+
         weatherViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
             binding.tvCurrentLocation.text = if (weatherViewModel.useCurrentLocation) {
+                weatherViewModel.isLoading.value = false
                 it.address
             } else {
+                weatherViewModel.isLoading.value = false
                 weatherViewModel.getOtherLocation().value?.address
             }
         }
