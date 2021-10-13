@@ -12,6 +12,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import fi.carterm.clearskiesweather.databinding.ActivityMainBinding
 import fi.carterm.clearskiesweather.fragments.InputLocationDialogFragment
 
+/**
+ * Main activity for the application. Hosts the navigation controller.
+ *
+ * @author Michael Carter
+ * @version 1
+ * */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigationView: BottomNavigationView

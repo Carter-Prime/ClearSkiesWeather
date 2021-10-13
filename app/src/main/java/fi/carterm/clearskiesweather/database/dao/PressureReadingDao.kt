@@ -4,6 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import fi.carterm.clearskiesweather.models.sensors.PressureSensorReading
 
+/**
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
+
 @Dao
 interface PressureReadingDao {
     @Query("SELECT * FROM PressureSensorReading")

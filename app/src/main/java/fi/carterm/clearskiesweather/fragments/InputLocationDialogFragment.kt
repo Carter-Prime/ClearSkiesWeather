@@ -14,6 +14,14 @@ import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
 import fi.carterm.clearskiesweather.viewmodels.WeatherViewModel
 
+/**
+ *
+ * Dialog Fragment - display an input view to change current location to a city location.
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 
 class InputLocationDialogFragment : DialogFragment(), View.OnClickListener {
 
@@ -25,10 +33,16 @@ class InputLocationDialogFragment : DialogFragment(), View.OnClickListener {
     lateinit var edit: TextInputLayout
     private var inputText: String? = null
 
+
     private val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
 
+        /**
+         * When the text changes this will check if the max character limit has been reached and set
+         * an error if true to the text input. Then it will format the entered character string to
+         * ensure only one space is used at a time with no leading or trailing whitespace, set to lowercase.
+         */
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             edit.error = if (count > 19) {
                 getString(R.string.error_max_character_reached)
@@ -81,6 +95,8 @@ class InputLocationDialogFragment : DialogFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
+
+                // Sets loading and passes text to view model to get location. Closes dialog.
                 R.id.btn_accept -> {
                     weatherViewModel.isLoading.value = true
                     inputText?.let { weatherViewModel.getLocationFromName(it) }
@@ -88,10 +104,12 @@ class InputLocationDialogFragment : DialogFragment(), View.OnClickListener {
                     inputText = ""
                     dismiss()
                 }
+                // Clear input and close dialog
                 R.id.btn_cancel -> {
                     inputText = ""
                     dismiss()
                 }
+                // Reset location to current location and closes dialog.
                 R.id.btn_reset -> {
                     weatherViewModel.isLoading.value = true
                     weatherViewModel.useCurrentLocation = true
@@ -101,6 +119,4 @@ class InputLocationDialogFragment : DialogFragment(), View.OnClickListener {
             }
         }
     }
-
-
 }

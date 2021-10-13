@@ -15,6 +15,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.activities.MainActivity
 
+/**
+ *
+ * Sensor Service. Creates a service that will monitor and report sensor readings from the phone.
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 
 class SensorService: Service(), SensorEventListener {
 

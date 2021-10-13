@@ -98,7 +98,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         weatherViewModel.getLocationError().observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            if(!weatherViewModel.useCurrentLocation){
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+
         }
 
         weatherViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner) {

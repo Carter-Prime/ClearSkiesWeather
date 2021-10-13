@@ -15,10 +15,20 @@ import fi.carterm.clearskiesweather.adapters.ForecastAdapter
 import fi.carterm.clearskiesweather.databinding.FragmentForcastBinding
 import fi.carterm.clearskiesweather.viewmodels.WeatherViewModel
 
+/**
+ *
+ * Forecast Fragment - displays a recyclerview list of the weeks weather forecast based on the
+ * location set/displayed at the top of the view.
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 class ForecastFragment : Fragment(R.layout.fragment_forcast) {
     lateinit var binding: FragmentForcastBinding
     private lateinit var forecastViewModel: WeatherViewModel
     private lateinit var forecastAdapter: ForecastAdapter
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +44,7 @@ class ForecastFragment : Fragment(R.layout.fragment_forcast) {
         }
         binding.rvForecastList.adapter = forecastAdapter
 
-
+        // Observer of location data and sets text view with address.
         forecastViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
             binding.tvLocation.text = if (forecastViewModel.useCurrentLocation) {
                 it.address
@@ -43,24 +53,37 @@ class ForecastFragment : Fragment(R.layout.fragment_forcast) {
             }
         }
 
+        // Observer of new weather api call and then insets relevant data to forecast table
         forecastViewModel.weather.observe(viewLifecycleOwner) {
             forecastViewModel.insertForecast(it)
         }
+
+        // Observer if another location is being used instead of current location insert data to
+        // forecast table
         forecastViewModel.otherLocationWeather.observe(viewLifecycleOwner) {
             forecastViewModel.insertForecast(it)
         }
 
+        // Observer of forecast table in database, on change submit new data to recyclerview
         forecastViewModel.getForecast().observe(viewLifecycleOwner) {
             forecastAdapter.submitList(it)
         }
+    }
 
     }
 
+    /**
+     * Creates menu icons in the top toolbar
+     * sets phone sensor toggle to invisible
+     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_right_menu, menu)
         menu.findItem(R.id.btn_toggle_sensors).isVisible = false
     }
 
+    /**
+     * Navigate to settings fragment when menu item selected
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.btn_settings_menu -> {

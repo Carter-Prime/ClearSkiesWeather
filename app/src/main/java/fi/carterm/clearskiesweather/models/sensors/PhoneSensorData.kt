@@ -1,5 +1,11 @@
 package fi.carterm.clearskiesweather.models.sensors
 
+/**
+ * @author Michael Carter
+ * @version 1
+ *
+ */
+
 data class PhoneSensorData(
     val reading_light: Float,
     val reading_temperature: Float,

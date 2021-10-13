@@ -20,6 +20,16 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 
+/**
+ * Recycler view adaptor for the home fragment. Takes a list of weather information or phone sensor data
+ * and displays it to the screen
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ * @param application - for access to application context
+ * @param onClick - pass a function to be called with an item is clicked
+ */
 
 class SensorAdapter(
     val application: Application,
@@ -77,6 +87,9 @@ class SensorAdapter(
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
+    /**
+     * Object callback to compare current and new lists for changes and updates accordingly
+     */
     private val diffCallback = object : DiffUtil.ItemCallback<DataItem>() {
 
         override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
@@ -91,6 +104,13 @@ class SensorAdapter(
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
+    /**
+     * Handles the received list and creates a new list with a header item or no header if using
+     * phone sensors
+     *
+     * @param list - Sensor data list
+     * @param phoneSensor - boolean if the data is from the phone or weather api
+     */
     fun addHeaderAndSubmitList(list: List<SensorData>?, phoneSensor: Boolean) {
         phoneSensorsOn = phoneSensor
         adapterScope.launch {
@@ -135,7 +155,9 @@ class SensorAdapter(
         return differ.currentList.size
     }
 
-
+    /**
+     *  Will create a different item holder depending on the view type
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> HeaderHolder.from(parent)
@@ -143,6 +165,7 @@ class SensorAdapter(
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
+
 
     override fun getItemViewType(position: Int): Int {
         return when (differ.currentList[position]) {
@@ -186,6 +209,13 @@ class SensorAdapter(
 
     }
 
+    /**
+     * Will format the data in a way is presentable depending on the type of sensor data
+     *
+     * @param item - the sensor data object to be formatted
+     *
+     * @return - the formatted string to be set to a view
+     */
     private fun setSensorReading(item: DataItem.SensorItem): String {
         if (item.reading == -1000f) {
             return "-"
@@ -240,6 +270,14 @@ class SensorAdapter(
         }
 
     }
+
+    /**
+     * Will format the data in the header a way is presentable depending on the type of sensor data
+     *
+     * @param item - the sensor data object to be formatted
+     *
+     * @return - the formatted string to be set to a view
+     */
 
     private fun setHeaderReading(item: DataItem.Header): String {
         if (item.reading == -1000f) {
@@ -296,6 +334,12 @@ class SensorAdapter(
 
     }
 
+    /**
+     * Gets the resource id from a list based on string passed as a parameter.
+     *
+     * @param data - text of the weather condition used to filter list by.
+     * @return Int of image resource to be set to view.
+     */
     private fun getWeatherImage(data: String): Int {
         val pair = backgroundImage.filter { item -> item.first == data }
         return if (pair.isEmpty()) {
@@ -306,6 +350,12 @@ class SensorAdapter(
 
     }
 
+    /**
+     * Gets the resource id from a list based on string passed as a parameter.
+     *
+     * @param data - text of the weather condition used to filter list by.
+     * @return Int of image resource to be set to view.
+     */
     private fun getClipartImage(data: String): Int {
         val pair = clipartImage.filter { item -> item.first == data }
         return if (pair.isEmpty()) {
@@ -315,6 +365,12 @@ class SensorAdapter(
         }
     }
 
+    /**
+     * Converts a timestamp number into the local time
+     * @param time - timestamp of weather from list
+     *
+     * @return String of loal time
+     */
     private fun convertToLocalTime(time: Float): String {
         return Instant.ofEpochSecond(time.toLong())
             .atZone(ZoneId.systemDefault())
@@ -354,6 +410,9 @@ class SensorAdapter(
         }
     }
 
+    /**
+     * Class holding the data models for the new lists for this recyclerview
+     */
     sealed class DataItem {
         data class SensorItem(val sensor: SensorData) : DataItem() {
             override val id = sensor.sensorReading as Float
