@@ -94,20 +94,36 @@ class SensorAdapter(
     fun addHeaderAndSubmitList(list: List<SensorData>?, phoneSensor: Boolean) {
         phoneSensorsOn = phoneSensor
         adapterScope.launch {
-            val items = when (list) {
-                null -> listOf(
-                    DataItem.Header(
-                        SensorData(
-                            "Header", 0,
-                            defaultWeather
+            if(phoneSensor){
+                val items =  when (list) {
+                    null -> listOf(
+                        DataItem.Header(
+                            SensorData(
+                                "Header", 0,
+                                defaultWeather
+                            )
                         )
                     )
-                )
-                else -> listOf(DataItem.Header(list[0])) + list.map { DataItem.SensorItem(it) }
+                    else -> listOf<DataItem>() + list.map { DataItem.SensorItem(it) } }
+                withContext(Dispatchers.Main) {
+                    submitList(items)
+                }
+            }else{
+                val items =  when (list) {
+                        null -> listOf(
+                            DataItem.Header(
+                                SensorData(
+                                    "Header", 0,
+                                    defaultWeather
+                                )
+                            )
+                        )
+                        else -> listOf(DataItem.Header(list[0])) + list.map { DataItem.SensorItem(it) } }
+                withContext(Dispatchers.Main) {
+                    submitList(items)
+                }
             }
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
+
         }
     }
 

@@ -125,9 +125,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 if (app.onPhoneSensors) {
                     stopService()
                     sensorAdapter.addHeaderAndSubmitList(weatherViewModel.getLatestWeather().value?.let {
-                        weatherViewModel.createListOfCurrentWeatherData(
-                            it
-                        )
+                        weatherViewModel.createListOfCurrentWeatherData(it)
                     }, !app.onPhoneSensors)
                 } else {
                     startService()
