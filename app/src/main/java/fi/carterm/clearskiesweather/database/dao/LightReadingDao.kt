@@ -5,6 +5,12 @@ import androidx.room.*
 import fi.carterm.clearskiesweather.models.sensors.PhoneSensorData
 import fi.carterm.clearskiesweather.models.sensors.LightSensorReading
 
+/**
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 
 @Dao
 interface LightReadingDao {

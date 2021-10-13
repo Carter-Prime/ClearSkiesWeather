@@ -37,11 +37,13 @@
         android:layout_height="374dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/content_description_home_screenshot"
         android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:srcCompat="@drawable/img_3" />
+        app:srcCompat="@drawable/img_0" />
 
     <TextView
         android:id="@+id/textView3"
@@ -50,47 +52,48 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="57dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="250dp"
         android:text="@string/on_boarding_text_4"
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_continue"
+
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.459" />
 
-    <Button
-        android:id="@+id/btn_skip"
-        style="@style/outlineButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/btn_text_skip"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/btn_continue"
-        style="@style/outlineButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="179dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/btn_text_continue"
+        android:orientation="horizontal"
+        android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toEndOf="@+id/btn_skip"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:layout_weight="0.5"
+            android:id="@+id/btn_skip"
+            style="@style/outlineButton"
+            android:layout_marginEnd="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_text_skip" />
+
+        <Button
+            android:layout_weight="0.5"
+            android:id="@+id/btn_continue"
+            style="@style/outlineButton"
+            android:layout_marginStart="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_text_continue" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import fi.carterm.clearskiesweather.models.misc.LocationDetails
 
+/**
+ * @author Michael Carter
+ * @version 1
+ *
+ */
+
 @Entity
 data class TemperatureSensorReading(
     @PrimaryKey(autoGenerate = true)

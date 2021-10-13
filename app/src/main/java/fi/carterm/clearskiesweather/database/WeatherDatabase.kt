@@ -13,6 +13,15 @@ import fi.carterm.clearskiesweather.models.sensors.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ *
+ * Database class, during database creation, the tables are populated with some starting data points.
+ *
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 
 @Database(
     entities = [LightSensorReading::class, TemperatureSensorReading::class,
@@ -30,6 +39,11 @@ abstract class WeatherDatabase : RoomDatabase() {
     abstract fun weatherModelDao(): WeatherModelDao
     abstract fun forecastDao(): ForecastDao
 
+    /**
+     * This is called when the database is first created
+     *
+     * @param scope - CoroutineScope is passed to allow for this to occur in the background.
+     */
     private class WeatherDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
@@ -101,9 +115,18 @@ abstract class WeatherDatabase : RoomDatabase() {
         }
     }
 
+
     companion object {
         private var instance: WeatherDatabase? = null
 
+        /**
+         * Singleton access of the database.
+         *
+         * @param context - application context
+         * @param scope - coroutine to run on created callback
+         *
+         * @return the application database
+         */
         @Synchronized
         fun get(context: Context, scope: CoroutineScope): WeatherDatabase {
             if (instance == null) {

@@ -7,6 +7,15 @@ import fi.carterm.clearskiesweather.models.apiRoomCache.WeatherModel
 
 import fi.carterm.clearskiesweather.services.networking.util.EntityMapper
 
+/**
+ *
+ * Network Mapper to convert the API response to relevant data model to be saved to database
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
+
 class NetworkMapper : EntityMapper<OneCallWeather, WeatherModel> {
 
     override fun mapFromEntity(entity: OneCallWeather): WeatherModel {
