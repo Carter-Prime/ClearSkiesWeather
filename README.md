@@ -13,12 +13,12 @@ Android App written in Kotlin with MVVM architeture.
 
 ## Features
 
-- Display the weather based on values colected from sensors
+- Display the weather based on values collected from sensors
 - Display the weather forecast based on user location
 - Show 8 days forecast
 - Get the current location
 - Search weather by city name
-- Show weather statistics
+- Show sensors statistics
 
 ## Tech Stack
 
