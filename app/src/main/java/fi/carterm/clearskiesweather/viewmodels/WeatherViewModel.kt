@@ -23,6 +23,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var pressureSensor = true
     var app = getApplication<WeatherApplication>()
     var useCurrentLocation = true
+    var isLoading = MutableLiveData(true)
 
     private val repository = app.repository
 

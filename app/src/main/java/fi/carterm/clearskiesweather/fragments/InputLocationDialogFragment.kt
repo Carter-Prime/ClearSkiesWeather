@@ -82,6 +82,7 @@ class InputLocationDialogFragment : DialogFragment(), View.OnClickListener {
         if (v != null) {
             when (v.id) {
                 R.id.btn_accept -> {
+                    weatherViewModel.isLoading.value = true
                     inputText?.let { weatherViewModel.getLocationFromName(it) }
                     weatherViewModel.useCurrentLocation = false
                     inputText = ""
@@ -92,6 +93,7 @@ class InputLocationDialogFragment : DialogFragment(), View.OnClickListener {
                     dismiss()
                 }
                 R.id.btn_reset -> {
+                    weatherViewModel.isLoading.value = true
                     weatherViewModel.useCurrentLocation = true
                     dismiss()
                 }

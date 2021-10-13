@@ -44,6 +44,7 @@
     <string name="placeholder_text_toggle_phone_sensors">Toggle Phone Sensors</string>
     <string name="placeholder_text_select_data">Select your data to display</string>
     <string name="placeholder_reset_skip_on_boarding">Reset Skip On Boarding:</string>
+    <string name="placeholder_is_loading">Loading…</string>
 
     <!--TooltipsText-->
     <string name="tooltip_text_toggle_phone_sensors">Toggle Display between phone sensors and weather API</string>
