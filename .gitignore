@@ -255,4 +255,4 @@ fabric.properties
 .idea/deploymentTargetDropDown.xml
 
 # OpenWeatherMaps API key
-app/src/main/java/fi/carterm/clearskiesweather/constants/Constants.kt
+/app/src/main/java/fi/carterm/clearskiesweather/services/networking/Constant.kt

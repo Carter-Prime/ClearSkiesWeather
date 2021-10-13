@@ -1,12 +1,12 @@
 package fi.carterm.clearskiesweather.database
 
 import androidx.lifecycle.LiveData
-import fi.carterm.clearskiesweather.constants.Constants
 import fi.carterm.clearskiesweather.database.dao.*
 import fi.carterm.clearskiesweather.models.api.OneCallWeather
 import fi.carterm.clearskiesweather.models.apiRoomCache.DailyModel
 import fi.carterm.clearskiesweather.models.apiRoomCache.WeatherModel
 import fi.carterm.clearskiesweather.models.sensors.*
+import fi.carterm.clearskiesweather.services.networking.Constant
 import fi.carterm.clearskiesweather.services.networking.DailyNetworkMapper
 import fi.carterm.clearskiesweather.services.networking.NetworkMapper
 import fi.carterm.clearskiesweather.services.networking.OpenWeatherRetrofitFactory
@@ -31,7 +31,7 @@ class WeatherRepository(
     private val forecastDao: ForecastDao
 ) {
 
-    private var apiKey = Constants.API_KEY
+    private var apiKey = Constant.API_KEY
 
     private val call = OpenWeatherRetrofitFactory.SERVICE
     private val responseMapper = NetworkMapper()
