@@ -75,6 +75,7 @@ class SensorService: Service(), SensorEventListener {
         return null
     }
 
+    // Removes notification if service is destroyed
     override fun onDestroy() {
         super.onDestroy()
         val notificationManager =
@@ -90,6 +91,10 @@ class SensorService: Service(), SensorEventListener {
         return START_STICKY
     }
 
+    /**
+     * When a sensor reading changes, the new reading is compared to the previous reading if
+     * a large enough change occurs will update the view via the broadcast receiver.
+     */
     override fun onSensorChanged(event: SensorEvent?) {
         when(event?.sensor?.type){
             Sensor.TYPE_LIGHT -> {
@@ -123,30 +128,31 @@ class SensorService: Service(), SensorEventListener {
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
+    // Compares previous reading with new reading
     private fun checkLightReading(newLight: Float): Boolean {
         val minRange = light - 1
         val maxRange = light + 1
         return newLight !in minRange..maxRange
     }
-
+    // Compares previous reading with new reading
     private fun checkTempReading(newTemp: Float): Boolean {
         val minRange = temp - 1
         val maxRange = temp + 1
         return newTemp !in minRange..maxRange
     }
-
+    // Compares previous reading with new reading
     private fun checkPressureReading(newPressure: Float): Boolean {
         val minRange = press - 1
         val maxRange = press + 1
         return newPressure !in minRange..maxRange
     }
-
+    // Compares previous reading with new reading
     private fun checkHumidityReading(newHumidity: Float): Boolean {
         val minRange = humid - 1
         val maxRange = humid + 1
         return newHumidity !in minRange..maxRange
     }
-
+    // Creates a broadcast intent with new sensor readings
     private fun updateSensorReadings(type: String) {
         val intent = Intent()
         when(type){

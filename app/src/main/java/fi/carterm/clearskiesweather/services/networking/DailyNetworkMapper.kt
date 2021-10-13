@@ -5,6 +5,15 @@ import fi.carterm.clearskiesweather.models.apiRoomCache.CurrentWeatherModel
 import fi.carterm.clearskiesweather.models.apiRoomCache.DailyModel
 import fi.carterm.clearskiesweather.services.networking.util.EntityListMapper
 
+/**
+ *
+ * Network Mapper to convert the API response to relevant data model to be saved to database
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
+
 class DailyNetworkMapper : EntityListMapper<OneCallWeather, DailyModel> {
 
 

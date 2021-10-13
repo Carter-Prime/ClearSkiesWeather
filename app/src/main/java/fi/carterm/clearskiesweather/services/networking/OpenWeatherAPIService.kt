@@ -4,6 +4,15 @@ import fi.carterm.clearskiesweather.models.api.OneCallWeather
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+/**
+ *
+ * API Query interface for OpenWeather
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
+
 interface OpenWeatherAPIService {
 
     @GET("2.5/onecall?")

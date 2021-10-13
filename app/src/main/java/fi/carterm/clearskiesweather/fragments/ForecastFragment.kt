@@ -70,8 +70,6 @@ class ForecastFragment : Fragment(R.layout.fragment_forcast) {
         }
     }
 
-    }
-
     /**
      * Creates menu icons in the top toolbar
      * sets phone sensor toggle to invisible
