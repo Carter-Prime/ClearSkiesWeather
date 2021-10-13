@@ -75,4 +75,4 @@ object Constants {
 
 ## Project Stucture
 
-<img src="https://github.com//mjcarterdev/ClearSkiesWeather/blob/docs/screennshots/structure.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/structure.png" width="420" />
