@@ -14,7 +14,7 @@
     <string name="on_boarding_text_2">Other information shown will be downloaded from a regularly up dated database.</string>
     <string name="on_boarding_text_3">Click on a card in the list to display a graph of the data.</string>
     <string name="on_boarding_text_4">You can easily change the data shown by using the option at the bottom of the screen</string>
-    <string name="on_boarding_text_5">The forecast will show the weather up to 30 days in advance.</string>
+    <string name="on_boarding_text_5">The forecast will show the weather up to 8 days in advance.</string>
 
     <string name="on_boarding_firstly">Firstly…</string>
     <string name="on_boarding_next">Next…</string>
@@ -43,6 +43,7 @@
     <string name="placeholder_select_end_date">select end date</string>
     <string name="placeholder_text_toggle_phone_sensors">Toggle Phone Sensors</string>
     <string name="placeholder_text_select_data">Select your data to display</string>
+    <string name="placeholder_reset_skip_on_boarding">Reset Skip On Boarding:</string>
 
     <!--TooltipsText-->
     <string name="tooltip_text_toggle_phone_sensors">Toggle Display between phone sensors and weather API</string>
@@ -55,6 +56,8 @@
     <string name="content_description_home_screenshot">Screenshot of Home Screen</string>
     <string name="content_description_fab_btn">Change your current location</string>
     <string name="content_description_arrow_btn">Expand selection of sensors</string>
+    <string name="content_description_rectangle_highlight">Rectangle Highlight</string>
+
 
     <!--SensorTypes-->
     <string name="sensor_temperature">Temperature</string>
@@ -82,7 +85,6 @@
     <!--Error Messages-->
     <string name="error_no_weather_condition">No Weather Found</string>
     <string name="error_no_weather_reading">No Sensor Reading</string>
-<!--    <string name="btn_text_change_location">Change current location</string>-->
     <string name="error_max_character_reached">You have reached the maximum number of characters</string>
     <string name="error_location_not_found">Location was not found please try again.</string>
     <string name="error_no_address_found">No address found</string>
@@ -91,6 +93,8 @@
     <!--Dialog-->
     <string name="dialog_title">Change Current Location</string>
     <string name="dialog_input_hint">Enter city name</string>
+
+
 
     <!--Graphs-->
 </resources>

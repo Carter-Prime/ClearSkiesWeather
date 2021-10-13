@@ -73,6 +73,5 @@ class ForecastFragment : Fragment(R.layout.fragment_forcast) {
 
     private fun onClick(position: Int) {
         Log.d("tag", "data $position")
-        TODO()
     }
 }
