@@ -12,25 +12,29 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.textfield.TextInputLayout
 import fi.carterm.clearskiesweather.R
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
-import fi.carterm.clearskiesweather.viewmodels.HomeViewModel
+import fi.carterm.clearskiesweather.viewmodels.WeatherViewModel
 
 
-class InputLocationDialogFragment: DialogFragment(), View.OnClickListener {
+class InputLocationDialogFragment : DialogFragment(), View.OnClickListener {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var app: WeatherApplication
-    lateinit var btnAccept: Button
-    lateinit var btnCancel: Button
-    lateinit var btnReset: Button
+    private lateinit var btnAccept: Button
+    private lateinit var btnCancel: Button
+    private lateinit var btnReset: Button
     lateinit var edit: TextInputLayout
     private var inputText: String? = null
 
-    private val textWatcher = object : TextWatcher{
+    private val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            edit.error = if(count > 19){ "You have reached the maximum number of characters" }else { "" }
+            edit.error = if (count > 19) {
+                getString(R.string.error_max_character_reached)
+            } else {
+                ""
+            }
             inputText = s.toString().replace(Regex("\\s{2,}"), " ").trim().lowercase()
         }
 
@@ -38,10 +42,14 @@ class InputLocationDialogFragment: DialogFragment(), View.OnClickListener {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         dialog!!.window?.setBackgroundDrawableResource(R.drawable.dialog_gradient)
-        val viewModel: HomeViewModel by activityViewModels()
-        homeViewModel = viewModel
+        val viewModel: WeatherViewModel by activityViewModels()
+        weatherViewModel = viewModel
         return inflater.inflate(R.layout.dialog_layout, container, false)
     }
 
@@ -72,25 +80,25 @@ class InputLocationDialogFragment: DialogFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         if (v != null) {
-            when(v.id){
+            when (v.id) {
                 R.id.btn_accept -> {
-                    inputText?.let {homeViewModel.getLocationFromName(it) }
-                    homeViewModel.useCurrentLocation = false
+                    inputText?.let { weatherViewModel.getLocationFromName(it) }
+                    weatherViewModel.useCurrentLocation = false
                     inputText = ""
-                    dismiss()}
+                    dismiss()
+                }
                 R.id.btn_cancel -> {
                     inputText = ""
                     dismiss()
                 }
                 R.id.btn_reset -> {
-                    homeViewModel.useCurrentLocation = true
+                    weatherViewModel.useCurrentLocation = true
                     dismiss()
                 }
 
             }
         }
     }
-
 
 
 }

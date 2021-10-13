@@ -11,15 +11,17 @@ import fi.carterm.clearskiesweather.services.networking.NetworkMapper
 import fi.carterm.clearskiesweather.services.networking.OpenWeatherRetrofitFactory
 
 
-class WeatherRepository(private val lightReadingDao: LightReadingDao,
-                        private val temperatureReadingDao: TemperatureReadingDao,
-                        private val humidityReadingDao: HumidityReadingDao,
-                        private val dewPointAndAbsHumidityReadingDao: DewPointAndAbsHumidityReadingDao,
-                        private val pressureReadingDao: PressureReadingDao,
-                        private val weatherModelDao: WeatherModelDao,
-                        private val forecastDao: ForecastDao) {
+class WeatherRepository(
+    private val lightReadingDao: LightReadingDao,
+    private val temperatureReadingDao: TemperatureReadingDao,
+    private val humidityReadingDao: HumidityReadingDao,
+    private val dewPointAndAbsHumidityReadingDao: DewPointAndAbsHumidityReadingDao,
+    private val pressureReadingDao: PressureReadingDao,
+    private val weatherModelDao: WeatherModelDao,
+    private val forecastDao: ForecastDao
+) {
 
-    private var API_KEY = "3b652131c8bd2ab5f62f1959b63267f3"
+    private var apiKey = "3b652131c8bd2ab5f62f1959b63267f3"
 
     private val call = OpenWeatherRetrofitFactory.SERVICE
     private val responseMapper = NetworkMapper()
@@ -35,14 +37,15 @@ class WeatherRepository(private val lightReadingDao: LightReadingDao,
     val getCurrentWeather: LiveData<WeatherModel> = weatherModelDao.getLatestWeather()
     val getForecast: LiveData<List<DailyModel>> = forecastDao.getForecast()
 
-    suspend fun addLightReading(sensorReading: LightSensorReading): Long{
+    suspend fun addLightReading(sensorReading: LightSensorReading): Long {
         return lightReadingDao.insert(sensorReading)
     }
-    suspend fun addTempReading(sensorReading: TemperatureSensorReading): Long{
+
+    suspend fun addTempReading(sensorReading: TemperatureSensorReading): Long {
         return temperatureReadingDao.insert(sensorReading)
     }
 
-    suspend fun addDewAndAbsReading(sensorReading: DewPointAndAbsHumidityReading): Long{
+    suspend fun addDewAndAbsReading(sensorReading: DewPointAndAbsHumidityReading): Long {
         return dewPointAndAbsHumidityReadingDao.insert(sensorReading)
     }
 
@@ -57,19 +60,19 @@ class WeatherRepository(private val lightReadingDao: LightReadingDao,
     //API Calls
 
     suspend fun getWeather(lat: String, long: String): OneCallWeather {
-       return call.getWeatherByLocation(lat=lat, lon=long, appid = API_KEY)
+        return call.getWeatherByLocation(lat = lat, lon = long, appid = apiKey)
 
     }
 
-    suspend fun insertWeatherToDatabase(response: OneCallWeather){
+    suspend fun insertWeatherToDatabase(response: OneCallWeather) {
         val model = responseMapper.mapFromEntity(response)
         weatherModelDao.insert(model)
     }
 
-    suspend fun insertForecasts(response: OneCallWeather){
+    suspend fun insertForecasts(response: OneCallWeather) {
         val listModels = responseListMapper.mapListFromEntity(response)
-        listModels.forEach{
-           forecastDao.insert(it)
+        listModels.forEach {
+            forecastDao.insert(it)
         }
 
     }

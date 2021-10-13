@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
+class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
     var tempSensor = true
     var lightSensor = true
@@ -66,7 +66,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun insertForecast(data: OneCallWeather){
+    fun insertForecast(data: OneCallWeather) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertForecasts(data)
         }
@@ -79,14 +79,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
                 val geocoder = Geocoder(getApplication<WeatherApplication>().applicationContext)
                 val list = geocoder.getFromLocationName(name, 1)
-                if(list.isNotEmpty()){
+                if (list.isNotEmpty()) {
                     val long = list[0].longitude
                     val lat = list[0].latitude
                     val otherLocation =
                         LocationDetails(lat.toString(), long.toString(), list[0].getAddressLine(0))
                     getOtherLocation.postValue(otherLocation)
-                }else{
-                    locationError.postValue("Location was not found please try again.")
+                } else {
+                    locationError.postValue(app.getString(R.string.error_location_not_found))
                 }
             }
 
@@ -259,8 +259,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
             )
     }
-
-
 
 
 }

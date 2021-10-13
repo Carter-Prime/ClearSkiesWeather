@@ -1,6 +1,5 @@
 package fi.carterm.clearskiesweather.services.background
 
-import android.annotation.SuppressLint
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,7 +9,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -46,9 +44,7 @@ class SensorService: Service(), SensorEventListener {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("sensor", "Service Created")
         sensorManager = getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager
-
         sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)?.also { lightSensor ->
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI)
         }
@@ -71,7 +67,6 @@ class SensorService: Service(), SensorEventListener {
         return null
     }
 
-    @SuppressLint("UnspecifiedImmutableFlag")
     override fun onDestroy() {
         super.onDestroy()
         val notificationManager =
@@ -81,7 +76,6 @@ class SensorService: Service(), SensorEventListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
-            Log.d("sensor", "Start command")
             background = it.getBooleanExtra(KEY_BACKGROUND, false)
         }
 
@@ -165,7 +159,6 @@ class SensorService: Service(), SensorEventListener {
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
     }
 
-    @SuppressLint("UnspecifiedImmutableFlag")
     private fun createNotification(): Notification {
 
         val notificationManager =
@@ -188,14 +181,14 @@ class SensorService: Service(), SensorEventListener {
         // Open activity intent
         val contentIntent = PendingIntent.getActivity(
             this, notificationActivityRequestCode,
-            Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+            Intent(this, MainActivity::class.java),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
         // Stop notification intent
         val stopNotificationIntent = Intent(this, ActionListener::class.java)
         stopNotificationIntent.action = KEY_NOTIFICATION_STOP_ACTION
         stopNotificationIntent.putExtra(KEY_NOTIFICATION_ID, notificationId)
         val pendingStopNotificationIntent =
-            PendingIntent.getBroadcast(this, notificationStopRequestCode, stopNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(this, notificationStopRequestCode, stopNotificationIntent,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
         notificationBuilder.setAutoCancel(true)
             .setDefaults(Notification.DEFAULT_ALL)
@@ -222,7 +215,6 @@ class SensorService: Service(), SensorEventListener {
                         val notificationManager =
                             it.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                         val sensorIntent = Intent(it, SensorService::class.java)
-                        Log.d("stopService", "service stopped")
                         it.stopService(sensorIntent)
                         val notificationId = intent.getIntExtra(KEY_NOTIFICATION_ID, -1)
                         if (notificationId != -1) {

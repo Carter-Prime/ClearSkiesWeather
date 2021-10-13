@@ -24,13 +24,13 @@ import fi.carterm.clearskiesweather.databinding.FragmentHomeBinding
 import fi.carterm.clearskiesweather.services.background.SensorService
 import fi.carterm.clearskiesweather.utilities.WeatherApplication
 import fi.carterm.clearskiesweather.utilities.managers.PermissionsManager
-import fi.carterm.clearskiesweather.viewmodels.HomeViewModel
+import fi.carterm.clearskiesweather.viewmodels.WeatherViewModel
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var sensorAdapter: SensorAdapter
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var app: WeatherApplication
 
 
@@ -38,8 +38,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         binding = FragmentHomeBinding.bind(view)
-        val viewModel: HomeViewModel by activityViewModels()
-        homeViewModel = viewModel
+        val viewModel: WeatherViewModel by activityViewModels()
+        weatherViewModel = viewModel
         app = activity?.application as WeatherApplication
 
         PermissionsManager.hasLocationPermissions(requireContext(), requireActivity())
@@ -72,43 +72,43 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.rvSensorDataCards.adapter = sensorAdapter
         binding.rvSensorDataCards.itemAnimator = null
 
-        homeViewModel.otherLocationWeather.observe(viewLifecycleOwner) {
-            Log.d("other", "location weather observer: $it")
-            homeViewModel.insertWeather(it)
+        weatherViewModel.otherLocationWeather.observe(viewLifecycleOwner) {
+            weatherViewModel.insertWeather(it)
         }
 
-        homeViewModel.getLocationError().observe(viewLifecycleOwner) {
+        weatherViewModel.getLocationError().observe(viewLifecycleOwner) {
             Log.d("other", "location error observer: $it")
+            TODO()
         }
 
-        homeViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner) {
+        weatherViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner) {
             if (it != null && app.onPhoneSensors) {
                 sensorAdapter.addHeaderAndSubmitList(
-                    homeViewModel.createListOfPhoneSensorData(it),
+                    weatherViewModel.createListOfPhoneSensorData(it),
                     app.onPhoneSensors
                 )
             }
         }
 
-        homeViewModel.getLatestWeather().observe(viewLifecycleOwner) {
+        weatherViewModel.getLatestWeather().observe(viewLifecycleOwner) {
             if (it != null && !app.onPhoneSensors) {
                 sensorAdapter.addHeaderAndSubmitList(
-                    homeViewModel.createListOfCurrentWeatherData(it),
+                    weatherViewModel.createListOfCurrentWeatherData(it),
                     app.onPhoneSensors
                 )
             }
         }
 
-        homeViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
-            binding.tvCurrentLocation.text = if (homeViewModel.useCurrentLocation) {
+        weatherViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
+            binding.tvCurrentLocation.text = if (weatherViewModel.useCurrentLocation) {
                 it.address
             } else {
-                homeViewModel.getOtherLocation().value?.address
+                weatherViewModel.getOtherLocation().value?.address
             }
         }
 
-        homeViewModel.weather.observe(viewLifecycleOwner) {
-            homeViewModel.insertWeather(it)
+        weatherViewModel.weather.observe(viewLifecycleOwner) {
+            weatherViewModel.insertWeather(it)
         }
 
     }
@@ -124,10 +124,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             R.id.btn_toggle_sensors -> {
                 if (app.onPhoneSensors) {
                     stopService()
-                    sensorAdapter.addHeaderAndSubmitList(homeViewModel.getLatestWeather().value?.let {
-                        homeViewModel.createListOfCurrentWeatherData(
-                            it
-                        )
+                    sensorAdapter.addHeaderAndSubmitList(weatherViewModel.getLatestWeather().value?.let {
+                        weatherViewModel.createListOfCurrentWeatherData(it)
                     }, !app.onPhoneSensors)
                 } else {
                     startService()
@@ -200,25 +198,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            homeViewModel.lightOnChangeSaveToDatabase(
+            weatherViewModel.lightOnChangeSaveToDatabase(
                 intent.getFloatExtra(
                     SensorService.KEY_LIGHT,
                     -1000f
                 )
             )
-            homeViewModel.temperatureOnChangeSaveToDatabase(
+            weatherViewModel.temperatureOnChangeSaveToDatabase(
                 intent.getFloatExtra(
                     SensorService.KEY_TEMP,
                     -1000f
                 )
             )
-            homeViewModel.pressureOnChangeSaveToDatabase(
+            weatherViewModel.pressureOnChangeSaveToDatabase(
                 intent.getFloatExtra(
                     SensorService.KEY_PRESSURE,
                     -1000f
                 )
             )
-            homeViewModel.humidityOnChangeSaveToDatabase(
+            weatherViewModel.humidityOnChangeSaveToDatabase(
                 intent.getFloatExtra(
                     SensorService.KEY_HUMIDITY,
                     -1000f
@@ -228,7 +226,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onClick(sensorType: String) {
-        Log.d("weatherTest", "Data Type $sensorType")
         val bundle = Bundle()
         bundle.putString("sensorType", sensorType)
         findNavController().navigate(R.id.action_homeFragment_to_graphFragment, bundle)
@@ -238,19 +235,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val pm: PackageManager = requireActivity().packageManager
         if (!pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
-            homeViewModel.gpsSensor = false
+            weatherViewModel.gpsSensor = false
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_LIGHT)) {
-            homeViewModel.lightSensor = false
+            weatherViewModel.lightSensor = false
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_AMBIENT_TEMPERATURE)) {
-            homeViewModel.tempSensor = false
+            weatherViewModel.tempSensor = false
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_RELATIVE_HUMIDITY)) {
-            homeViewModel.humiditySensor = false
+            weatherViewModel.humiditySensor = false
         }
         if (!pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_BAROMETER)) {
-            homeViewModel.pressureSensor = false
+            weatherViewModel.pressureSensor = false
         }
     }
 

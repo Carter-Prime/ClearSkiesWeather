@@ -21,10 +21,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("WeatherTest", "Main activity")
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
 
         configureNavigationBar(binding)
@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding.fab.setOnClickListener {
-            Log.d("tag", "fab pressed")
             InputLocationDialogFragment().show(supportFragmentManager, "MyCustomerDialog")
         }
 
@@ -47,13 +46,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    private fun configureNavigationBar(binding: ActivityMainBinding){
+    private fun configureNavigationBar(binding: ActivityMainBinding) {
         bottomNavigationView = binding.bottomNavView
         bottomNavigationView.background = null
         bottomNavigationView.menu.getItem(1).isEnabled = false
 
     }
-
 
 
     override fun onSupportNavigateUp(): Boolean {
