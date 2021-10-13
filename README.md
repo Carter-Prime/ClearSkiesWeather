@@ -7,9 +7,9 @@ Android App written in Kotlin with MVVM architeture.
 [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mjcarterdev/ClearSkiesWeather/master.svg)](https://github.com/mjcarterdev/ClearSkiesWeather)
 [![GitHub license](https://img.shields.io/github/license/mjcarterdev/ClearSkiesWeather)](https://github.com/mjcarterdev/ClearSkiesWeather)
 [![GitHub issues](https://img.shields.io/github/issues/mjcarterdev/ClearSkiesWeather?color=green)](https://github.com/mjcarterdev/ClearSkiesWeather)
-[![GitHub closed issues](https://img.shields.io/github/issues-closed/mjcarterdev/ClearSkiesWeather?color=green)](https://github.com//mjcarterdev/ClearSkiesWeather)
+[![GitHub closed issues](https://img.shields.io/github/issues-closed/mjcarterdev/ClearSkiesWeather?color=green&label=issues%20closed)](https://github.com//mjcarterdev/ClearSkiesWeather)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/mjcarterdev/ClearSkiesWeather?color=green)](https://github.com//mjcarterdev/ClearSkiesWeather)
-[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/mjcarterdev/ClearSkiesWeather?color=green)](https://github.com//mjcarterdev/ClearSkiesWeather)
+[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/mjcarterdev/ClearSkiesWeather?color=green&label=closed%20pull%20requests)](https://github.com//mjcarterdev/ClearSkiesWeather)
 
 ## Features
 
