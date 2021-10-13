@@ -3,13 +3,13 @@
 Weather forecast + weather station.
 Android App written in Kotlin with MVVM architeture.
 
-[![Contributors](https://img.shields.io/github/contributors//mjcarterdev/ClearSkiesWeather)](https://github.com/mjcarterdev/ClearSkiesWeather/graphs/contributors)
+[![Contributors](https://img.shields.io/github/contributors//mjcarterdev/ClearSkiesWeather)](https://github.com/mjcarterdev/ClearSkiesWeather)
 [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mjcarterdev/ClearSkiesWeather/master.svg)](https://github.com/mjcarterdev/ClearSkiesWeather)
-[![license](https://img.shields.io/github/license//mjcarterdev/ClearSkiesWeather)](https://github.com//mjcarterdev/ClearSkiesWeather/blob/master/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/mjcarterdev/ClearSkiesWeather)](https://github.com/mjcarterdev/ClearSkiesWeather/issues)
-[![GitHub closed issues](https://img.shields.io/github/issues-closed//mjcarterdev/ClearSkiesWeather)](https://github.com//mjcarterdev/ClearSkiesWeather/issues?q=is%3Aissue+is%3Aclosed)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr//mjcarterdev/ClearSkiesWeather)](https://github.com//mjcarterdev/ClearSkiesWeather/pulls)
-[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed//mjcarterdev/ClearSkiesWeather)](https://github.com//mjcarterdev/ClearSkiesWeather/pulls?q=is%3Apr+is%3Aclosed)
+[![GitHub license](https://img.shields.io/github/license/mjcarterdev/ClearSkiesWeather)](https://github.com/mjcarterdev/ClearSkiesWeather)
+[![GitHub issues](https://img.shields.io/github/issues/mjcarterdev/ClearSkiesWeather)](https://github.com/mjcarterdev/ClearSkiesWeather)
+[![GitHub closed issues](https://img.shields.io/github/issues-closed//mjcarterdev/ClearSkiesWeather)](https://github.com//mjcarterdev/ClearSkiesWeather)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr//mjcarterdev/ClearSkiesWeather)](https://github.com//mjcarterdev/ClearSkiesWeather)
+[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed//mjcarterdev/ClearSkiesWeather)](https://github.com//mjcarterdev/ClearSkiesWeather)
 
 ## Features
 
