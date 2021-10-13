@@ -253,3 +253,6 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,kotlin,android
 
 .idea/deploymentTargetDropDown.xml
+
+# OpenWeatherMaps API key
+app/src/main/java/fi/carterm/clearskiesweather/constants/Constants.kt

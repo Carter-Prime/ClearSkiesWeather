@@ -61,6 +61,7 @@ object Constants {
     const val API_KEY = "YOUR API KEY"
 }
 ```
+
 5. Run project with Your mobile or Android Emulator SDK 26 or higher
 6. On phone, functionality of weather station is limited to the sensor that the phone has.
    In emulator, sensor activity can be simulated. Graph data will appear after the phone registers a sensor change.
@@ -69,10 +70,20 @@ object Constants {
 
 ## Screenshots
 
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/splash.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/home_forecast_1.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/home_forecast_2.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/home_sensors_1.png" width="420" />
+
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/set_region.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/forecast.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/chart.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/schart2.png" width="420" />
+
 ## Presentation
 
 ![Presentation](/ClearSkies.pptx)
 
 ## Project Stucture
 
-<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/structure.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/structure.png" width="300" />
