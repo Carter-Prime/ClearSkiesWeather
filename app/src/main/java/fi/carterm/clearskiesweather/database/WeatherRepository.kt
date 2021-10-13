@@ -6,6 +6,7 @@ import fi.carterm.clearskiesweather.models.api.OneCallWeather
 import fi.carterm.clearskiesweather.models.apiRoomCache.DailyModel
 import fi.carterm.clearskiesweather.models.apiRoomCache.WeatherModel
 import fi.carterm.clearskiesweather.models.sensors.*
+import fi.carterm.clearskiesweather.services.networking.Constant
 import fi.carterm.clearskiesweather.services.networking.DailyNetworkMapper
 import fi.carterm.clearskiesweather.services.networking.NetworkMapper
 import fi.carterm.clearskiesweather.services.networking.OpenWeatherRetrofitFactory
@@ -30,7 +31,7 @@ class WeatherRepository(
     private val forecastDao: ForecastDao
 ) {
 
-    private var apiKey = "3b652131c8bd2ab5f62f1959b63267f3"
+    private var apiKey = Constant.API_KEY
 
     private val call = OpenWeatherRetrofitFactory.SERVICE
     private val responseMapper = NetworkMapper()
