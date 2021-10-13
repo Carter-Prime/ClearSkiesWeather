@@ -82,7 +82,7 @@ object Constants {
 
 ## Presentation
 
-![Presentation](/ClearSkies.pptx)
+![Presentation](https://docs.google.com/presentation/d/1y17MEiOWuCGaACqPx-doMhmjc9K6md9K/edit?usp=sharing&ouid=100419313399244545656&rtpof=true&sd=true) 
 
 ## Project Stucture
 
