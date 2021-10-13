@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="212dp"
+        android:layout_marginBottom="64dp"
         android:text="@string/on_boarding_text_5"
         android:textColor="@color/white"
         android:textSize="18sp"
