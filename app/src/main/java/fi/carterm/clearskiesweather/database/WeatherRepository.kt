@@ -27,8 +27,12 @@ class WeatherRepository(
     private val responseMapper = NetworkMapper()
     private val responseListMapper = DailyNetworkMapper()
 
-    val allLightReadings: LiveData<List<LightSensorReading>> =
-        lightReadingDao.getAllLightSensorReadings()
+    val allLightReadings: LiveData<List<LightSensorReading>> = lightReadingDao.getAllLightSensorReadings()
+    val allTemperatureReadings: LiveData<List<TemperatureSensorReading>> = temperatureReadingDao.getAllTemperatureSensorReadings()
+    val allPressureReadings: LiveData<List<PressureSensorReading>> = pressureReadingDao.getAllPressureSensorReadings()
+    val allDewPointReadings: LiveData<List<DewPointAndAbsHumidityReading>> = dewPointAndAbsHumidityReadingDao.getAllDewPointAndAbsHumidityReadings()
+    val allHumidityReadings: LiveData<List<HumiditySensorReading>> = humidityReadingDao.getAllHumiditySensorReadings()
+
     val latestPhoneSensorData: LiveData<PhoneSensorData> = lightReadingDao.getLatestReadings()
     val getCurrentWeather: LiveData<WeatherModel> = weatherModelDao.getLatestWeather()
     val getForecast: LiveData<List<DailyModel>> = forecastDao.getForecast()
