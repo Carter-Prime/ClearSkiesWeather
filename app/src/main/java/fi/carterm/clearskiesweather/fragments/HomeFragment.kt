@@ -6,11 +6,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -26,6 +28,14 @@ import fi.carterm.clearskiesweather.utilities.WeatherApplication
 import fi.carterm.clearskiesweather.utilities.managers.PermissionsManager
 import fi.carterm.clearskiesweather.viewmodels.WeatherViewModel
 
+/**
+ *  Home Fragment. Displays a recyclerview with sensor data from the phone or data from the API.
+ *  Is limited to current day only. Has a broadcast receiver for the sensor service.
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
@@ -45,6 +55,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         PermissionsManager.hasLocationPermissions(requireContext(), requireActivity())
         checkSensors()
 
+        binding.tvCurrentLocation.text = "Loading..."
+
 
         if (app.onPhoneSensors) {
             LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
@@ -52,6 +64,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     SensorService.KEY_ON_SENSOR_CHANGED_ACTION
                 )
             )
+            binding.tvUsingPhoneSensors.visibility = VISIBLE
         }
 
         val mLayoutManager = GridLayoutManager(context, 2)
@@ -72,15 +85,39 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.rvSensorDataCards.adapter = sensorAdapter
         binding.rvSensorDataCards.itemAnimator = null
 
+        weatherViewModel.isLoading.observe(viewLifecycleOwner){ isLoading ->
+            if(isLoading){
+                binding.tvCurrentLocation.text = getString(R.string.placeholder_is_loading)
+            }
+        }
+
+        // Observes current location data and will update the view depending on if using current
+        // position or another location
+        weatherViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
+            binding.tvCurrentLocation.text = if (weatherViewModel.useCurrentLocation) {
+                weatherViewModel.isLoading.value = false
+                it.address
+            } else {
+                weatherViewModel.isLoading.value = false
+                weatherViewModel.getOtherLocation().value?.address
+            }
+        }
+
+        // Observe other locations weather API call and with response insert to database.
         weatherViewModel.otherLocationWeather.observe(viewLifecycleOwner) {
             weatherViewModel.insertWeather(it)
         }
 
+        // Observe for location errors and if found will create a warning on screen.
         weatherViewModel.getLocationError().observe(viewLifecycleOwner) {
-            Log.d("other", "location error observer: $it")
-            TODO()
+            if(!weatherViewModel.useCurrentLocation){
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+
         }
 
+        // Observe for changes in database for phone sensors. If change received sends list to
+        // recyclerview.
         weatherViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner) {
             if (it != null && app.onPhoneSensors) {
                 sensorAdapter.addHeaderAndSubmitList(
@@ -90,6 +127,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
+        // Observe for changes in database for latest weather from API. If changes received sends list
+        // to recyclerview.
         weatherViewModel.getLatestWeather().observe(viewLifecycleOwner) {
             if (it != null && !app.onPhoneSensors) {
                 sensorAdapter.addHeaderAndSubmitList(
@@ -99,16 +138,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        weatherViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
-            binding.tvCurrentLocation.text = if (weatherViewModel.useCurrentLocation) {
-                it.address
-            } else {
-                weatherViewModel.getOtherLocation().value?.address
-            }
-        }
-
+        // Observe current location weather and inserts to database on change.
         weatherViewModel.weather.observe(viewLifecycleOwner) {
-            weatherViewModel.insertWeather(it)
+            if(weatherViewModel.useCurrentLocation){
+                weatherViewModel.insertWeather(it)
+            }
         }
 
     }
@@ -119,6 +153,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             getString(R.string.tooltip_text_toggle_phone_sensors)
     }
 
+    /**
+     *  When menu item is selected will toggle between turning sensor service on or off and send
+     *  relevant list to recyclerview. Will also save new phone state to preferences.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.btn_toggle_sensors -> {
@@ -127,8 +165,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     sensorAdapter.addHeaderAndSubmitList(weatherViewModel.getLatestWeather().value?.let {
                         weatherViewModel.createListOfCurrentWeatherData(it)
                     }, !app.onPhoneSensors)
+                    binding.tvUsingPhoneSensors.visibility = GONE
                 } else {
                     startService()
+                    binding.tvUsingPhoneSensors.visibility = VISIBLE
                 }
                 saveOnSensorState()
                 true
@@ -141,6 +181,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    /**
+     *  Stops Sensor service
+     */
     private fun stopService() {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver)
         requireContext().stopService(Intent(activity, SensorService::class.java))
@@ -148,6 +191,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     }
 
+    /**
+     *  Starts Sensor service
+     */
     private fun startService() {
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
             broadcastReceiver, IntentFilter(
@@ -157,6 +203,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         startForegroundServiceForSensors(false)
     }
 
+    /**
+     * Changes sensor state in shared preferences
+     */
     private fun saveOnSensorState() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         with(sharedPref.edit()) {
@@ -173,6 +222,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         checkSensors()
     }
 
+    /**
+     *  Creates the Intent for the sensor service
+     */
     private fun startForegroundServiceForSensors(background: Boolean) {
         val sensorServiceIntent = Intent(activity, SensorService::class.java)
         sensorServiceIntent.putExtra(SensorService.KEY_BACKGROUND, background)
@@ -196,6 +248,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onDestroy()
     }
 
+    /**
+     *  Broadcast receiver - depending on sensor data received will create object and save to database.
+     */
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             weatherViewModel.lightOnChangeSaveToDatabase(
@@ -225,12 +280,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    /**
+     *  Navigation to graph fragment
+     */
     private fun onClick(sensorType: String) {
         val bundle = Bundle()
         bundle.putString("sensorType", sensorType)
         findNavController().navigate(R.id.action_homeFragment_to_graphFragment, bundle)
     }
 
+    /**
+     *  Checks what phone sensors are available and toggles their availability
+     */
     private fun checkSensors() {
 
         val pm: PackageManager = requireActivity().packageManager

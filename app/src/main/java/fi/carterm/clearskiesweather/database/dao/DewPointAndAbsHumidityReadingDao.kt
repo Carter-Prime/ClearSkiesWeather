@@ -4,6 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import fi.carterm.clearskiesweather.models.sensors.DewPointAndAbsHumidityReading
 
+/**
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 @Dao
 interface DewPointAndAbsHumidityReadingDao {
     @Query("SELECT * FROM DewPointAndAbsHumidityReading")

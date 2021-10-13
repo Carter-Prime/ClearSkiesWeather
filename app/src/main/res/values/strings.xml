@@ -14,7 +14,7 @@
     <string name="on_boarding_text_2">Other information shown will be downloaded from a regularly up dated database.</string>
     <string name="on_boarding_text_3">Click on a card in the list to display a graph of the data.</string>
     <string name="on_boarding_text_4">You can easily change the data shown by using the option at the bottom of the screen</string>
-    <string name="on_boarding_text_5">The forecast will show the weather up to 8 days in advance.</string>
+    <string name="on_boarding_text_5">The forecast will show the weather up to 8 days in advance.\n\nTo change your location use the button at the bottom center of the screen.\n\nYou can also reset back to your current location from here too.</string>
 
     <string name="on_boarding_firstly">Firstly…</string>
     <string name="on_boarding_next">Next…</string>
@@ -44,6 +44,7 @@
     <string name="placeholder_text_toggle_phone_sensors">Toggle Phone Sensors</string>
     <string name="placeholder_text_select_data">Select your data to display</string>
     <string name="placeholder_reset_skip_on_boarding">Reset Skip On Boarding:</string>
+    <string name="placeholder_is_loading">Loading…</string>
 
     <!--TooltipsText-->
     <string name="tooltip_text_toggle_phone_sensors">Toggle Display between phone sensors and weather API</string>
@@ -93,5 +94,6 @@
     <!--Dialog-->
     <string name="dialog_title">Change Current Location</string>
     <string name="dialog_input_hint">Enter city name</string>
+    <string name="placeholder_currently_using_phone_sensors">Currently Using Phone Sensors</string>
 
 </resources>

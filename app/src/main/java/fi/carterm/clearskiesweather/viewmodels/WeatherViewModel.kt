@@ -13,6 +13,16 @@ import fi.carterm.clearskiesweather.utilities.livedata.LocationLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ *
+ * Weather view model class. Handles all data flow between home and forecast fragments. Has various
+ * live data variables monitoring weather api and locations. Calls the repository to insert new data,
+ * formats and creates lists for loading into each recyclerview.
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 
 class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,9 +33,11 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var pressureSensor = true
     var app = getApplication<WeatherApplication>()
     var useCurrentLocation = true
+    var isLoading = MutableLiveData(true)
 
     private val repository = app.repository
 
+    // Various livedata objects for weather and sensors tracking
 
     private val latestPhoneSensorData = repository.latestPhoneSensorData
     fun getLatestPhoneSensorData() = latestPhoneSensorData
@@ -52,6 +64,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     private val locationError = MutableLiveData<String>()
     fun getLocationError() = locationError
 
+    // Takes the data from location details, when its triggered, and calls weather API and stores
+    // the result in this livedata
     val weather = locationDetails.switchMap {
         liveData(Dispatchers.IO) {
             if (useCurrentLocation) {
@@ -73,6 +87,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
     }
 
+    // Takes a string input and finds the address and location coordinates. Then it calls the API
+    // for the new location and propagates this information to the UI.
     fun getLocationFromName(name: String) {
         if (Geocoder.isPresent()) {
             viewModelScope.launch(Dispatchers.IO) {
@@ -94,6 +110,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
     }
 
+    // Functions to save sensor data to database tables
 
     fun lightOnChangeSaveToDatabase(current: Float) {
         if (current != -1000f) {
@@ -185,6 +202,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    // Creates a list of sensor readings for the recyclerview to display
     fun createListOfPhoneSensorData(data: PhoneSensorData): List<SensorData> {
 
         val list = listOf(
@@ -220,6 +238,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
     }
 
+    // Creates a list of weather information to display in a recyclerview.
     fun createListOfCurrentWeatherData(data: WeatherModel): List<SensorData> {
 
         return listOf(
