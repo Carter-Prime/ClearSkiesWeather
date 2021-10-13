@@ -14,6 +14,18 @@ import fi.carterm.clearskiesweather.models.apiRoomCache.DailyModel
 import java.time.Instant
 import java.time.ZoneId
 
+/**
+ * Recycler view adaptor for the forecast fragment. Takes a list of weather information and displays
+ * the condition for the next 7 days plus today.
+ *
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ * @param application - for access to application context
+ * @param onClick - pass a function to be called with an item is clicked
+ */
+
 class ForecastAdapter(
     val application: Application,
     private val onClick: ((position: Int) -> Unit)? = null
@@ -44,6 +56,9 @@ class ForecastAdapter(
 
     )
 
+    /**
+     * Object callback to compare current and new lists for changes and updates accordingly
+     */
     private val diffCallback = object : DiffUtil.ItemCallback<DailyModel>() {
         override fun areItemsTheSame(oldItem: DailyModel, newItem: DailyModel): Boolean {
             return oldItem.id == newItem.id
@@ -84,12 +99,24 @@ class ForecastAdapter(
         return differ.currentList.size
     }
 
+    /**
+     * Converts a timestamp number into the day of the week
+     * @param time - timestamp of weather from list
+     *
+     * @return String of day of the week
+     */
     private fun getDay(time: Double): String {
         return Instant.ofEpochSecond(time.toLong())
             .atZone(ZoneId.systemDefault())
             .toLocalDate().dayOfWeek.toString()
     }
 
+    /**
+     * Gets the resource id from a list based on string passed as a parameter.
+     *
+     * @param data - text of the weather condition used to filter list by.
+     * @return Int of image resource to be set to view.
+     */
     private fun getWeatherImage(data: String): Int {
         val pair = backgroundImage.filter { item -> item.first == data }
         return if (pair.isEmpty()) {
@@ -99,12 +126,18 @@ class ForecastAdapter(
         }
     }
 
+    /**
+     * Class used to create an specific type of item holder for the recyclerview.
+     */
     class ForecastHolder(view: View) : RecyclerView.ViewHolder(view) {
         val dayName: TextView = view.findViewById(R.id.tv_dayName)
         val weatherCondition: TextView = view.findViewById(R.id.tv_weatherDescription)
         val backgroundImage: ImageView = view.findViewById(R.id.img_background)
 
         companion object {
+            /**
+             * Method to inflate the layout
+             */
             fun from(parent: ViewGroup): ForecastHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val view = layoutInflater.inflate(R.layout.forecast_item_layout, parent, false)

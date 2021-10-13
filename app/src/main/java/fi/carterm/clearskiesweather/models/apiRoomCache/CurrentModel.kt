@@ -2,6 +2,12 @@ package fi.carterm.clearskiesweather.models.apiRoomCache
 
 import androidx.room.Embedded
 
+/**
+ * @author Michael Carter
+ * @version 1
+ *
+ */
+
 
 data class CurrentModel (
     val dt :  Double,

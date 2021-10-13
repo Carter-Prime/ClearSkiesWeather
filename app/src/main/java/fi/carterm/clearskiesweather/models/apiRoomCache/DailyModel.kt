@@ -4,6 +4,11 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 @Entity
 data class DailyModel(
     @PrimaryKey(autoGenerate = false)

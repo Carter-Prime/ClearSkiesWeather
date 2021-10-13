@@ -10,6 +10,15 @@ import fi.carterm.clearskiesweather.services.networking.DailyNetworkMapper
 import fi.carterm.clearskiesweather.services.networking.NetworkMapper
 import fi.carterm.clearskiesweather.services.networking.OpenWeatherRetrofitFactory
 
+/**
+ *
+ * Application repository - handles all data calls from api and database
+ *
+ *
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 
 class WeatherRepository(
     private val lightReadingDao: LightReadingDao,
@@ -59,16 +68,34 @@ class WeatherRepository(
 
     //API Calls
 
+    /**
+     * Makes a call to the weather API using position coordinates
+     *
+     * @param lat - latitude position as a string
+     * @param long - longitude position as a string
+     *
+     * @return OneCallWeather object for passed location
+     */
     suspend fun getWeather(lat: String, long: String): OneCallWeather {
         return call.getWeatherByLocation(lat = lat, lon = long, appid = apiKey)
 
     }
 
+    /**
+     * Maps relevant data to model and inserted to database
+     *
+     * @param response - API OneCallWeather object
+     */
     suspend fun insertWeatherToDatabase(response: OneCallWeather) {
         val model = responseMapper.mapFromEntity(response)
         weatherModelDao.insert(model)
     }
 
+    /**
+     * Maps relevant data to model and inserted to database
+     *
+     * @param response - API OneCallWeather object
+     */
     suspend fun insertForecasts(response: OneCallWeather) {
         val listModels = responseListMapper.mapListFromEntity(response)
         listModels.forEach {

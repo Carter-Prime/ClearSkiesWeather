@@ -9,6 +9,13 @@ import fi.carterm.clearskiesweather.models.misc.LocationDetails
 import kotlin.math.exp
 import kotlin.math.ln
 
+/**
+ *
+ * Dew point and Absolute Humidity calculated when temperature and humidity are passed.
+ * @author Michael Carter
+ * @version 1
+ *
+ */
 @Entity
 data class DewPointAndAbsHumidityReading(
     @PrimaryKey(autoGenerate = true)
