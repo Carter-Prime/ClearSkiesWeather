@@ -3,7 +3,7 @@
 Weather forecast + weather station.
 Android App written in Kotlin with MVVM architeture.
 
-[![Contributors](https://img.shields.io/github/contributors//mjcarterdev/ClearSkiesWeather.svg)](https://github.com/mjcarterdev/ClearSkiesWeather/graphs/contributors)
+[![Contributors](https://img.shields.io/github/contributors//mjcarterdev/ClearSkiesWeather)](https://github.com/mjcarterdev/ClearSkiesWeather/graphs/contributors)
 [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mjcarterdev/ClearSkiesWeather/master.svg)](https://github.com/mjcarterdev/ClearSkiesWeather)
 [![license](https://img.shields.io/github/license//mjcarterdev/ClearSkiesWeather.svg)](https://github.com//mjcarterdev/ClearSkiesWeather/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues//mjcarterdev/ClearSkiesWeather.svg)](https://github.com//mjcarterdev/ClearSkiesWeather/issues)
