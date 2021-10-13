@@ -6,11 +6,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -45,6 +47,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         PermissionsManager.hasLocationPermissions(requireContext(), requireActivity())
         checkSensors()
 
+        binding.tvCurrentLocation.text = "Loading..."
+
 
         if (app.onPhoneSensors) {
             LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
@@ -52,6 +56,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     SensorService.KEY_ON_SENSOR_CHANGED_ACTION
                 )
             )
+            binding.tvUsingPhoneSensors.visibility = VISIBLE
         }
 
         val mLayoutManager = GridLayoutManager(context, 2)
@@ -72,13 +77,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.rvSensorDataCards.adapter = sensorAdapter
         binding.rvSensorDataCards.itemAnimator = null
 
+        weatherViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
+            binding.tvCurrentLocation.text = if (weatherViewModel.useCurrentLocation) {
+                it.address
+            } else {
+                weatherViewModel.getOtherLocation().value?.address
+            }
+        }
+
         weatherViewModel.otherLocationWeather.observe(viewLifecycleOwner) {
             weatherViewModel.insertWeather(it)
         }
 
         weatherViewModel.getLocationError().observe(viewLifecycleOwner) {
-            Log.d("other", "location error observer: $it")
-            TODO()
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
         }
 
         weatherViewModel.getLatestPhoneSensorData().observe(viewLifecycleOwner) {
@@ -96,14 +108,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     weatherViewModel.createListOfCurrentWeatherData(it),
                     app.onPhoneSensors
                 )
-            }
-        }
-
-        weatherViewModel.getLocationLiveData().observe(viewLifecycleOwner) {
-            binding.tvCurrentLocation.text = if (weatherViewModel.useCurrentLocation) {
-                it.address
-            } else {
-                weatherViewModel.getOtherLocation().value?.address
             }
         }
 
@@ -127,8 +131,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     sensorAdapter.addHeaderAndSubmitList(weatherViewModel.getLatestWeather().value?.let {
                         weatherViewModel.createListOfCurrentWeatherData(it)
                     }, !app.onPhoneSensors)
+                    binding.tvUsingPhoneSensors.visibility = GONE
                 } else {
                     startService()
+                    binding.tvUsingPhoneSensors.visibility = VISIBLE
                 }
                 saveOnSensorState()
                 true
