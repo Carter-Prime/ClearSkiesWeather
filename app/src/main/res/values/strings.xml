@@ -39,8 +39,8 @@
     <string name="placeholder_text_day_title">Today</string>
     <string name="placeholder_text_sensor_reading">20°C</string>
     <string name="placeholder_text_weather_condition">Sunny with Clear Skies</string>
-    <string name="placeholder_text_select_start_date">select start date</string>
-    <string name="placeholder_select_end_date">select end date</string>
+    <string name="placeholder_text_select_start_date">Select start date</string>
+    <string name="placeholder_select_end_date">Select end date</string>
     <string name="placeholder_text_toggle_phone_sensors">Toggle Phone Sensors</string>
     <string name="placeholder_text_select_data">Select your data to display</string>
     <string name="placeholder_reset_skip_on_boarding">Reset Skip On Boarding:</string>
