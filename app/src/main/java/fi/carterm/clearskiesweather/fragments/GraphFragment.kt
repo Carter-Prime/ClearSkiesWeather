@@ -26,6 +26,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import com.anychart.charts.Cartesian
 import com.anychart.core.cartesian.series.Line
+import com.google.android.material.datepicker.DateValidatorPointBackward
 
 
 class GraphFragment : Fragment(R.layout.fragment_graph) {
@@ -71,7 +72,6 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
 
         // Receive sensor type from home fragment
-        //Log.d("testing", "sensor type: $sensorType")
         when (arguments?.getString("sensorType").orEmpty()) {
             getString(R.string.sensor_temperature) -> {
                 selectedSensor["selectedTemperature"] = true
@@ -110,7 +110,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .setCalendarConstraints(
                     CalendarConstraints.Builder()
-                        .setValidator(DateValidatorPointForward.now()).build()
+                        .setValidator(DateValidatorPointBackward.now()).build()
                 )
                 .build()
         b.etEventStartDate.setOnClickListener {
@@ -129,7 +129,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .setCalendarConstraints(
                     CalendarConstraints.Builder()
-                        .setValidator(DateValidatorPointForward.now()).build()
+                        .setValidator(DateValidatorPointBackward.now()).build()
                 )
                 .build()
         b.etEventEndDate.setOnClickListener {
@@ -173,11 +173,16 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                 b.arrowButton.setImageResource(R.drawable.ic_baseline_expand_less_24)
 
                 // read button value
-                b.lightBtn.setOnClickListener { toggleSensors("selectedLight") }
-                b.temperatureBtn.setOnClickListener { toggleSensors("selectedTemperature") }
-                b.humidityBtn.setOnClickListener { toggleSensors("selectedHumidity") }
+                b.lightBtn.setOnClickListener { toggleSensors("selectedLight")
+
+                    observeSensorLight()}
+                b.temperatureBtn.setOnClickListener { toggleSensors("selectedTemperature")
+                    observeSensorTemp()}
+                b.humidityBtn.setOnClickListener { toggleSensors("selectedHumidity")
+                    observeSensorHumidity()}
                 b.absHumidityBtn.setOnClickListener { toggleSensors("selectedAbsHumidity") }
-                b.pressureBtn.setOnClickListener { toggleSensors("selectedPressure") }
+                b.pressureBtn.setOnClickListener { toggleSensors("selectedPressure")
+                    observeSensorPressure()}
                 b.dewPointBtn.setOnClickListener {toggleSensors("selectedDewPoint") }
             }
         }
@@ -223,6 +228,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             line?.stroke("blue")
             displayInChart(chart, "°C", "time")
         }
+
     }
 
     private fun observeSensorLight() {
