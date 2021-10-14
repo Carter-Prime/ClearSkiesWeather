@@ -4,8 +4,8 @@
     <string name="app_name">Clear Skies Weather</string>
     <string name="home_fragment">Weather Dashboard</string>
     <string name="forecast_fragment">8 Day Forecast</string>
-    <string name="settings_fragment">SettingsFragment</string>
-    <string name="graph_fragment">GraphFragment</string>
+    <string name="settings_fragment">Settings</string>
+    <string name="graph_fragment">Graph</string>
 
     <!--OnBoarding-->
     <string name="on_boarding_text_intro">Welcome to Clear Skies… before you begin we would
