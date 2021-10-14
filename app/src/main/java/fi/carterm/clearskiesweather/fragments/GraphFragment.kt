@@ -42,23 +42,24 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private val intervalMapRev =
         mapOf(0 to "minute", 1 to "hour", 2 to "day", 3 to "month", 4 to "year")
 
-    private var selectedTemperature = false
-    private var selectedPressure = false
-    private var selectedLight = false
-    private var selectedHumidity = false
-    private var selectedAbsHumidity = false
-    private var selectedDewPoint = false
-    private var selectedUVRating = false
-    private var selectedWind = false
-    private var selectedVisibility = false
-    private var selectedSunrise = false
-    private var selectedSunset = false
+    private val selectedSensor =
+        mutableMapOf(
 
+            "selectedTemperature" to false,
+            "selectedPressure" to false,
+            "selectedLight" to false,
+            "selectedHumidity" to false,
+            "selectedAbsHumidity" to false,
+            "selectedDewPoint" to false,
+            "selectedUVRating" to false,
+            "selectedWind" to false,
+            "selectedVisibility" to false,
+            "selectedSunrise" to false,
+            "selectedSunset" to false,
+        )
     private var selectedInterval = defaultInterval
     private var selectedStartDate = defaultStartDate
     private var selectedEndDate = defaultEndDate
-
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,29 +74,29 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         //Log.d("testing", "sensor type: $sensorType")
         when (arguments?.getString("sensorType").orEmpty()) {
             getString(R.string.sensor_temperature) -> {
-                selectedTemperature = true
+                selectedSensor["selectedTemperature"] = true
                 observeSensorTemp()
             }
             getString(R.string.sensor_humidity) -> {
-                selectedHumidity = true
+                selectedSensor["selectedHumidity"] = true
                 observeSensorHumidity()
             }
             getString(R.string.sensor_light) -> {
-                selectedLight = true
+                selectedSensor["selectedLight"] = true
                 observeSensorLight()
             }
             getString(R.string.sensor_pressure) -> {
-                selectedPressure = true
+                selectedSensor["selectedPressure"] = true
                 observeSensorPressure()
             }
-            getString(R.string.sensor_absolute_humidity) -> selectedAbsHumidity = true
-
-            getString(R.string.sensor_dew_point) -> selectedDewPoint = true
-            getString(R.string.sensor_uv_rating) -> selectedUVRating = true
-            getString(R.string.sensor_wind) -> selectedWind = true
-            getString(R.string.sensor_visibility) -> selectedVisibility = true
-            getString(R.string.sensor_sunrise) -> selectedSunrise = true
-            getString(R.string.sensor_sunset) -> selectedSunset = true
+            getString(R.string.sensor_absolute_humidity) -> selectedSensor["selectedAbsHumidity"] =
+                true
+            getString(R.string.sensor_dew_point) -> selectedSensor["selectedDewPoint"] = true
+            getString(R.string.sensor_uv_rating) -> selectedSensor["selectedUVRating"] = true
+            getString(R.string.sensor_wind) -> selectedSensor["selectedWind"] = true
+            getString(R.string.sensor_visibility) -> selectedSensor["selectedVisibility"] = true
+            getString(R.string.sensor_sunrise) -> selectedSensor["selectedSunrise"] = true
+            getString(R.string.sensor_sunset) -> selectedSensor["selectedSunset"] = true
             else -> {
                 //TODO: Toast
             }
@@ -171,75 +172,35 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
                 b.hiddenView.visibility = View.VISIBLE
                 b.arrowButton.setImageResource(R.drawable.ic_baseline_expand_less_24)
 
-                // read light button value
-                b.lightBtn.setOnClickListener {
-                    if (!selectedLight) {
-                        selectedLight = true
-                        b.lightBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
-                        observeSensorLight()
-                    } else {
-                        selectedLight = false
-                        b.lightBtn.setBackgroundColor(Color.parseColor("#34000000"))
-                    }
-
-                }
-                // read temp button value
-                b.temperatureBtn.setOnClickListener {
-                    if (!selectedTemperature) {
-                        selectedTemperature = true
-                        b.temperatureBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
-                        observeSensorTemp()
-                    } else {
-                        selectedTemperature = false
-                        b.temperatureBtn.setBackgroundColor(Color.parseColor("#34000000"))
-                    }
-                }
-                // read humidity button value
-                b.humidityBtn.setOnClickListener {
-                    if (!selectedHumidity) {
-                        selectedHumidity = true
-                        b.humidityBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
-                        observeSensorHumidity()
-                    } else {
-                        selectedHumidity = false
-                        b.humidityBtn.setBackgroundColor(Color.parseColor("#34000000"))
-                    }
-                }
-// read absolute humidity button value
-                b.absHumidityBtn.setOnClickListener {
-                    if (!selectedAbsHumidity) {
-                        selectedAbsHumidity = true
-                        b.absHumidityBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
-                    } else {
-                        selectedAbsHumidity = false
-                        b.absHumidityBtn.setBackgroundColor(Color.parseColor("#34000000"))
-                    }
-                }
-// read pressure button value
-                b.pressureBtn.setOnClickListener {
-                    if (!selectedPressure) {
-                        selectedPressure = true
-                        b.pressureBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
-                        observeSensorPressure()
-                    } else {
-                        selectedPressure = false
-                        b.pressureBtn.setBackgroundColor(Color.parseColor("#34000000"))
-                    }
-                }
-                // read dew point button value
-                b.dewPointBtn.setOnClickListener {
-                    if (!selectedDewPoint) {
-                        selectedDewPoint = true
-                        b.dewPointBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
-                    } else {
-                        selectedDewPoint = false
-                        b.dewPointBtn.setBackgroundColor(Color.parseColor("#34000000"))
-                    }
-                }
+                // read button value
+                b.lightBtn.setOnClickListener { toggleSensors("selectedLight") }
+                b.temperatureBtn.setOnClickListener { toggleSensors("selectedTemperature") }
+                b.humidityBtn.setOnClickListener { toggleSensors("selectedHumidity") }
+                b.absHumidityBtn.setOnClickListener { toggleSensors("selectedAbsHumidity") }
+                b.pressureBtn.setOnClickListener { toggleSensors("selectedPressure") }
+                b.dewPointBtn.setOnClickListener {toggleSensors("selectedDewPoint") }
             }
         }
+    }
 
+    private fun toggleSensors(s: String) {
+        if (!selectedSensor[s]!!) {
+            selectedSensor[s] = true
+            setOtherToFalse(s)
+            observeSensorLight()
+        } else {
+            selectedSensor[s] = false
 
+        }
+    }
+
+    // deselects all previously selected sensors
+    private fun setOtherToFalse(s: String) {
+        for ((k, v) in selectedSensor) {
+            if (k != s) {
+                selectedSensor[s] = false
+            }
+        }
     }
 
     private fun observeSensorTemp() {
@@ -344,9 +305,9 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             chart.tooltip().positionMode(TooltipPositionMode.POINT)
             chart.title("Sensor reading")
         }
-       }
+    }
 
-    private fun displayInChart(chart: Cartesian?,s1: String, s2: String) {
+    private fun displayInChart(chart: Cartesian?, s1: String, s2: String) {
         if (chart != null) {
             chart.yAxis(0).title(s1)
             chart.xAxis(0).title(s2)
