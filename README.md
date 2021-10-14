@@ -78,7 +78,7 @@ object Constants {
 <img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/set_region.png" width="420" />
 <img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/forecast.png" width="420" />
 <img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/chart.png" width="420" />
-<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/schart2.png" width="420" />
+<img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/chart2.png" width="420" />
 
 ## Presentation
 
