@@ -57,7 +57,6 @@ Android App written in Kotlin with MVVM architeture.
 ```
 // setup your own API KEY
 object Constants {
-    const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
     const val API_KEY = "YOUR API KEY"
 }
 ```
@@ -67,7 +66,7 @@ object Constants {
    In emulator, sensor activity can be simulated. Graph data will appear after the phone registers a sensor change.
 
 ## Demo video
-
+[Demo Video](https://drive.google.com/file/d/1YNMiYIk2Pgb6W_mRfZZZYHrba0iplk-Y/view?usp=sharing)
 ## Screenshots
 
 <img src="https://github.com/mjcarterdev/ClearSkiesWeather/blob/docs/screenshots/splash.png" width="420" />
