@@ -1,6 +1,5 @@
 package fi.carterm.clearskiesweather.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -17,7 +16,6 @@ import androidx.fragment.app.FragmentActivity
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
 import java.time.LocalDateTime
 import com.anychart.AnyChart
 import com.anychart.enums.TooltipPositionMode
@@ -38,8 +36,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
     private val defaultStartDate = LocalDateTime.now().minusMonths(1).toString()
     private val defaultEndDate = LocalDateTime.now().toString()
     private val defaultInterval = 4
-    private val intervalMap =
-        mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
+    // private val intervalMap = mapOf("minute" to 0, "hour" to 1, "day" to 2, "month" to 3, "year" to 4)
     private val intervalMapRev =
         mapOf(0 to "minute", 1 to "hour", 2 to "day", 3 to "month", 4 to "year")
 
@@ -65,7 +62,6 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("WeatherTest", "Fragment")
         b = FragmentGraphBinding.bind(view)
         val viewModel: GraphViewModel by viewModels()
         graphViewModel = viewModel
@@ -98,7 +94,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             getString(R.string.sensor_sunrise) -> selectedSensor["selectedSunrise"] = true
             getString(R.string.sensor_sunset) -> selectedSensor["selectedSunset"] = true
             else -> {
-                //TODO: Toast
+                Log.d("GraphFragment", "unknoen intent message")
             }
         }
 
@@ -201,7 +197,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
 
     // deselects all previously selected sensors
     private fun setOtherToFalse(s: String) {
-        for ((k, v) in selectedSensor) {
+        for ((k, _) in selectedSensor) {
             if (k != s) {
                 selectedSensor[s] = false
             }
@@ -226,7 +222,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             }
             val line: Line? = chart?.line(data)  // re-creates
             line?.stroke("blue")
-            displayInChart(chart, "°C", "time")
+            displayInChart(chart, "°C")
         }
 
     }
@@ -249,7 +245,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             }
             val line: Line? = chart?.line(data)  // re-creates
             line?.stroke("blue")
-            displayInChart(chart, "lux", "time")
+            displayInChart(chart, "lux")
         }
     }
 
@@ -272,7 +268,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             }
             val line: Line? = chart?.line(data)  // re-creates
             line?.stroke("blue")
-            displayInChart(chart, "hPa", "time")
+            displayInChart(chart, "hPa")
         }
     }
 
@@ -295,7 +291,7 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
             }
             val line: Line? = chart?.line(data)  // re-creates
             line?.stroke("blue")
-            displayInChart(chart, "%", "time")
+            displayInChart(chart, "%")
         }
     }
 
@@ -313,10 +309,10 @@ class GraphFragment : Fragment(R.layout.fragment_graph) {
         }
     }
 
-    private fun displayInChart(chart: Cartesian?, s1: String, s2: String) {
+    private fun displayInChart(chart: Cartesian?, s1: String) {
         if (chart != null) {
             chart.yAxis(0).title(s1)
-            chart.xAxis(0).title(s2)
+            chart.xAxis(0).title("time")
         }
     }
 }
